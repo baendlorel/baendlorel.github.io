@@ -1,0 +1,30 @@
+{
+  "name": "kasukabe-tsumugi-homepage",
+  "version": "1.0.0",
+  "description": "A beautiful showcase website for KasukabeTsumugi's NPM packages and repositories",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python3 -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baendlorel/kasukabe-tsumugi-homepage.git"
+  },
+  "keywords": [
+    "portfolio",
+    "npm-packages",
+    "github-pages",
+    "showcase",
+    "static-site"
+  ],
+  "author": {
+    "name": "KasukabeTsumugi",
+    "email": "futami16237@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/baendlorel/kasukabe-tsumugi-homepage/issues"
+  },
+  "homepage": "https://baendlorel.github.io/kasukabe-tsumugi-homepage/"
+}
