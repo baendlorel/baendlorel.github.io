@@ -1,6 +1,6 @@
 .vscode/settings.json
 cache/fetched-data.json
-
+cache/github-repos.api.json
 
 # Logs
 logs

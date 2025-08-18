@@ -8,5 +8,6 @@
       "@/*": ["src/*"]
     }
   },
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "cache/**/*.ts"],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }

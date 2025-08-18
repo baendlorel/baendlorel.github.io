@@ -8,28 +8,6 @@ const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 const OUTPUT_PATH = './fetched-data.json';
 
-interface NpmInfo {
-  version: string;
-  description: string;
-  homepage: string;
-  repository: { url: string };
-}
-interface RepoData {
-  name: string;
-  description: string | null;
-  html_url: string;
-  private: boolean;
-  fork: boolean;
-  stargazers_count: number;
-  forks_count: number;
-  language: string | null;
-  updated_at: string;
-  homepage: string | null;
-  topics: string[];
-  npm: NpmInfo | null;
-  is_npm_package: boolean;
-}
-
 async function fetchRepos() {
   const res = await fetch(
     `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
@@ -58,7 +36,7 @@ async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
   }
 }
 
-async function enrichRepos(repos) {
+async function enrichRepos(repos: RepoData[]) {
   return Promise.all(
     repos.map(async (repo) => {
       let npmInfo: NpmInfo | null = null;
@@ -74,12 +52,19 @@ async function enrichRepos(repos) {
       } catch (e) {
         console.error(`Error fetching package.json for ${repo.name}:`, e);
       }
-      return {
+      const riched: RepoData = {
+        id: repo.id,
         name: repo.name,
         description: repo.description,
         html_url: repo.html_url,
+        private: repo.private,
+        fork: repo.fork,
+        license: repo.license,
+
         stargazers_count: repo.stargazers_count,
         forks_count: repo.forks_count,
+        watchers_count: repo.watchers_count,
+
         language: repo.language,
         updated_at: repo.updated_at,
         homepage: repo.homepage,
@@ -87,6 +72,7 @@ async function enrichRepos(repos) {
         npm: npmInfo ?? null,
         is_npm_package: !!npmInfo,
       };
+      return riched;
     })
   );
 }

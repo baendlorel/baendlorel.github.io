@@ -3,15 +3,27 @@
 
 declare const __IS_DEV__: boolean;
 
+interface License {
+  key: string;
+  name: string;
+  spdx_id: string;
+  url: string;
+  node_id: string;
+}
+
 interface RepoData {
-  index: number;
+  id: number;
   name: string;
   description: string | null;
   html_url: string;
   private: boolean;
   fork: boolean;
+  license: License | null;
+
   stargazers_count: number;
   forks_count: number;
+  watchers_count: number;
+
   language: string | null;
   updated_at: string;
   homepage: string | null;
