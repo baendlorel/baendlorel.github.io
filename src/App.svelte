@@ -1,21 +1,27 @@
 <script lang="ts">
-  import Header from './lib/Header.svelte'
-  import PackageGrid from './lib/PackageGrid.svelte';
-  import Footer from './lib/Footer.svelte';
+  import { loadRepoData } from '@/store/repo.js';
+  import Header from '@/lib/Header.svelte';
+  import PackageGrid from '@/lib/PackageGrid.svelte';
+  import Footer from '@/lib/Footer.svelte';
+
+  loadRepoData();
 </script>
 
 <div class="container">
   <Header />
-  
+
   <main class="main">
     <section class="intro">
       <h2>🚀 Welcome to My Package Collection</h2>
-      <p>Here you'll find all my open-source NPM packages. Each one is crafted with care and designed to make your development experience better! (◕‿◕)</p>
+      <p>
+        Here you'll find all my open-source NPM packages. Each one is crafted with care and designed
+        to make your development experience better! (◕‿◕)
+      </p>
     </section>
-    
+
     <PackageGrid />
   </main>
-  
+
   <Footer />
 </div>
 
@@ -43,7 +49,13 @@
   }
 
   :global(body) {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
     background: var(--background);
     color: var(--text-primary);
     line-height: 1.6;
@@ -91,7 +103,7 @@
     .intro h2 {
       font-size: 2rem;
     }
-    
+
     .intro p {
       font-size: 1.1rem;
     }

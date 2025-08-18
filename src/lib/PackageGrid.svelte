@@ -1,48 +1,28 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import PackageCard from './PackageCard.svelte';
   import { debounce } from '@/common/debounce.js';
   import { getRepoInfo } from '@/common/get-repo-info.js';
+  import { repoStore, repoLoading, repoError } from '@/store/repo.js';
+
+  import PackageCard from './PackageCard.svelte';
 
   type RepoType = 'all' | 'npm';
 
   // State
-  let repos: RepoData[] = [];
   let filteredRepos: RepoData[] = [];
-  let loading = true;
-  let error = false;
   let searchQuery = '';
   let activeFilter: RepoType = 'npm';
 
   // Reactive statements
-  $: filterRepositories(repos, searchQuery, activeFilter);
-
-  onMount(() => {
-    loadRepositories();
-  });
-
-  // Load repositories from GitHub API
-  async function loadRepositories() {
-    try {
-      error = false;
-      loading = true;
-      repos = await getRepoInfo();
-    } catch (err) {
-      console.error('Error loading repositories:', err);
-      error = true;
-    } finally {
-      loading = false;
-    }
-  }
+  $: filterRepositories(repoStore, searchQuery, activeFilter);
 
   // Filter repositories based on search and filter type
-  function filterRepositories(repos: RepoData[], search: string, filter: RepoType) {
-    if (repos.length === 0) {
+  function filterRepositories(storedRepos: RepoData[], search: string, filter: RepoType) {
+    if (storedRepos.length === 0) {
       filteredRepos = [];
       return;
     }
 
-    let filtered = [...repos];
+    let filtered = [...storedRepos];
 
     // Apply type filter
     if (filter !== 'all') {
@@ -113,12 +93,12 @@
 </section>
 
 <section class="packages">
-  {#if loading}
+  {#if $repoLoading}
     <div class="loading">
       <div class="spinner"></div>
       <p>Loading awesome packages... ⏳</p>
     </div>
-  {:else if error}
+  {:else if $repoError}
     <div class="error-message">
       <i class="fas fa-exclamation-triangle"></i>
       <p>Oops! Something went wrong while loading packages. (╯°□°)╯</p>

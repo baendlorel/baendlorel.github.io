@@ -1,15 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  
-  let totalRepos = '-';
-  let npmPackages = '-';
-
-  onMount(() => {});
-
-  export function updateStats(repos: number, packages: number) {
-    totalRepos = repos.toString();
-    npmPackages = packages.toString();
-  }
+  import { repoStats } from '@/store/repo.js';
 </script>
 
 <header class="header">
@@ -31,11 +22,11 @@
     </div>
     <div class="stats">
       <div class="stat-item">
-        <span class="stat-number">{totalRepos}</span>
+        <span class="stat-number">{$repoStats.total}</span>
         <span class="stat-label">Repositories</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number">{npmPackages}</span>
+        <span class="stat-number">{$repoStats.npm}</span>
         <span class="stat-label">NPM Packages</span>
       </div>
     </div>
