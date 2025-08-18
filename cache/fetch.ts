@@ -1,4 +1,3 @@
-// @ts-check
 // Node.js script to fetch GitHub repo and NPM info, then output to public/data.json
 import { writeFileSync } from 'node:fs';
 import fetch from 'node-fetch';

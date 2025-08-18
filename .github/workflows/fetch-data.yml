@@ -23,10 +23,10 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install node-fetch tsx
 
-      - name: Run fetch.js to generate data
-        run: node cache/fetch.js
+      - name: Run fetch.ts to generate data
+        run: tsx cache/fetch.ts
 
       - name: Create or update release with data file
         uses: softprops/action-gh-release@v1
