@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
+import { getRepoInfo } from '@/common/get-repo-info';
 
 export const repoStore = writable<RepoData[]>([]);
-export const repoStats = writable<{ total: number; npm: number }>({ total: 0, npm: 0 });
+export const repoStats = writable<{ total: number; npm: number }>({ total: NaN, npm: NaN });
 export const repoLoading = writable<boolean>(false);
 export const repoError = writable<boolean>(false);
 
-export async function loadRepoData(getRepoInfo: () => Promise<RepoData[]>) {
+export async function loadRepoData() {
   try {
     repoLoading.set(true);
     const data = await getRepoInfo();

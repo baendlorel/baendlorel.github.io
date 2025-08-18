@@ -1,32 +1,58 @@
-<script lang="ts">
-  export let repository: any;
+<script context="module" lang="ts">
+  function getLanguageColor(language: string): string {
+    const colors: Record<string, string> = {
+      JavaScript: '#f1e05a',
+      TypeScript: '#3178c6',
+      Python: '#3572A5',
+      Java: '#b07219',
+      'C++': '#f34b7d',
+      C: '#555555',
+      Go: '#00ADD8',
+      Rust: '#dea584',
+      PHP: '#4F5D95',
+      Ruby: '#701516',
+      Swift: '#fa7343',
+      Kotlin: '#A97BFF',
+      Dart: '#00B4AB',
+      Shell: '#89e051',
+      HTML: '#e34c26',
+      CSS: '#1572B6',
+      Vue: '#4FC08D',
+      Svelte: '#ff3e00',
+    };
+    return colors[language] || '#64748b';
+  }
+</script>
 
-  function getTypeClass(repo: any): string {
-    if (repo.isNpmPackage) return 'npm';
+<script lang="ts">
+  export let repository: RepoData;
+
+  function getTypeClass(repo: RepoData): string {
+    if (repo.is_npm_package) return 'npm';
     if (repo.topics?.includes('library')) return 'library';
     if (repo.topics?.includes('tool')) return 'tool';
     return 'other';
   }
 
-  function getTypeIcon(repo: any): string {
-    if (repo.isNpmPackage) return 'fab fa-npm';
+  function getTypeIcon(repo: RepoData): string {
+    if (repo.is_npm_package) return 'fab fa-npm';
     if (repo.topics?.includes('library')) return 'fas fa-book';
     if (repo.topics?.includes('tool')) return 'fas fa-tools';
     return 'fas fa-code';
   }
 
-  function formatDate(dateString: string): string {
+  function formatDate(dateString: RepoData): string {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   }
 
-  function truncateDescription(description: string, maxLength: number = 120): string {
+  function trunc(description: string, maxLength: number = 120): string {
     if (!description) return 'No description available';
-    return description.length > maxLength 
-      ? description.substring(0, maxLength) + '...' 
+    return description.length > maxLength
+      ? description.substring(0, maxLength) + '...'
       : description;
   }
 </script>
@@ -40,18 +66,18 @@
       {getTypeClass(repository)}
     </div>
   </div>
-  
+
   <div class="package-content">
     <h3 class="package-name">
       <a href={repository.html_url} target="_blank" rel="noopener noreferrer">
         {repository.name}
       </a>
     </h3>
-    
+
     <p class="package-description">
-      {truncateDescription(repository.description)}
+      {trunc(repository.description)}
     </p>
-    
+
     <div class="package-meta">
       <div class="meta-item">
         <i class="fas fa-star"></i>
@@ -63,47 +89,56 @@
       </div>
       {#if repository.language}
         <div class="meta-item">
-          <i class="fas fa-circle language-dot" style="color: {getLanguageColor(repository.language)}"></i>
+          <i
+            class="fas fa-circle language-dot"
+            style="color: {getLanguageColor(repository.language)}"
+          ></i>
           <span>{repository.language}</span>
         </div>
       {/if}
     </div>
-    
-    {#if repository.isNpmPackage && repository.npmStats}
+
+    {#if repository.is_npm_package && repository.npmStats}
       <div class="npm-info">
         <div class="npm-badge">
           <i class="fab fa-npm"></i>
           <span>v{repository.npmStats.version}</span>
         </div>
         {#if repository.packageInfo?.name}
-          <a href="https://npmjs.com/package/{repository.packageInfo.name}" 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="npm-link">
+          <a
+            href="https://npmjs.com/package/{repository.packageInfo.name}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="npm-link"
+          >
             View on NPM
           </a>
         {/if}
       </div>
     {/if}
-    
+
     <div class="package-footer">
       <div class="updated-date">
         Updated {formatDate(repository.updated_at)}
       </div>
-      
+
       <div class="package-links">
-        <a href={repository.html_url} 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="btn btn-outline">
+        <a
+          href={repository.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-outline"
+        >
           <i class="fab fa-github"></i>
           View Code
         </a>
         {#if repository.homepage}
-          <a href={repository.homepage} 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="btn btn-primary">
+          <a
+            href={repository.homepage}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
             <i class="fas fa-external-link-alt"></i>
             Demo
           </a>
@@ -112,32 +147,6 @@
     </div>
   </div>
 </div>
-
-<script context="module" lang="ts">
-  function getLanguageColor(language: string): string {
-    const colors: Record<string, string> = {
-      'JavaScript': '#f1e05a',
-      'TypeScript': '#3178c6',
-      'Python': '#3572A5',
-      'Java': '#b07219',
-      'C++': '#f34b7d',
-      'C': '#555555',
-      'Go': '#00ADD8',
-      'Rust': '#dea584',
-      'PHP': '#4F5D95',
-      'Ruby': '#701516',
-      'Swift': '#fa7343',
-      'Kotlin': '#A97BFF',
-      'Dart': '#00B4AB',
-      'Shell': '#89e051',
-      'HTML': '#e34c26',
-      'CSS': '#1572B6',
-      'Vue': '#4FC08D',
-      'Svelte': '#ff3e00'
-    };
-    return colors[language] || '#64748b';
-  }
-</script>
 
 <style>
   .package-card {
@@ -338,15 +347,15 @@
   }
 
   /* Type-specific styling */
-  .package-card[data-type="npm"] .package-icon {
+  .package-card[data-type='npm'] .package-icon {
     background: linear-gradient(135deg, #cb3837 0%, #ff6b6b 100%);
   }
 
-  .package-card[data-type="library"] .package-icon {
+  .package-card[data-type='library'] .package-icon {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%);
   }
 
-  .package-card[data-type="tool"] .package-icon {
+  .package-card[data-type='tool'] .package-icon {
     background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
   }
 </style>

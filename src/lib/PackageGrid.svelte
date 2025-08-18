@@ -8,12 +8,13 @@
   type RepoType = 'all' | 'npm';
 
   // State
+  $: repos = $repoStore;
   let filteredRepos: RepoData[] = [];
   let searchQuery = '';
   let activeFilter: RepoType = 'npm';
 
   // Reactive statements
-  $: filterRepositories(repoStore, searchQuery, activeFilter);
+  $: filterRepositories(repos, searchQuery, activeFilter);
 
   // Filter repositories based on search and filter type
   function filterRepositories(storedRepos: RepoData[], search: string, filter: RepoType) {
@@ -21,7 +22,6 @@
       filteredRepos = [];
       return;
     }
-
     let filtered = [...storedRepos];
 
     // Apply type filter
