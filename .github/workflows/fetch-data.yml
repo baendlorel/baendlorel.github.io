@@ -1,0 +1,35 @@
+name: Fetch and Cache Repo Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' # 每天凌晨2点自动运行
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          pnpm install || npm install
+
+      - name: Run fetch.js to generate data
+        run: node cache/fetch.js
+
+      - name: Create or update release with data file
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: data-cache
+          name: Cached Repo Data
+          body: 'Auto-generated repo and NPM data file.'
+          files: fetched-data.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
