@@ -6,7 +6,7 @@ on:
     - cron: '0 2 * * *' # 每天凌晨2点自动运行
 
 permissions:
-  contents: read
+  contents: write
   packages: read
   deployments: read
 
@@ -36,4 +36,4 @@ jobs:
           body: 'Auto-generated repo and NPM data file.'
           files: fetched-data.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
