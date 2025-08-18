@@ -5,6 +5,11 @@ on:
   schedule:
     - cron: '0 2 * * *' # 每天凌晨2点自动运行
 
+permissions:
+  contents: read
+  packages: read
+  deployments: read
+
 jobs:
   fetch-data:
     runs-on: ubuntu-latest
