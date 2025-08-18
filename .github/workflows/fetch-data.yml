@@ -20,13 +20,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install node-fetch tsx
 
       - name: Run fetch.ts to generate data
-        run: tsx cache/fetch.ts
+        run: npx tsx cache/fetch.ts
 
       - name: Create or update release with data file
         uses: softprops/action-gh-release@v1
