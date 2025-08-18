@@ -1,4 +1,5 @@
 // Node.js script to fetch GitHub repo and NPM info, then output to public/data.json
+
 import { writeFileSync } from 'node:fs';
 import fetch from 'node-fetch';
 
@@ -14,21 +15,21 @@ async function fetchRepos() {
   if (!res.ok) {
     throw new Error('GitHub API error: ' + res.status);
   }
-  const repos = await res.json();
+  const repos = (await res.json()) as RepoData[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
   return repos.filter((repo) => !repo.private);
 }
 
-async function fetchNpmInfo(pkgName) {
+async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
   try {
     const res = await fetch(`${NPM_REGISTRY}${pkgName}`);
     if (!res.ok) return null;
-    const npmData = await res.json();
+    const npmData = (await res.json()) as NpmInfo;
     return {
       version: npmData['dist-tags']?.latest || 'unknown',
       description: npmData.description || '',
       homepage: npmData.homepage || '',
-      repository: npmData.repository?.url || '',
+      repository: npmData.repository || { url: '' },
     };
   } catch {
     return null;
@@ -38,13 +39,13 @@ async function fetchNpmInfo(pkgName) {
 async function enrichRepos(repos) {
   return Promise.all(
     repos.map(async (repo) => {
-      let npmInfo = null;
+      let npmInfo: NpmInfo | null = null;
       try {
         const pkgRes = await fetch(
           `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
         );
         if (pkgRes.ok) {
-          const pkgData = await pkgRes.json();
+          const pkgData = (await pkgRes.json()) as { content: string };
           const pkgContent = JSON.parse(Buffer.from(pkgData.content, 'base64').toString());
           npmInfo = await fetchNpmInfo(pkgContent.name);
         }
@@ -60,7 +61,7 @@ async function enrichRepos(repos) {
         language: repo.language,
         updated_at: repo.updated_at,
         homepage: repo.homepage,
-        topics: repo.topics,
+        topics: Array.isArray(repo.topics) ? repo.topics : [],
         npm: npmInfo ?? null,
         is_npm_package: !!npmInfo,
       };
