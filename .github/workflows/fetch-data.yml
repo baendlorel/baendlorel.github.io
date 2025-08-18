@@ -36,4 +36,4 @@ jobs:
           body: 'Auto-generated repo and NPM data file.'
           files: fetched-data.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
