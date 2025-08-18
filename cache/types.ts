@@ -1,7 +1,7 @@
 /**
  * Interface for NPM package info
  */
-interface NpmInfo {
+export interface NpmInfo {
   version: string;
   description: string;
   homepage: string;
@@ -11,7 +11,7 @@ interface NpmInfo {
 /**
  * Interface for each repo data item in fetched-data.json
  */
-interface RepoData {
+export interface RepoData {
   name: string;
   description: string | null;
   html_url: string;

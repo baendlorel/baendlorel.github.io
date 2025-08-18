@@ -3,6 +3,8 @@
 import { writeFileSync } from 'node:fs';
 import fetch from 'node-fetch';
 
+import { RepoData, NpmInfo } from './types';
+
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
