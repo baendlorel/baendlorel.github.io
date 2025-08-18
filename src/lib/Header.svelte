@@ -4,10 +4,7 @@
   let totalRepos = '-';
   let npmPackages = '-';
 
-  onMount(() => {
-    // 这些数值会在 PackageGrid 组件中更新
-    // 可以通过事件或状态管理来同步
-  });
+  onMount(() => {});
 
   export function updateStats(repos: number, packages: number) {
     totalRepos = repos.toString();

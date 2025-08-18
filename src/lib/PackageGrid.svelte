@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import PackageCard from './PackageCard.svelte';
+  import { debounce } from '@/common/debounce.js';
 
   // Configuration
   const GITHUB_USERNAME = 'baendlorel';
@@ -26,25 +27,25 @@
     try {
       loading = true;
       error = false;
-      
-      // Fetch repositories
-      const response = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`);
-      
+
+      const response = await fetch(
+        `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
+      );
+
       if (!response.ok) {
         throw new Error(`GitHub API error: ${response.status}`);
       }
-      
+
       const repositories = await response.json();
-      
+
       // Filter out forks and private repos, and enrich with package info
       allRepositories = await Promise.all(
         repositories
           .filter((repo: any) => !repo.fork && !repo.private)
           .map(async (repo: any) => await enrichRepositoryData(repo))
       );
-      
+
       loading = false;
-      
     } catch (err) {
       console.error('Error loading repositories:', err);
       error = true;
@@ -58,37 +59,41 @@
       ...repo,
       isNpmPackage: false,
       packageInfo: null,
-      npmStats: null
+      npmStats: null,
     };
-    
+
     try {
       // Check if repository has package.json
-      const packageResponse = await fetch(`${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`);
-      
-      if (packageResponse.ok) {
-        const packageData = await packageResponse.json();
-        const packageContent = JSON.parse(atob(packageData.content));
-        
-        enrichedRepo.isNpmPackage = true;
-        enrichedRepo.packageInfo = packageContent;
-        
-        // Get NPM package stats if available
-        try {
-          const npmResponse = await fetch(`https://registry.npmjs.org/${packageContent.name}`);
-          if (npmResponse.ok) {
-            const npmData = await npmResponse.json();
-            enrichedRepo.npmStats = {
-              version: npmData['dist-tags']?.latest || 'unknown'
-            };
-          }
-        } catch (npmError) {
-          console.log(`NPM data not found for ${packageContent.name}`);
+      const packageResponse = await fetch(
+        `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
+      );
+
+      if (!packageResponse.ok) {
+        return enrichedRepo;
+      }
+
+      const packageData = await packageResponse.json();
+      const packageContent = JSON.parse(atob(packageData.content));
+
+      enrichedRepo.isNpmPackage = true;
+      enrichedRepo.packageInfo = packageContent;
+
+      // Get NPM package stats if available
+      try {
+        const npmResponse = await fetch(`https://registry.npmjs.org/${packageContent.name}`);
+        if (npmResponse.ok) {
+          const npmData = await npmResponse.json();
+          enrichedRepo.npmStats = {
+            version: npmData['dist-tags']?.latest || 'unknown',
+          };
         }
+      } catch (npmError) {
+        console.log(`NPM data not found for ${packageContent.name}`);
       }
     } catch (err) {
-      console.log(`Could not fetch package.json for ${repo.name}`);
+      console.log(`Could not load package.json for ${repo.name}`);
     }
-    
+
     return enrichedRepo;
   }
 
@@ -100,10 +105,11 @@
     }
 
     let filtered = [...repos];
+    console.log('filteredRepositories', filtered);
 
     // Apply type filter
     if (filter !== 'all') {
-      filtered = filtered.filter(repo => {
+      filtered = filtered.filter((repo) => {
         switch (filter) {
           case 'npm':
             return repo.isNpmPackage;
@@ -120,10 +126,12 @@
     // Apply search filter
     if (search.trim()) {
       const searchLower = search.toLowerCase();
-      filtered = filtered.filter(repo =>
-        repo.name.toLowerCase().includes(searchLower) ||
-        (repo.description && repo.description.toLowerCase().includes(searchLower)) ||
-        (repo.topics && repo.topics.some((topic: string) => topic.toLowerCase().includes(searchLower)))
+      filtered = filtered.filter(
+        (repo) =>
+          repo.name.toLowerCase().includes(searchLower) ||
+          (repo.description && repo.description.toLowerCase().includes(searchLower)) ||
+          (repo.topics &&
+            repo.topics.some((topic: string) => topic.toLowerCase().includes(searchLower)))
       );
     }
 
@@ -141,61 +149,48 @@
     activeFilter = filter;
   }
 
-  // Debounce function
-  function debounce(func: Function, wait: number) {
-    let timeout: ReturnType<typeof setTimeout>;
-    return function executedFunction(...args: any[]) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-
   // Create debounced search handler
   const debouncedSearch = debounce(handleSearch, 300);
 </script>
 
 <section class="filters">
   <div class="filter-buttons">
-    <button 
-      class="filter-btn" 
-      class:active={activeFilter === 'all'}
-      on:click={() => handleFilter('all')}
-    >
-      All
-    </button>
-    <button 
-      class="filter-btn" 
+    <button
+      class="filter-btn"
       class:active={activeFilter === 'npm'}
       on:click={() => handleFilter('npm')}
     >
       NPM Packages
     </button>
-    <button 
-      class="filter-btn" 
+    <button
+      class="filter-btn"
       class:active={activeFilter === 'library'}
       on:click={() => handleFilter('library')}
     >
       Libraries
     </button>
-    <button 
-      class="filter-btn" 
+    <button
+      class="filter-btn"
       class:active={activeFilter === 'tool'}
       on:click={() => handleFilter('tool')}
     >
       Tools
     </button>
+    <button
+      class="filter-btn"
+      class:active={activeFilter === 'all'}
+      on:click={() => handleFilter('all')}
+    >
+      All
+    </button>
   </div>
   <div class="search-box">
-    <input 
-      type="text" 
+    <input
+      type="text"
       placeholder="Search packages... 🔍"
       on:input={debouncedSearch}
       bind:value={searchQuery}
-    >
+    />
   </div>
 </section>
 
@@ -208,7 +203,7 @@
   {:else if error}
     <div class="error-message">
       <i class="fas fa-exclamation-triangle"></i>
-      <p>Oops! Something went wrong while fetching packages. (╯°□°)╯</p>
+      <p>Oops! Something went wrong while loading packages. (╯°□°)╯</p>
       <button on:click={loadRepositories} class="retry-btn">Try Again</button>
     </div>
   {:else if filteredRepositories.length === 0}
@@ -319,8 +314,12 @@
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   .error-message i,
