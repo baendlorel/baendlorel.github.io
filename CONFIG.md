@@ -7,7 +7,7 @@ This file contains configuration options for the homepage.
 ### GitHub Settings
 
 - Username: baendlorel
-- Repository: kasukabe-tsumugi-homepage
+- Repository: baendlorel.github.io
 
 ### Features Enabled
 

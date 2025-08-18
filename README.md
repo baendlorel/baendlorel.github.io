@@ -23,8 +23,8 @@ A beautiful, interactive website to showcase all NPM packages and repositories c
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/baendlorel/kasukabe-tsumugi-homepage.git
-   cd kasukabe-tsumugi-homepage
+   git clone https://github.com/baendlorel/baendlorel.github.io.git
+   cd baendlorel.github.io
    ```
 
 2. **Configure your GitHub username**:
@@ -81,7 +81,7 @@ The modular JavaScript architecture makes it easy to add new features:
 ### 📁 Project Structure
 
 ```
-kasukabe-tsumugi-homepage/
+baendlorel.github.io/
 ├── index.html          # Main HTML structure
 ├── styles.css          # Styling and responsive design
 ├── script.js           # JavaScript functionality
@@ -145,8 +145,8 @@ This project is open source and available under the [MIT License](LICENSE).
 1. **克隆仓库**:
 
    ```bash
-   git clone https://github.com/baendlorel/kasukabe-tsumugi-homepage.git
-   cd kasukabe-tsumugi-homepage
+   git clone https://github.com/baendlorel/baendlorel.github.io.git
+   cd baendlorel.github.io
    ```
 
 2. **配置你的 GitHub 用户名**:
@@ -203,7 +203,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ### 📁 项目结构
 
 ```
-kasukabe-tsumugi-homepage/
+baendlorel.github.io/
 ├── index.html          # 主 HTML 结构
 ├── styles.css          # 样式和响应式设计
 ├── script.js           # JavaScript 功能
