@@ -3,12 +3,32 @@
 import { writeFileSync } from 'node:fs';
 import fetch from 'node-fetch';
 
-import { RepoData, NpmInfo } from './types';
-
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 const OUTPUT_PATH = './fetched-data.json';
+
+interface NpmInfo {
+  version: string;
+  description: string;
+  homepage: string;
+  repository: { url: string };
+}
+interface RepoData {
+  name: string;
+  description: string | null;
+  html_url: string;
+  private: boolean;
+  fork: boolean;
+  stargazers_count: number;
+  forks_count: number;
+  language: string | null;
+  updated_at: string;
+  homepage: string | null;
+  topics: string[];
+  npm: NpmInfo | null;
+  is_npm_package: boolean;
+}
 
 async function fetchRepos() {
   const res = await fetch(

@@ -1,4 +1,7 @@
 .vscode/settings.json
+cache/fetched-data.json
+
+
 # Logs
 logs
 *.log

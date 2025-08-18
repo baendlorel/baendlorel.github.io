@@ -2,14 +2,11 @@
   import { onMount } from 'svelte';
   import PackageCard from './PackageCard.svelte';
   import { debounce } from '@/common/debounce.js';
-
-  // Configuration
-  const GITHUB_USERNAME = 'baendlorel';
-  const GITHUB_API_BASE = 'https://api.github.com';
+  import { getRepoInfo } from '@/common/get-repo-info.js';
 
   // State
-  let allRepositories: any[] = [];
-  let filteredRepositories: any[] = [];
+  let allRepositories: RepoData[] = [];
+  let filteredRepositories: RepoData[] = [];
   let loading = true;
   let error = false;
   let searchQuery = '';
@@ -25,81 +22,20 @@
   // Load repositories from GitHub API
   async function loadRepositories() {
     try {
-      loading = true;
       error = false;
-
-      const response = await fetch(
-        `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
-      );
-
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
-      }
-
-      const repositories = await response.json();
-
-      // Filter out forks and private repos, and enrich with package info
-      allRepositories = await Promise.all(
-        repositories
-          .filter((repo: any) => !repo.fork && !repo.private)
-          .map(async (repo: any) => await enrichRepositoryData(repo))
-      );
-
-      loading = false;
+      loading = true;
+      allRepositories = await getRepoInfo();
     } catch (err) {
       console.error('Error loading repositories:', err);
       error = true;
+    } finally {
       loading = false;
     }
   }
 
-  // Enrich repository data with additional information
-  async function enrichRepositoryData(repo: any) {
-    const enrichedRepo = {
-      ...repo,
-      isNpmPackage: false,
-      packageInfo: null,
-      npmStats: null,
-    };
-
-    try {
-      // Check if repository has package.json
-      const packageResponse = await fetch(
-        `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
-      );
-
-      if (!packageResponse.ok) {
-        return enrichedRepo;
-      }
-
-      const packageData = await packageResponse.json();
-      const packageContent = JSON.parse(atob(packageData.content));
-
-      enrichedRepo.isNpmPackage = true;
-      enrichedRepo.packageInfo = packageContent;
-
-      // Get NPM package stats if available
-      try {
-        const npmResponse = await fetch(`https://registry.npmjs.org/${packageContent.name}`);
-        if (npmResponse.ok) {
-          const npmData = await npmResponse.json();
-          enrichedRepo.npmStats = {
-            version: npmData['dist-tags']?.latest || 'unknown',
-          };
-        }
-      } catch (npmError) {
-        console.log(`NPM data not found for ${packageContent.name}`);
-      }
-    } catch (err) {
-      console.log(`Could not load package.json for ${repo.name}`);
-    }
-
-    return enrichedRepo;
-  }
-
   // Filter repositories based on search and filter type
-  function filterRepositories(repos: any[], search: string, filter: string) {
-    if (!repos.length) {
+  function filterRepositories(repos: RepoData[], search: string, filter: string) {
+    if (repos.length === 0) {
       filteredRepositories = [];
       return;
     }
@@ -112,7 +48,7 @@
       filtered = filtered.filter((repo) => {
         switch (filter) {
           case 'npm':
-            return repo.isNpmPackage;
+            return repo.is_npm_package;
           case 'library':
             return repo.topics?.includes('library');
           case 'tool':
@@ -125,13 +61,12 @@
 
     // Apply search filter
     if (search.trim()) {
-      const searchLower = search.toLowerCase();
+      const lower = search.toLowerCase();
       filtered = filtered.filter(
         (repo) =>
-          repo.name.toLowerCase().includes(searchLower) ||
-          (repo.description && repo.description.toLowerCase().includes(searchLower)) ||
-          (repo.topics &&
-            repo.topics.some((topic: string) => topic.toLowerCase().includes(searchLower)))
+          repo.name.toLowerCase().includes(lower) ||
+          repo.description?.toLowerCase().includes(lower) ||
+          repo.topics?.some((topic) => topic.toLowerCase().includes(lower))
       );
     }
 
@@ -213,7 +148,7 @@
     </div>
   {:else}
     <div class="packages-grid">
-      {#each filteredRepositories as repository (repository.id)}
+      {#each filteredRepositories as repository (repository.index)}
         <PackageCard {repository} />
       {/each}
     </div>
