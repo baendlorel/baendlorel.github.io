@@ -18,8 +18,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: |
-          pnpm install || npm install
+        run: npm install
 
       - name: Run fetch.js to generate data
         run: node cache/fetch.js
@@ -27,7 +26,7 @@ jobs:
       - name: Create or update release with data file
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: data-cache
+          tag_name: assets
           name: Cached Repo Data
           body: 'Auto-generated repo and NPM data file.'
           files: fetched-data.json
