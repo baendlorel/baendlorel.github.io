@@ -4,16 +4,18 @@
   import { debounce } from '@/common/debounce.js';
   import { getRepoInfo } from '@/common/get-repo-info.js';
 
+  type RepoType = 'all' | 'npm';
+
   // State
-  let allRepositories: RepoData[] = [];
-  let filteredRepositories: RepoData[] = [];
+  let repos: RepoData[] = [];
+  let filteredRepos: RepoData[] = [];
   let loading = true;
   let error = false;
   let searchQuery = '';
-  let activeFilter = 'all';
+  let activeFilter: RepoType = 'npm';
 
   // Reactive statements
-  $: filterRepositories(allRepositories, searchQuery, activeFilter);
+  $: filterRepositories(repos, searchQuery, activeFilter);
 
   onMount(() => {
     loadRepositories();
@@ -24,7 +26,7 @@
     try {
       error = false;
       loading = true;
-      allRepositories = await getRepoInfo();
+      repos = await getRepoInfo();
     } catch (err) {
       console.error('Error loading repositories:', err);
       error = true;
@@ -34,14 +36,13 @@
   }
 
   // Filter repositories based on search and filter type
-  function filterRepositories(repos: RepoData[], search: string, filter: string) {
+  function filterRepositories(repos: RepoData[], search: string, filter: RepoType) {
     if (repos.length === 0) {
-      filteredRepositories = [];
+      filteredRepos = [];
       return;
     }
 
     let filtered = [...repos];
-    console.log('filteredRepositories', filtered);
 
     // Apply type filter
     if (filter !== 'all') {
@@ -49,10 +50,6 @@
         switch (filter) {
           case 'npm':
             return repo.is_npm_package;
-          case 'library':
-            return repo.topics?.includes('library');
-          case 'tool':
-            return repo.topics?.includes('tool');
           default:
             return true;
         }
@@ -70,7 +67,7 @@
       );
     }
 
-    filteredRepositories = filtered;
+    filteredRepos = filtered;
   }
 
   // Handle search input
@@ -96,20 +93,6 @@
       on:click={() => handleFilter('npm')}
     >
       NPM Packages
-    </button>
-    <button
-      class="filter-btn"
-      class:active={activeFilter === 'library'}
-      on:click={() => handleFilter('library')}
-    >
-      Libraries
-    </button>
-    <button
-      class="filter-btn"
-      class:active={activeFilter === 'tool'}
-      on:click={() => handleFilter('tool')}
-    >
-      Tools
     </button>
     <button
       class="filter-btn"
@@ -141,14 +124,14 @@
       <p>Oops! Something went wrong while loading packages. (╯°□°)╯</p>
       <button on:click={loadRepositories} class="retry-btn">Try Again</button>
     </div>
-  {:else if filteredRepositories.length === 0}
+  {:else if filteredRepos.length === 0}
     <div class="no-results">
       <i class="fas fa-search"></i>
       <p>No packages found matching your criteria. ¯\_(ツ)_/¯</p>
     </div>
   {:else}
     <div class="packages-grid">
-      {#each filteredRepositories as repository (repository.index)}
+      {#each filteredRepos as repository (repository.id)}
         <PackageCard {repository} />
       {/each}
     </div>
