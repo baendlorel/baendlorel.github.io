@@ -1,11 +1,21 @@
 <footer class="footer">
   <div class="footer-content">
-    <p>&copy; 2025 KasukabeTsumugi. Made with ❤️ and lots of ☕</p>
+    <p>&copy; 2025 KasukabeTsumugi. Made with ❤️</p>
     <div class="social-links">
-      <a href="https://github.com/baendlorel" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+      <a
+        href="https://github.com/baendlorel"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub Profile"
+      >
         <i class="fab fa-github"></i>
       </a>
-      <a href="https://npmjs.com/~kasukabetsumugi" target="_blank" rel="noopener noreferrer" aria-label="NPM Profile">
+      <a
+        href="https://npmjs.com/~baendlorel"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="NPM Profile"
+      >
         <i class="fab fa-npm"></i>
       </a>
     </div>
