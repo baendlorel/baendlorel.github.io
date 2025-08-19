@@ -98,15 +98,15 @@
       {/if}
     </div>
 
-    {#if repository.is_npm_package && repository.npmStats}
+    {#if repository.is_npm_package}
       <div class="npm-info">
         <div class="npm-badge">
           <i class="fab fa-npm"></i>
-          <span>v{repository.npmStats.version}</span>
+          <span>v{repository.npm.version}</span>
         </div>
-        {#if repository.packageInfo?.name}
+        {#if repository.name}
           <a
-            href="https://npmjs.com/package/{repository.packageInfo.name}"
+            href="https://npmjs.com/package/{repository.name}"
             target="_blank"
             rel="noopener noreferrer"
             class="npm-link"
