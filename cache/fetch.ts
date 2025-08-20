@@ -6,7 +6,6 @@ import fetch from 'node-fetch';
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
-const OUTPUT_PATH = './repo-info.js';
 
 async function fetchRepos() {
   const res = await fetch(
@@ -95,12 +94,31 @@ async function enrichRepos(repos: RepoInfo[]) {
  * 2. CORS_GET_FEATURED_REPO
  */
 async function update() {
-  const repos = await fetchRepos();
-  const data = await enrichRepos(repos);
-  const dataStr = JSON.stringify(data, null, 2);
-  const js = `window.CORS_GET_REPO_INFO(${dataStr});`;
+  const REPO_INFO_PATH = './repo-info.js';
+  const FEATURED_REPO_PATH = './featured-repo.js';
 
-  writeFileSync(OUTPUT_PATH, js);
+  const repos = await fetchRepos();
+  const enrichedRepos = await enrichRepos(repos);
+  const reposStr = JSON.stringify(enrichedRepos, null, 2);
+  writeFileSync(REPO_INFO_PATH, `window.CORS_GET_REPO_INFO(${reposStr});`);
+
+  const featuredRepos = [
+    'reflect-deep',
+    'colorful-titlebar',
+    'archiver',
+    'rollup-plugin-dts-merger',
+    'rollup-plugin-conditional-compilation',
+    '2ality-javascript-decorators-document',
+    'wildcard-event',
+    'singleton-pattern',
+    'probability-branch',
+    'function-feature',
+    'get-function-features',
+    'whisper-asr-spa',
+    'cpp-comment-generator',
+  ];
+  const featuredReposStr = JSON.stringify(featuredRepos, null, 2);
+  writeFileSync(FEATURED_REPO_PATH, `window.CORS_GET_FEATURED_REPO(${featuredReposStr});`);
 }
 
 update();

@@ -6,7 +6,6 @@ on:
     branches: ['main']
     paths:
       - cache/fetch.ts
-      - featured-repo.js
   schedule:
     - cron: '0 2 * * *' # Runs daily at 2 AM UTC
 
