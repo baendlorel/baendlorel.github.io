@@ -13,7 +13,7 @@ const createThemeStore = () => {
   return {
     toggle: () => {
       themeStore.update((current) => {
-        const newTheme = current === 'light' ? 'light' : 'dark';
+        const newTheme = current === 'light' ? 'dark' : 'light';
         persis.save(KEY, newTheme);
         document.body.setAttribute(KEY, newTheme);
         return newTheme;

@@ -15,6 +15,7 @@
       </div>
       <div class="profile-info">
         <h1 class="name">Kasukabe Tsumugi</h1>
+
         <p class="bio">✨ Creating awesome stuff ✨</p>
         <div class="contact-info">
           <a href="mailto:futami16237@gmail.com" class="email">

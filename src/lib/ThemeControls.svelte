@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { themeStore, toggle } from '@/store/theme.js';
-  import { t, lang } from '@/common/i18n.js';
+  import { themeStore, toggle as toggleTheme } from '@/store/theme.js';
+  import { t, lang, toggle as toggleLanguage } from '@/common/i18n.js';
 
   $: currentTheme = $themeStore;
-
-  function toggleTheme() {
-    toggle();
-  }
 </script>
 
 <div class="controls">

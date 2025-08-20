@@ -10,6 +10,7 @@ const translations = {
     repositories: 'Repositories',
     npmPackages: 'NPM Packages',
     featuredProjects: 'Featured Projects',
+    otherProjects: 'Others',
     allProjects: 'All Projects',
 
     stars: 'Stars',
@@ -42,6 +43,7 @@ const translations = {
     repositories: '仓库数',
     npmPackages: 'NPM 包',
     featuredProjects: '特色项目',
+    otherProjects: '其他项目',
     allProjects: '所有项目',
 
     stars: '星标',
@@ -49,8 +51,8 @@ const translations = {
     downloads: '下载量',
     version: '版本',
     updated: '更新时间',
-    viewOnGitHub: '在 GitHub 查看',
-    viewOnNPM: '在 NPM 查看',
+    viewOnGitHub: '前往仓库',
+    viewOnNPM: '前往NPM',
 
     searchPlaceholder: '搜索包...',
     noResults: '没有找到匹配的包。',

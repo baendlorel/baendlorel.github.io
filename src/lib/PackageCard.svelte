@@ -26,6 +26,7 @@
 
 <script lang="ts">
   import { lang, t } from '@/common/i18n.js';
+  import { copyToClipboard } from '@/common/copy.js';
 
   export let repository: RepoInfo;
 
@@ -71,9 +72,14 @@
 
   <div class="package-content">
     <h3 class="package-name">
-      <a href={repository.html_url} target="_blank" rel="noopener noreferrer">
+      <button
+        type="button"
+        class="package-name-btn"
+        aria-label="Copy package name to clipboard"
+        on:click={() => copyToClipboard(repository.name)}
+      >
         {repository.name}
-      </a>
+      </button>
     </h3>
 
     <p class="package-description">
@@ -222,7 +228,9 @@
     margin-bottom: 0.75rem;
   }
 
-  .package-name a {
+  .package-name-btn {
+    border: 0;
+    background-color: transparent;
     color: var(--text-primary);
     text-decoration: none;
     font-size: 1.25rem;
@@ -230,7 +238,7 @@
     transition: color 0.3s ease;
   }
 
-  .package-name a:hover {
+  .package-name-btn:hover {
     color: var(--primary-color);
   }
 

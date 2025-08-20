@@ -1,7 +1,8 @@
 {
   "name": "baendlorel.github.io",
   "version": "1.0.0",
-  "description": "A beautiful showcase website for KasukabeTsumugi's NPM packages and repositories",
+  "description": "A beautiful showcase website for Kasukabe Tsumugi repositories",
+  "descriptionZh": "Kasukabe Tsumugi的个人主页，展示她的项目仓库",
   "main": "index.html",
   "scripts": {
     "start": "python -m http.server 8000",

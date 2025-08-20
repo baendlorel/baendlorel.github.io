@@ -7,6 +7,7 @@ const app = mount(App, {
 });
 
 if (__IS_DEV__) {
+  console.log('Development mode: LocalStorage cleared');
   localStorage.clear();
 }
 

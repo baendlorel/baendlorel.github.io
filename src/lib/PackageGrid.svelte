@@ -125,7 +125,7 @@
       class:active={activeFilter === 'other'}
       on:click={() => handleFilter('other')}
     >
-      Others
+      {t('otherProjects')}
     </button>
     <button
       class="filter-btn"

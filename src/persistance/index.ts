@@ -9,7 +9,7 @@ class Persistance {
     return d.getTime();
   }
 
-  private format(expire: number, value: unknown) {
+  private format(value: unknown, expire: number) {
     const valueType = value === null ? 'null' : typeof value;
     if (valueType === 'function') {
       throw new TypeError('Cannot stringify private');
@@ -32,11 +32,12 @@ class Persistance {
       case 'symbol':
         throw new TypeError('Cannot stringify symbol');
     }
-    return `${expire},${valueType},${s}`;
+    return `${expire},${valueType},${compress(s)}`;
   }
 
   private deformat(str: string) {
     const [expireStr, valueType] = str.split(',', 2);
+    console.log(expireStr, valueType);
     const expire = parseInt(expireStr, 10);
     if (isNaN(expire)) {
       throw new Error('Invalid expire time format');
@@ -86,9 +87,8 @@ class Persistance {
    * @param expire if omitted, will use default expire time
    */
   save(key: string, obj: any, expire?: number) {
-    const value = this.format(expire ?? this.genExpireTime(), obj);
-    const s = compress(value);
-    localStorage.setItem(Persis.Prefix + key, s);
+    const value = this.format(obj, expire ?? this.genExpireTime());
+    localStorage.setItem(Persis.Prefix + key, value);
   }
 
   /**
