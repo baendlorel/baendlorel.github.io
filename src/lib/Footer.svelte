@@ -4,7 +4,7 @@
 
 <footer class="footer">
   <div class="footer-content">
-    <p>&copy; 2025 KasukabeTsumugi. {t('madeWithLove')}</p>
+    <p>&copy; 2025 Kasukabe Tsumugi. {t('madeWithLove')}</p>
     <div class="social-links">
       <a
         href="https://github.com/baendlorel"

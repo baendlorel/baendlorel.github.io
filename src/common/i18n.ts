@@ -13,6 +13,7 @@ const translations = {
     otherProjects: 'Others',
     allProjects: 'All Projects',
 
+    updatedAt: 'Updated',
     stars: 'Stars',
     forks: 'Forks',
     downloads: 'Downloads',
@@ -33,7 +34,7 @@ const translations = {
 
     builtWith: 'Built with',
     and: 'and',
-    madeWithLove: 'Made with ❤️ by',
+    madeWithLove: 'Made with ❤️',
 
     errorLoading: 'Error loading data',
     tryAgain: 'Try Again',
@@ -47,6 +48,7 @@ const translations = {
     otherProjects: '其他项目',
     allProjects: '所有项目',
 
+    updatedAt: '更新于',
     stars: '星标',
     forks: '分叉',
     downloads: '下载量',
@@ -67,7 +69,7 @@ const translations = {
 
     builtWith: '使用',
     and: '和',
-    madeWithLove: '用 ❤️ 制作，作者',
+    madeWithLove: '用 ❤️ 制作',
 
     errorLoading: '加载数据出错',
     tryAgain: '重试',

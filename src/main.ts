@@ -6,9 +6,4 @@ const app = mount(App, {
   target: document.getElementById('app')!,
 });
 
-if (__IS_DEV__) {
-  console.log('Development mode: LocalStorage cleared');
-  localStorage.clear();
-}
-
 export default app;

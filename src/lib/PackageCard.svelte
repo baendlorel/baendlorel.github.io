@@ -60,11 +60,19 @@
   }
 
   function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    if (lang === 'en') {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
+    } else {
+      return new Date(dateString).toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    }
   }
 
   function trunc(description: string, maxLength: number = 120): string {
@@ -123,7 +131,8 @@
 
     <div class="package-footer">
       <div class="updated-date">
-        Updated {formatDate(repository.updated_at)}
+        {t('updatedAt')}
+        {formatDate(repository.updated_at)}
       </div>
 
       <div class="package-links">
