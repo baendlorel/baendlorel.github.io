@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
-const OUTPUT_PATH = './fetched-data.js';
+const OUTPUT_PATH = './repo-info.js';
 
 async function fetchRepos() {
   const res = await fetch(
@@ -87,12 +87,20 @@ async function enrichRepos(repos: RepoInfo[]) {
   }
 }
 
-(async () => {
+/**
+ * [WARN] Method names must be the **SAME** as in `repository.service.ts`
+ *
+ * Supports:
+ * 1. CORS_GET_REPO_INFO
+ * 2. CORS_GET_FEATURED_REPO
+ */
+async function update() {
   const repos = await fetchRepos();
   const data = await enrichRepos(repos);
   const dataStr = JSON.stringify(data, null, 2);
-  //
-  const js = `window.CORS_GET_REPO_INFO_RESOLVER(${dataStr});`;
+  const js = `window.CORS_GET_REPO_INFO(${dataStr});`;
 
   writeFileSync(OUTPUT_PATH, js);
-})();
+}
+
+update();

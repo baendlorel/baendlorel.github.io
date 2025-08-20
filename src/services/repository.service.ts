@@ -1,39 +1,30 @@
 class RepositoryService {
-  // async getInfo(): Promise<RepoInfo[]> {
-  //   if (__IS_DEV__) {
-  //     const data = await import('../../cache/fetched-data.json');
-  //     return data.default;
-  //   }
-
-  //   // fixme still has cross origin issue
-  //   const resp = await axios.get(
-  //     'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/fetched-data.json'
-  //   );
-  //   resp.data.forEach((repo: RepoInfo) => {
-  //     repo.is_npm_package = !!repo.npm;
-  //   });
-  //   return resp.data;
-  // }
-  async getInfo(): Promise<RepoInfo[]> {
+  private async load<T>(url: string, resolverName: string | symbol): Promise<T> {
     const script = document.createElement('script');
-    script.id = 'CORS_GET_REPO_INFO';
     script.type = 'text/javascript';
-    script.src =
-      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/fetched-data.js';
+    script.src = url;
     document.body.appendChild(script);
 
-    const result = await new Promise<RepoInfo[]>((resolve) => {
-      globalThis.CORS_GET_REPO_INFO_RESOLVER = resolve;
+    const result = await new Promise<T>((resolve) => {
+      globalThis[resolverName] = resolve;
     });
-    delete globalThis.CORS_GET_REPO_INFO_RESOLVER;
+    delete globalThis[resolverName];
 
     script.remove();
     return result;
   }
-}
 
-declare global {
-  function CORS_GET_REPO_INFO_RESOLVER(data: RepoInfo[]): void;
+  async getInfo(): Promise<RepoInfo[]> {
+    const url =
+      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/repo-info.js';
+    return await this.load(url, 'CORS_GET_REPO_INFO');
+  }
+
+  async getFeatured(): Promise<string[]> {
+    const url =
+      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/featured-repo.js';
+    return await this.load(url, 'CORS_GET_FEATURED_REPO');
+  }
 }
 
 const repositoryService = new RepositoryService();

@@ -1,13 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { repoStats } from '@/store/repo.js';
+  import avatar from '@/assets/avatar.jpg';
 </script>
 
 <header class="header">
   <div class="header-content">
     <div class="profile-section">
       <div class="avatar">
-        <i class="fas fa-user-circle"></i>
+        <!-- <i class="fas fa-user-circle"></i> -->
+        <img src={avatar} alt="Avatar" width="80" height="80" style="border-radius: 50%;" />
       </div>
       <div class="profile-info">
         <h1 class="name">KasukabeTsumugi</h1>

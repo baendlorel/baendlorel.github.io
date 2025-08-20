@@ -4,7 +4,7 @@
 
   import PackageCard from './PackageCard.svelte';
 
-  type RepoType = 'all' | 'npm';
+  type RepoType = 'all' | 'npm' | 'featured' | 'other';
 
   // State
   $: repos = $repoStore;
@@ -29,6 +29,8 @@
         switch (filter) {
           case 'npm':
             return repo.is_npm_package;
+          case 'other':
+            return !repo.is_npm_package;
           default:
             return true;
         }
@@ -72,6 +74,13 @@
       on:click={() => handleFilter('npm')}
     >
       NPM Packages
+    </button>
+    <button
+      class="filter-btn"
+      class:active={activeFilter === 'other'}
+      on:click={() => handleFilter('other')}
+    >
+      Others
     </button>
     <button
       class="filter-btn"

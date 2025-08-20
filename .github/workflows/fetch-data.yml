@@ -2,6 +2,11 @@ name: Fetch and Cache Repo Data
 
 on:
   workflow_dispatch:
+  push:
+    branches: ['main']
+    paths:
+      - cache/fetch.ts
+      - featured-repo.js
   schedule:
     - cron: '0 2 * * *' # Runs daily at 2 AM UTC
 
@@ -34,6 +39,8 @@ jobs:
           tag_name: assets
           name: Cached Repo Data
           body: 'Auto-generated repo and NPM data file.'
-          files: fetched-data.js
+          files: |
+            repo-info.js
+            featured-repo.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
