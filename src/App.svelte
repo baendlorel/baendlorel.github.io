@@ -14,8 +14,8 @@
     <section class="intro">
       <h2>🚀 Welcome to My Package Collection</h2>
       <p>
-        Here you'll find all my open-source NPM packages. Each one is crafted with care and designed
-        to make your development experience better! (◕‿◕)
+        Here you'll find all my open-source packages. Each one is crafted with care and designed to
+        make your development experience better! (◕‿◕)
       </p>
     </section>
 

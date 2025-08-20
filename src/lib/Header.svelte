@@ -12,8 +12,8 @@
         <img src={avatar} alt="Avatar" width="80" height="80" style="border-radius: 50%;" />
       </div>
       <div class="profile-info">
-        <h1 class="name">KasukabeTsumugi</h1>
-        <p class="bio">✨ Creating awesome NPM packages ✨</p>
+        <h1 class="name">Kasukabe Tsumugi</h1>
+        <p class="bio">✨ Creating awesome stuff ✨</p>
         <div class="contact-info">
           <a href="mailto:futami16237@gmail.com" class="email">
             <i class="fas fa-envelope"></i>
