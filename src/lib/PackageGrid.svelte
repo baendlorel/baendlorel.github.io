@@ -1,6 +1,12 @@
 <script lang="ts">
   import { debounce } from '@/common/debounce.js';
-  import { loadRepoData, repoStore, repoLoading, repoError } from '@/store/repo.js';
+  import {
+    loadRepoData,
+    repoStore,
+    featuredRepoStore,
+    repoLoading,
+    repoError,
+  } from '@/store/repo.js';
 
   import PackageCard from './PackageCard.svelte';
 
@@ -8,9 +14,10 @@
 
   // State
   $: repos = $repoStore;
+  $: featuredRepos = $featuredRepoStore;
   let filteredRepos: RepoInfo[] = [];
   let searchQuery = '';
-  let activeFilter: RepoType = 'npm';
+  let activeFilter: RepoType = 'featured';
 
   // Reactive statements
   $: filterRepositories(repos, searchQuery, activeFilter);
@@ -24,7 +31,9 @@
     let filtered = [...storedRepos];
 
     // Apply type filter
-    if (filter !== 'all') {
+    if (filter === 'featured') {
+      filtered = featuredRepos;
+    } else if (filter !== 'all') {
       filtered = filtered.filter((repo) => {
         switch (filter) {
           case 'npm':
@@ -68,6 +77,13 @@
 
 <section class="filters">
   <div class="filter-buttons">
+    <button
+      class="filter-btn"
+      class:active={activeFilter === 'featured'}
+      on:click={() => handleFilter('featured')}
+    >
+      Featured
+    </button>
     <button
       class="filter-btn"
       class:active={activeFilter === 'npm'}
