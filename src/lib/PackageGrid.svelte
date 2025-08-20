@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { debounce } from '@/common/debounce.js';
-  import { languageStore, t, type Language } from '@/store/i18n.js';
+  import { languageStore, t } from '@/store/i18n.js';
   import {
     loadRepoData,
     repoStore,

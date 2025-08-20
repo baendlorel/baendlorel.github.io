@@ -1,7 +1,9 @@
 <script lang="ts">
   import { repoStats } from '@/store/repo.js';
-  import ThemeControls from './ThemeControls.svelte';
+  import { t } from '@/store/i18n.js';
   import avatar from '@/assets/avatar.jpg';
+
+  import ThemeControls from './ThemeControls.svelte';
 </script>
 
 <header class="header">

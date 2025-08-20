@@ -25,7 +25,7 @@
 </script>
 
 <script lang="ts">
-  import { languageStore, t, type Language } from '@/store/i18n.js';
+  import { languageStore, t } from '@/store/i18n.js';
 
   export let repository: RepoInfo;
 

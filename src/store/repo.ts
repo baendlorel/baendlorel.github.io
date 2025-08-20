@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import repositoryService from '@/services/repository.service.js';
-import { load, save } from '@/persistance/index.js';
+import persis from '@/persistance/index.js';
 
 export const repoStore = writable<RepoInfo[]>([]);
 export const featuredRepoStore = writable<RepoInfo[]>([]);
@@ -16,13 +16,13 @@ interface RepoData {
 }
 
 async function getInfo() {
-  const saved = load<RepoData>(KEY);
+  const saved = persis.load<RepoData>(KEY);
   if (saved !== null) {
     return saved;
   }
   const info = await repositoryService.getInfo();
   const featured = await repositoryService.getFeatured();
-  save(KEY, { info, featured });
+  persis.save(KEY, { info, featured });
   return { info, featured };
 }
 

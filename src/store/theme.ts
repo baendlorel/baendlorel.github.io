@@ -1,23 +1,23 @@
 import { writable } from 'svelte/store';
-import { load, save } from '@/persistance/index.js';
+import persis from '@/persistance/index.js';
 
 const KEY = 'repo-info';
 
 const createThemeStore = () => {
-  const savedTheme = load<Theme>(KEY) || 'light';
+  const savedTheme = persis.load<Theme>(KEY) || 'light';
   const { subscribe, set, update } = writable<Theme>(savedTheme);
 
   return {
     subscribe,
     set: (theme: Theme) => {
       set(theme);
-      save(KEY, theme);
+      persis.save(KEY, theme);
       applyTheme(theme);
     },
     toggle: () => {
       update((current) => {
         const newTheme = current === 'light' ? 'light' : 'dark';
-        save(KEY, newTheme);
+        persis.save(KEY, newTheme);
         applyTheme(newTheme);
         return newTheme;
       });

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { languageStore, t, type Language } from '@/store/i18n.js';
+  import { languageStore, t } from '@/store/i18n.js';
 
   let currentLang: Language;
 

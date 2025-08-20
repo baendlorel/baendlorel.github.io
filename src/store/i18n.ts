@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { load, save } from '../persistance/index.js';
+import persis from '../persistance/index.js';
 
 const KEY = 'language';
 
@@ -72,20 +72,20 @@ export const translations = {
 };
 
 const createLanguageStore = () => {
-  const savedLang = load<Language>(KEY) || 'en';
+  const savedLang = persis.load<Language>(KEY) || 'en';
   const { subscribe, set } = writable<Language>(savedLang);
 
   return {
     subscribe,
     set: (lang: Language) => {
       set(lang);
-      save(KEY, lang);
+      persis.save(KEY, lang);
     },
     toggle: () => {
-      const current = load<Language>(KEY) || 'en';
+      const current = persis.load<Language>(KEY) || 'en';
       const newLang = current === 'en' ? 'zh' : 'en';
       set(newLang);
-      save(KEY, newLang);
+      persis.save(KEY, newLang);
     },
   };
 };

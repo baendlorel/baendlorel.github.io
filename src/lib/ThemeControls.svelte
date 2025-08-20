@@ -1,6 +1,7 @@
 <script lang="ts">
   import { themeStore } from '@/store/theme.js';
   import { languageStore } from '@/store/i18n.js';
+  import { t } from '@/store/i18n.js';
 
   let currentTheme: string;
   let currentLang: Language;
