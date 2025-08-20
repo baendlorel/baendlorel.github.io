@@ -2,6 +2,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
+/* Global CSS Custom Properties & Theme Support */
+:root {
+  /* 默认暗色主题变量，会被 JS 动态覆盖 */
+  --primary-color: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary-color: #ec4899;
+  --accent-color: #06d6a0;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --surface-light: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: #475569;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+
+  /* 平滑过渡效果 */
+  --transition-speed: 0.3s;
+}
+
+/* 主题切换时的平滑过渡 */
+* {
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease,
+    border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
 /* Keep minimal global styles for Svelte app */
 #app {
   width: 100%;

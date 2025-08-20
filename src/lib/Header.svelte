@@ -1,7 +1,14 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { repoStats } from '@/store/repo.js';
+  import { languageStore, t, type Language } from '@/store/i18n.js';
+  import ThemeControls from './ThemeControls.svelte';
   import avatar from '@/assets/avatar.jpg';
+
+  let currentLang: Language;
+
+  languageStore.subscribe((lang) => {
+    currentLang = lang;
+  });
 </script>
 
 <header class="header">
@@ -22,15 +29,18 @@
         </div>
       </div>
     </div>
-    <div class="stats">
-      <div class="stat-item">
-        <span class="stat-number">{$repoStats.total}</span>
-        <span class="stat-label">Repositories</span>
+    <div class="header-actions">
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number">{$repoStats.total}</span>
+          <span class="stat-label">{t('repositories', currentLang)}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{$repoStats.npm}</span>
+          <span class="stat-label">{t('npmPackages', currentLang)}</span>
+        </div>
       </div>
-      <div class="stat-item">
-        <span class="stat-number">{$repoStats.npm}</span>
-        <span class="stat-label">NPM Packages</span>
-      </div>
+      <ThemeControls />
     </div>
   </div>
 </header>
@@ -65,6 +75,14 @@
     align-items: center;
     position: relative;
     z-index: 1;
+    gap: 2rem;
+  }
+
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
   }
 
   .profile-section {
@@ -165,6 +183,10 @@
       flex-direction: column;
       text-align: center;
       gap: 1rem;
+    }
+
+    .header-actions {
+      align-items: center;
     }
 
     .name {

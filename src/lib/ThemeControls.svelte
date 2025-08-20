@@ -1,0 +1,100 @@
+<script lang="ts">
+  import { themeStore } from '@/store/theme.js';
+  import { languageStore, t, type Language } from '@/store/i18n.js';
+
+  let currentTheme: string;
+  let currentLang: Language;
+
+  themeStore.subscribe((theme) => {
+    currentTheme = theme;
+  });
+
+  languageStore.subscribe((lang) => {
+    currentLang = lang;
+  });
+
+  function toggleTheme() {
+    themeStore.toggle();
+  }
+
+  function toggleLanguage() {
+    languageStore.toggle();
+  }
+</script>
+
+<div class="controls">
+  <button
+    class="control-btn theme-btn"
+    on:click={toggleTheme}
+    title={t('toggleTheme', currentLang)}
+    aria-label={t('toggleTheme', currentLang)}
+  >
+    {#if currentTheme === 'dark'}
+      <i class="fas fa-sun"></i>
+      <span>{t('lightMode', currentLang)}</span>
+    {:else}
+      <i class="fas fa-moon"></i>
+      <span>{t('darkMode', currentLang)}</span>
+    {/if}
+  </button>
+
+  <button
+    class="control-btn lang-btn"
+    on:click={toggleLanguage}
+    title={t('toggleLanguage', currentLang)}
+    aria-label={t('toggleLanguage', currentLang)}
+  >
+    <i class="fas fa-language"></i>
+    <span>{currentLang === 'en' ? '中文' : 'English'}</span>
+  </button>
+</div>
+
+<style>
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .control-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+  }
+
+  .control-btn i {
+    font-size: 1rem;
+  }
+
+  .control-btn span {
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .control-btn span {
+      display: none;
+    }
+
+    .control-btn {
+      padding: 0.5rem;
+      min-width: 40px;
+      justify-content: center;
+    }
+  }
+</style>

@@ -1,10 +1,40 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { loadRepoData } from '@/store/repo.js';
+  import { themeStore, themes } from '@/store/theme.js';
+  import { languageStore, t, type Language } from '@/store/i18n.js';
   import Header from '@/lib/Header.svelte';
   import PackageGrid from '@/lib/PackageGrid.svelte';
   import Footer from '@/lib/Footer.svelte';
+  import SettingsDemo from '@/lib/SettingsDemo.svelte';
 
-  loadRepoData();
+  let currentTheme: string;
+  let currentLang: Language;
+
+  // 订阅主题变化
+  themeStore.subscribe((theme) => {
+    currentTheme = theme;
+    if (typeof document !== 'undefined') {
+      // 应用 CSS 变量
+      const root = document.documentElement;
+      const themeVars = themes[theme];
+      Object.entries(themeVars).forEach(([key, value]) => {
+        root.style.setProperty(key, value);
+      });
+    }
+  });
+
+  // 订阅语言变化
+  languageStore.subscribe((lang) => {
+    currentLang = lang;
+  });
+
+  onMount(() => {
+    // 初始化主题
+    themeStore.init();
+    // 加载数据
+    loadRepoData();
+  });
 </script>
 
 <div class="container">
@@ -12,12 +42,14 @@
 
   <main class="main">
     <section class="intro">
-      <h2>🚀 Welcome to My Package Collection</h2>
+      <h2>{t('welcome', currentLang)}</h2>
       <p>
-        Here you'll find all my open-source packages. Each one is crafted with care and designed to
-        make your development experience better! (◕‿◕)
+        {t('intro', currentLang)}
       </p>
     </section>
+
+    <!-- 临时添加设置演示，测试完成后可以移除 -->
+    <SettingsDemo />
 
     <PackageGrid />
   </main>
@@ -26,22 +58,6 @@
 </div>
 
 <style>
-  :global(:root) {
-    --primary-color: #6366f1;
-    --primary-dark: #4f46e5;
-    --secondary-color: #ec4899;
-    --accent-color: #06d6a0;
-    --background: #0f172a;
-    --surface: #1e293b;
-    --surface-light: #334155;
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --border: #475569;
-    --shadow: rgba(0, 0, 0, 0.3);
-    --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  }
-
   :global(*) {
     margin: 0;
     padding: 0;

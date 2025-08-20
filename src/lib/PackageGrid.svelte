@@ -1,5 +1,6 @@
 <script lang="ts">
   import { debounce } from '@/common/debounce.js';
+  import { languageStore, t, type Language } from '@/store/i18n.js';
   import {
     loadRepoData,
     repoStore,
@@ -18,6 +19,11 @@
   let filteredRepos: RepoInfo[] = [];
   let searchQuery = '';
   let activeFilter: RepoType = 'featured';
+  let currentLang: Language;
+
+  languageStore.subscribe((lang) => {
+    currentLang = lang;
+  });
 
   // Reactive statements
   $: filterRepositories(repos, searchQuery, activeFilter);
@@ -67,7 +73,7 @@
   }
 
   // Handle filter change
-  function handleFilter(filter: string) {
+  function handleFilter(filter: RepoType) {
     activeFilter = filter;
   }
 
@@ -82,14 +88,14 @@
       class:active={activeFilter === 'featured'}
       on:click={() => handleFilter('featured')}
     >
-      Featured
+      {t('featuredProjects', currentLang)}
     </button>
     <button
       class="filter-btn"
       class:active={activeFilter === 'npm'}
       on:click={() => handleFilter('npm')}
     >
-      NPM Packages
+      {t('npmPackages', currentLang)}
     </button>
     <button
       class="filter-btn"
@@ -103,13 +109,13 @@
       class:active={activeFilter === 'all'}
       on:click={() => handleFilter('all')}
     >
-      All
+      {t('allProjects', currentLang)}
     </button>
   </div>
   <div class="search-box">
     <input
       type="text"
-      placeholder="Search packages... 🔍"
+      placeholder={t('searchPlaceholder', currentLang)}
       on:input={debouncedSearch}
       bind:value={searchQuery}
     />
@@ -120,18 +126,18 @@
   {#if $repoLoading}
     <div class="loading">
       <div class="spinner"></div>
-      <p>Loading awesome packages... ⏳</p>
+      <p>{t('loading', currentLang)}</p>
     </div>
   {:else if $repoError}
     <div class="error-message">
       <i class="fas fa-exclamation-triangle"></i>
-      <p>Oops! Something went wrong while loading packages. (╯°□°)╯</p>
-      <button on:click={loadRepoData} class="retry-btn">Try Again</button>
+      <p>{t('errorLoading', currentLang)}</p>
+      <button on:click={loadRepoData} class="retry-btn">{t('tryAgain', currentLang)}</button>
     </div>
   {:else if filteredRepos.length === 0}
     <div class="no-results">
       <i class="fas fa-search"></i>
-      <p>No packages found matching your criteria. ¯\_(ツ)_/¯</p>
+      <p>{t('noResults', currentLang)}</p>
     </div>
   {:else}
     <div class="packages-grid">

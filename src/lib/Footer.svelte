@@ -1,6 +1,16 @@
+<script lang="ts">
+  import { languageStore, t, type Language } from '@/store/i18n.js';
+
+  let currentLang: Language;
+
+  languageStore.subscribe((lang) => {
+    currentLang = lang;
+  });
+</script>
+
 <footer class="footer">
   <div class="footer-content">
-    <p>&copy; 2025 KasukabeTsumugi. Made with ❤️</p>
+    <p>&copy; 2025 KasukabeTsumugi. {t('madeWithLove', currentLang)}</p>
     <div class="social-links">
       <a
         href="https://github.com/baendlorel"

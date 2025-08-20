@@ -25,7 +25,15 @@
 </script>
 
 <script lang="ts">
+  import { languageStore, t, type Language } from '@/store/i18n.js';
+
   export let repository: RepoInfo;
+
+  let currentLang: Language;
+
+  languageStore.subscribe((lang) => {
+    currentLang = lang;
+  });
 
   function getTypeClass(repo: RepoInfo): string {
     if (repo.is_npm_package) return 'npm';
@@ -41,7 +49,7 @@
     return 'fas fa-code';
   }
 
-  function formatDate(dateString: RepoInfo): string {
+  function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -111,7 +119,7 @@
           class="btn btn-outline"
         >
           <i class="fab fa-github"></i>
-          View Code
+          {t('viewOnGitHub', currentLang)}
         </a>
 
         {#if repository.is_npm_package}
@@ -122,7 +130,7 @@
             class="btn btn-primary"
           >
             <i class="fab fa-npm"></i>
-            View on NPM
+            {t('viewOnNPM', currentLang)}
           </a>
           <!-- <div class="npm-info">
             <div class="npm-badge">
