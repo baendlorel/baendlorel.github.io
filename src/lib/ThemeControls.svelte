@@ -3,12 +3,8 @@
   import { languageStore } from '@/store/i18n.js';
   import { t } from '@/store/i18n.js';
 
-  let currentTheme: string;
+  $: currentTheme = $themeStore;
   let currentLang: Language;
-
-  themeStore.subscribe((theme) => {
-    currentTheme = theme;
-  });
 
   languageStore.subscribe((lang) => {
     currentLang = lang;

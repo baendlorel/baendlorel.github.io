@@ -95,7 +95,7 @@ class Persistance {
    * Load a value from localStorage with a key.
    * - when the key does not exist or the value is expired, returns null.
    */
-  load<T extends unknown>(key: string): T | null {
+  load<T>(key: string): T | null {
     const pkey = Persis.Prefix + key;
 
     const rawValue = localStorage.getItem(pkey);

@@ -1,31 +1,19 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { loadRepoData } from '@/store/repo.js';
-  import { themeStore, themes } from '@/store/theme.js';
-  import { languageStore, t, type Language } from '@/store/i18n.js';
+  import { init } from '@/store/theme.js';
+  import { languageStore, t } from '@/store/i18n.js';
   import Header from '@/lib/Header.svelte';
   import PackageGrid from '@/lib/PackageGrid.svelte';
   import Footer from '@/lib/Footer.svelte';
-  import SettingsDemo from '@/lib/SettingsDemo.svelte';
 
   let currentLang: Language;
-  themeStore.subscribe((theme) => {
-    if (typeof document !== 'undefined') {
-      const root = document.documentElement;
-      const themeVars = themes[theme];
-      Object.entries(themeVars).forEach(([key, value]) => {
-        root.style.setProperty(key, value);
-      });
-    }
-  });
-
-  // 订阅语言变化
   languageStore.subscribe((lang) => {
     currentLang = lang;
   });
 
   onMount(() => {
-    themeStore.init();
+    init();
     loadRepoData();
   });
 </script>
@@ -40,9 +28,6 @@
         {t('intro', currentLang)}
       </p>
     </section>
-
-    <!-- 临时添加设置演示，测试完成后可以移除 -->
-    <SettingsDemo />
 
     <PackageGrid />
   </main>

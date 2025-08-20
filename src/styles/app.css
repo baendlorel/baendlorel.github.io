@@ -4,7 +4,10 @@
 
 /* Global CSS Custom Properties & Theme Support */
 :root {
-  /* 默认暗色主题变量，会被 JS 动态覆盖 */
+  --transition-speed: 0.3s;
+}
+
+body[theme='dark'] {
   --primary-color: #6366f1;
   --primary-dark: #4f46e5;
   --secondary-color: #ec4899;
@@ -18,12 +21,24 @@
   --border: #475569;
   --shadow: rgba(0, 0, 0, 0.3);
   --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-
-  /* 平滑过渡效果 */
-  --transition-speed: 0.3s;
 }
 
-/* 主题切换时的平滑过渡 */
+body[theme='light'] {
+  --primary-color: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary-color: #ec4899;
+  --accent-color: #06d6a0;
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --surface-light: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
 * {
   transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease,
     border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
