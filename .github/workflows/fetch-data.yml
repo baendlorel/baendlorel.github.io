@@ -34,6 +34,6 @@ jobs:
           tag_name: assets
           name: Cached Repo Data
           body: 'Auto-generated repo and NPM data file.'
-          files: fetched-data.json
+          files: fetched-data.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

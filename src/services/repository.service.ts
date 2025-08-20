@@ -16,12 +16,16 @@ class RepositoryService {
   // }
   async getInfo(): Promise<RepoInfo[]> {
     const script = document.createElement('script');
+    script.id = 'CORS_GET_REPO_INFO';
     script.type = 'text/javascript';
     script.src =
       'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/fetched-data.js';
-    return await new Promise<RepoInfo[]>((resolve) =>
+    document.body.appendChild(script);
+    const result = await new Promise<RepoInfo[]>((resolve) =>
       Reflect.set(globalThis, 'CORS_GET_REPO_INFO_RESOLVER', resolve)
     );
+    script.remove();
+    return result;
   }
 }
 
