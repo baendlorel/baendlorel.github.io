@@ -5,17 +5,16 @@ const KEY = 'repo-info';
 
 const createThemeStore = () => {
   const savedTheme = persis.load<Theme>(KEY) || 'light';
-  const { subscribe, set, update } = writable<Theme>(savedTheme);
+  const themeStore = writable<Theme>(savedTheme);
 
   return {
-    subscribe,
     set: (theme: Theme) => {
-      set(theme);
+      themeStore.set(theme);
       persis.save(KEY, theme);
       applyTheme(theme);
     },
     toggle: () => {
-      update((current) => {
+      themeStore.update((current) => {
         const newTheme = current === 'light' ? 'light' : 'dark';
         persis.save(KEY, newTheme);
         applyTheme(newTheme);
@@ -24,6 +23,15 @@ const createThemeStore = () => {
     },
     init: () => {
       applyTheme(savedTheme);
+      themeStore.subscribe((theme) => {
+        if (typeof document !== 'undefined') {
+          const root = document.documentElement;
+          const themeVars = themes[theme];
+          Object.entries(themeVars).forEach(([key, value]) => {
+            root.style.setProperty(key, value);
+          });
+        }
+      });
     },
   };
 };

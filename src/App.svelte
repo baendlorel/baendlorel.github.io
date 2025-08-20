@@ -8,14 +8,9 @@
   import Footer from '@/lib/Footer.svelte';
   import SettingsDemo from '@/lib/SettingsDemo.svelte';
 
-  let currentTheme: string;
   let currentLang: Language;
-
-  // 订阅主题变化
   themeStore.subscribe((theme) => {
-    currentTheme = theme;
     if (typeof document !== 'undefined') {
-      // 应用 CSS 变量
       const root = document.documentElement;
       const themeVars = themes[theme];
       Object.entries(themeVars).forEach(([key, value]) => {
@@ -30,9 +25,7 @@
   });
 
   onMount(() => {
-    // 初始化主题
     themeStore.init();
-    // 加载数据
     loadRepoData();
   });
 </script>
