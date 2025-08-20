@@ -21,12 +21,19 @@ class RepositoryService {
     script.src =
       'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/fetched-data.js';
     document.body.appendChild(script);
-    const result = await new Promise<RepoInfo[]>((resolve) =>
-      Reflect.set(globalThis, 'CORS_GET_REPO_INFO_RESOLVER', resolve)
-    );
+
+    const result = await new Promise<RepoInfo[]>((resolve) => {
+      globalThis.CORS_GET_REPO_INFO_RESOLVER = resolve;
+    });
+    delete globalThis.CORS_GET_REPO_INFO_RESOLVER;
+
     script.remove();
     return result;
   }
+}
+
+declare global {
+  function CORS_GET_REPO_INFO_RESOLVER(data: RepoInfo[]): void;
 }
 
 const repositoryService = new RepositoryService();

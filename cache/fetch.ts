@@ -36,45 +36,55 @@ async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
   }
 }
 
+interface PackageJson {
+  name: string;
+  description?: string;
+}
+
 async function enrichRepos(repos: RepoInfo[]) {
-  return Promise.all(
-    repos.map(async (repo) => {
-      let npmInfo: NpmInfo | null = null;
-      try {
-        const pkgRes = await fetch(
-          `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
-        );
-        if (pkgRes.ok) {
-          const pkgData = (await pkgRes.json()) as { content: string };
-          const pkgContent = JSON.parse(Buffer.from(pkgData.content, 'base64').toString());
-          npmInfo = await fetchNpmInfo(pkgContent.name);
-        }
-      } catch (e) {
-        console.error(`Error fetching package.json for ${repo.name}:`, e);
+  const enrichedRepos: RepoInfo[] = [];
+  for (let i = 0; i < repos.length; i++) {
+    const repo = repos[i];
+    let npmInfo: NpmInfo | null = null;
+    let pkgJson: PackageJson | null = null;
+    try {
+      const pkgRes = await fetch(
+        `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
+      );
+      if (pkgRes.ok) {
+        const pkgData = (await pkgRes.json()) as { content: string };
+        pkgJson = JSON.parse(Buffer.from(pkgData.content, 'base64').toString()) as {
+          name: string;
+          description?: string;
+        };
+        npmInfo = await fetchNpmInfo(pkgJson.name);
       }
-      const riched: RepoInfo = {
-        id: repo.id,
-        name: repo.name,
-        description: repo.description,
-        html_url: repo.html_url,
-        private: repo.private,
-        fork: repo.fork,
-        license: repo.license,
+    } catch (e) {
+      console.error(`Error fetching package.json for ${repo.name}:`, e);
+    }
+    const enriched: RepoInfo = {
+      id: repo.id,
+      name: repo.name,
+      description: pkgJson?.description ?? repo.description,
+      html_url: repo.html_url,
+      private: repo.private,
+      fork: repo.fork,
+      license: repo.license,
 
-        stargazers_count: repo.stargazers_count,
-        forks_count: repo.forks_count,
-        watchers_count: repo.watchers_count,
+      stargazers_count: repo.stargazers_count,
+      forks_count: repo.forks_count,
+      watchers_count: repo.watchers_count,
 
-        language: repo.language,
-        updated_at: repo.updated_at,
-        homepage: repo.homepage,
-        topics: Array.isArray(repo.topics) ? repo.topics : [],
-        npm: npmInfo ?? null,
-        is_npm_package: !!npmInfo,
-      };
-      return riched;
-    })
-  );
+      language: repo.language,
+      updated_at: repo.updated_at,
+      homepage: repo.homepage,
+      topics: Array.isArray(repo.topics) ? repo.topics : [],
+      npm: npmInfo ?? null,
+      is_npm_package: !!npmInfo,
+    };
+
+    enrichedRepos.push(enriched);
+  }
 }
 
 (async () => {

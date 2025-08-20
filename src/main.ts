@@ -6,4 +6,8 @@ const app = mount(App, {
   target: document.getElementById('app')!,
 });
 
+if (__IS_DEV__) {
+  localStorage.clear();
+}
+
 export default app;
