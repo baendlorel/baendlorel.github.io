@@ -40,7 +40,7 @@ interface PackageJson {
   description?: string;
 }
 
-async function enrichRepos(repos: RepoInfo[]) {
+async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
   const enrichedRepos: RepoInfo[] = [];
   for (let i = 0; i < repos.length; i++) {
     const repo = repos[i];
@@ -84,6 +84,8 @@ async function enrichRepos(repos: RepoInfo[]) {
 
     enrichedRepos.push(enriched);
   }
+
+  return enrichedRepos;
 }
 
 /**
