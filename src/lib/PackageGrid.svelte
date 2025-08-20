@@ -1,6 +1,5 @@
 <script lang="ts">
   import { debounce } from '@/common/debounce.js';
-  import { getRepoInfo } from '@/common/get-repo-info.js';
   import { repoStore, repoLoading, repoError } from '@/store/repo.js';
 
   import PackageCard from './PackageCard.svelte';

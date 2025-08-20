@@ -11,11 +11,17 @@ function genExpireTime() {
 /**
  * [WARN] Must use object can be stringified
  */
-export function save(key: string, value: any) {
+export function save(key: string, obj: any) {
+  if (typeof obj !== 'object' || obj === null) {
+    throw new TypeError(`Cannot save non-object value for key "${key}"`);
+  }
+
   const k = Consts.PersistancePrefix + key;
-  const s = compress(JSON.stringify(value));
-  const expire = genExpireTime();
-  localStorage.setItem(k, `{"value":"${s}","expire":${expire}}`);
+  const ke = Consts.PersistanceExpirePrefix + key;
+  const s = compress(JSON.stringify(obj));
+  const e = genExpireTime();
+  localStorage.setItem(k, s);
+  localStorage.setItem(ke, e.toString());
 }
 
 /**
@@ -24,18 +30,21 @@ export function save(key: string, value: any) {
  */
 export function load<T extends unknown>(key: string): T | null {
   const k = Consts.PersistancePrefix + key;
-  const item = localStorage.getItem(k);
-  if (!item) {
+  const ke = Consts.PersistanceExpirePrefix + key;
+
+  const value = localStorage.getItem(k);
+  if (value === null) {
+    return null;
+  }
+
+  const e = parseInt(localStorage.getItem(ke), 10);
+  if (e < Date.now()) {
+    localStorage.removeItem(k);
     return null;
   }
 
   try {
-    const parsed = JSON.parse(item);
-    if (parsed.expire < Date.now()) {
-      localStorage.removeItem(k);
-      return null;
-    }
-    return JSON.parse(decompress(parsed.value));
+    return JSON.parse(decompress(value));
   } catch (e) {
     console.error(`Error loading key "${key}":`, e);
     return null;

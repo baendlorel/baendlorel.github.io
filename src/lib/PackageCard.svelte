@@ -98,25 +98,6 @@
       {/if}
     </div>
 
-    {#if repository.is_npm_package}
-      <div class="npm-info">
-        <div class="npm-badge">
-          <i class="fab fa-npm"></i>
-          <span>v{repository.npm.version}</span>
-        </div>
-        {#if repository.name}
-          <a
-            href="https://npmjs.com/package/{repository.name}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="npm-link"
-          >
-            View on NPM
-          </a>
-        {/if}
-      </div>
-    {/if}
-
     <div class="package-footer">
       <div class="updated-date">
         Updated {formatDate(repository.updated_at)}
@@ -132,16 +113,31 @@
           <i class="fab fa-github"></i>
           View Code
         </a>
-        {#if repository.homepage}
+
+        {#if repository.is_npm_package}
           <a
-            href={repository.homepage}
+            href="https://npmjs.com/package/{repository.name}"
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-primary"
           >
-            <i class="fas fa-external-link-alt"></i>
-            Demo
+            <i class="fab fa-npm"></i>
+            View on NPM
           </a>
+          <!-- <div class="npm-info">
+            <div class="npm-badge">
+              <i class="fab fa-npm"></i>
+              <span>v{repository.npm.version}</span>
+            </div>
+            <a
+              href="https://npmjs.com/package/{repository.name}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="npm-link"
+            >
+              View on NPM
+            </a>
+          </div> -->
         {/if}
       </div>
     </div>
@@ -344,6 +340,10 @@
   .btn-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .package-card .btn-primary {
+    border-color: var(--surface);
   }
 
   /* Type-specific styling */
