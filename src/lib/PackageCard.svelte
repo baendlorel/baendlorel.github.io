@@ -25,15 +25,9 @@
 </script>
 
 <script lang="ts">
-  import { languageStore, t } from '@/store/i18n.js';
+  import { lang, t } from '@/common/i18n.js';
 
   export let repository: RepoInfo;
-
-  let currentLang: Language;
-
-  languageStore.subscribe((lang) => {
-    currentLang = lang;
-  });
 
   function getTypeClass(repo: RepoInfo): string {
     if (repo.is_npm_package) return 'npm';
@@ -119,7 +113,7 @@
           class="btn btn-outline"
         >
           <i class="fab fa-github"></i>
-          {t('viewOnGitHub', currentLang)}
+          {t('viewOnGitHub')}
         </a>
 
         {#if repository.is_npm_package}
@@ -130,7 +124,7 @@
             class="btn btn-primary"
           >
             <i class="fab fa-npm"></i>
-            {t('viewOnNPM', currentLang)}
+            {t('viewOnNPM')}
           </a>
           <!-- <div class="npm-info">
             <div class="npm-badge">

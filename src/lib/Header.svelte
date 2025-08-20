@@ -1,6 +1,6 @@
 <script lang="ts">
   import { repoStats } from '@/store/repo.js';
-  import { t } from '@/store/i18n.js';
+  import { t } from '@/common/i18n.js';
   import avatar from '@/assets/avatar.jpg';
 
   import ThemeControls from './ThemeControls.svelte';
@@ -28,11 +28,11 @@
       <div class="stats">
         <div class="stat-item">
           <span class="stat-number">{$repoStats.total}</span>
-          <span class="stat-label">{t('repositories', currentLang)}</span>
+          <span class="stat-label">{t('repositories')}</span>
         </div>
         <div class="stat-item">
           <span class="stat-number">{$repoStats.npm}</span>
-          <span class="stat-label">{t('npmPackages', currentLang)}</span>
+          <span class="stat-label">{t('npmPackages')}</span>
         </div>
       </div>
       <ThemeControls />

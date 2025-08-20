@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { debounce } from '@/common/debounce.js';
-  import { languageStore, t } from '@/store/i18n.js';
+  import { lang, t } from '@/common/i18n.js';
   import {
     loadRepoData,
     repoStore,
@@ -20,11 +20,6 @@
   let filteredRepos: RepoInfo[] = [];
   let searchQuery = '';
   let activeFilter: RepoType = 'featured'; // 默认值，会被 URL 参数覆盖
-  let currentLang: Language;
-
-  languageStore.subscribe((lang) => {
-    currentLang = lang;
-  });
 
   function getRepoTypeFromURL(): RepoType {
     if (typeof window === 'undefined') {
@@ -116,14 +111,14 @@
       class:active={activeFilter === 'featured'}
       on:click={() => handleFilter('featured')}
     >
-      {t('featuredProjects', currentLang)}
+      {t('featuredProjects')}
     </button>
     <button
       class="filter-btn"
       class:active={activeFilter === 'npm'}
       on:click={() => handleFilter('npm')}
     >
-      {t('npmPackages', currentLang)}
+      {t('npmPackages')}
     </button>
     <button
       class="filter-btn"
@@ -137,13 +132,13 @@
       class:active={activeFilter === 'all'}
       on:click={() => handleFilter('all')}
     >
-      {t('allProjects', currentLang)}
+      {t('allProjects')}
     </button>
   </div>
   <div class="search-box">
     <input
       type="text"
-      placeholder={t('searchPlaceholder', currentLang)}
+      placeholder={t('searchPlaceholder')}
       on:input={debouncedSearch}
       bind:value={searchQuery}
     />
@@ -154,18 +149,18 @@
   {#if $repoLoading}
     <div class="loading">
       <div class="spinner"></div>
-      <p>{t('loading', currentLang)}</p>
+      <p>{t('loading')}</p>
     </div>
   {:else if $repoError}
     <div class="error-message">
       <i class="fas fa-exclamation-triangle"></i>
-      <p>{t('errorLoading', currentLang)}</p>
-      <button on:click={loadRepoData} class="retry-btn">{t('tryAgain', currentLang)}</button>
+      <p>{t('errorLoading')}</p>
+      <button on:click={loadRepoData} class="retry-btn">{t('tryAgain')}</button>
     </div>
   {:else if filteredRepos.length === 0}
     <div class="no-results">
       <i class="fas fa-search"></i>
-      <p>{t('noResults', currentLang)}</p>
+      <p>{t('noResults')}</p>
     </div>
   {:else}
     <div class="packages-grid">

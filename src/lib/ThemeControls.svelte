@@ -1,21 +1,11 @@
 <script lang="ts">
-  import { themeStore } from '@/store/theme.js';
-  import { languageStore } from '@/store/i18n.js';
-  import { t } from '@/store/i18n.js';
+  import { themeStore, toggle } from '@/store/theme.js';
+  import { t, lang } from '@/common/i18n.js';
 
   $: currentTheme = $themeStore;
-  let currentLang: Language;
-
-  languageStore.subscribe((lang) => {
-    currentLang = lang;
-  });
 
   function toggleTheme() {
-    themeStore.toggle();
-  }
-
-  function toggleLanguage() {
-    languageStore.toggle();
+    toggle();
   }
 </script>
 
@@ -23,26 +13,26 @@
   <button
     class="control-btn theme-btn"
     on:click={toggleTheme}
-    title={t('toggleTheme', currentLang)}
-    aria-label={t('toggleTheme', currentLang)}
+    title={t('toggleTheme')}
+    aria-label={t('toggleTheme')}
   >
     {#if currentTheme === 'dark'}
       <i class="fas fa-sun"></i>
-      <span>{t('lightMode', currentLang)}</span>
+      <span>{t('lightMode')}</span>
     {:else}
       <i class="fas fa-moon"></i>
-      <span>{t('darkMode', currentLang)}</span>
+      <span>{t('darkMode')}</span>
     {/if}
   </button>
 
   <button
     class="control-btn lang-btn"
     on:click={toggleLanguage}
-    title={t('toggleLanguage', currentLang)}
-    aria-label={t('toggleLanguage', currentLang)}
+    title={t('toggleLanguage')}
+    aria-label={t('toggleLanguage')}
   >
     <i class="fas fa-language"></i>
-    <span>{currentLang === 'en' ? '中文' : 'English'}</span>
+    <span>{lang === 'en' ? '中文' : 'English'}</span>
   </button>
 </div>
 

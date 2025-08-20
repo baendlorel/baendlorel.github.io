@@ -2,7 +2,7 @@ import persis from '@/persistance/index.js';
 
 const KEY = 'language';
 
-export const translations = {
+const translations = {
   en: {
     welcome: '🚀 Welcome to My Package Collection',
     intro:
@@ -71,16 +71,18 @@ export const translations = {
 };
 
 const createLanguageStore = () => {
-  const savedLang = persis.load<Language>(KEY) ?? 'en';
+  const lang = persis.load<Language>(KEY) ?? 'en';
 
   return {
-    set: (lang: Language) => {
-      persis.save(KEY, lang);
-    },
     toggle: () => {
-      const current = persis.load<Language>(KEY) || 'en';
-      const newLang = current === 'en' ? 'zh' : 'en';
+      const newLang = lang === 'en' ? 'zh' : 'en';
       persis.save(KEY, newLang);
+      window.location.reload();
     },
+    t: (lorem) => translations[lang][lorem],
+    lang,
   };
 };
+
+const { toggle, t, lang } = createLanguageStore();
+export { toggle, t, lang };

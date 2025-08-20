@@ -1,16 +1,10 @@
 <script lang="ts">
-  import { languageStore, t } from '@/store/i18n.js';
-
-  let currentLang: Language;
-
-  languageStore.subscribe((lang) => {
-    currentLang = lang;
-  });
+  import { lang, t } from '@/common/i18n.js';
 </script>
 
 <footer class="footer">
   <div class="footer-content">
-    <p>&copy; 2025 KasukabeTsumugi. {t('madeWithLove', currentLang)}</p>
+    <p>&copy; 2025 KasukabeTsumugi. {t('madeWithLove')}</p>
     <div class="social-links">
       <a
         href="https://github.com/baendlorel"

@@ -1,19 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { t } from '@/common/i18n.js';
   import { loadRepoData } from '@/store/repo.js';
-  import { init } from '@/store/theme.js';
-  import { languageStore, t } from '@/store/i18n.js';
+  import { init as initTheme } from '@/store/theme.js';
   import Header from '@/lib/Header.svelte';
   import PackageGrid from '@/lib/PackageGrid.svelte';
   import Footer from '@/lib/Footer.svelte';
 
-  let currentLang: Language;
-  languageStore.subscribe((lang) => {
-    currentLang = lang;
-  });
-
   onMount(() => {
-    init();
+    initTheme();
     loadRepoData();
   });
 </script>
@@ -23,9 +18,9 @@
 
   <main class="main">
     <section class="intro">
-      <h2>{t('welcome', currentLang)}</h2>
+      <h2>{t('welcome')}</h2>
       <p>
-        {t('intro', currentLang)}
+        {t('intro')}
       </p>
     </section>
 
