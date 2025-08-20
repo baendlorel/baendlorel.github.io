@@ -1,24 +1,23 @@
 import { writable } from 'svelte/store';
-import { load, save } from './persistance.js';
+import { load, save } from '@/persistance/index.js';
 
-export type Theme = 'dark' | 'light';
+const KEY = 'repo-info';
 
-// 创建主题 store，默认暗色主题
 const createThemeStore = () => {
-  const savedTheme = load<Theme>('theme') || 'dark';
+  const savedTheme = load<Theme>(KEY) || 'light';
   const { subscribe, set, update } = writable<Theme>(savedTheme);
 
   return {
     subscribe,
     set: (theme: Theme) => {
       set(theme);
-      save('theme', theme);
+      save(KEY, theme);
       applyTheme(theme);
     },
     toggle: () => {
       update((current) => {
-        const newTheme = current === 'dark' ? 'light' : 'dark';
-        save('theme', newTheme);
+        const newTheme = current === 'light' ? 'light' : 'dark';
+        save(KEY, newTheme);
         applyTheme(newTheme);
         return newTheme;
       });
@@ -29,7 +28,6 @@ const createThemeStore = () => {
   };
 };
 
-// 应用主题到 DOM
 function applyTheme(theme: Theme) {
   if (typeof document !== 'undefined') {
     document.documentElement.setAttribute('data-theme', theme);
@@ -38,7 +36,6 @@ function applyTheme(theme: Theme) {
 
 export const themeStore = createThemeStore();
 
-// CSS 变量定义
 export const themes = {
   dark: {
     '--primary-color': '#6366f1',

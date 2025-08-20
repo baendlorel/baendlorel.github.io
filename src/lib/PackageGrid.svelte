@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { debounce } from '@/common/debounce.js';
   import { languageStore, t, type Language } from '@/store/i18n.js';
   import {
@@ -18,11 +19,38 @@
   $: featuredRepos = $featuredRepoStore;
   let filteredRepos: RepoInfo[] = [];
   let searchQuery = '';
-  let activeFilter: RepoType = 'featured';
+  let activeFilter: RepoType = 'featured'; // 默认值，会被 URL 参数覆盖
   let currentLang: Language;
 
   languageStore.subscribe((lang) => {
     currentLang = lang;
+  });
+
+  function getRepoTypeFromURL(): RepoType {
+    if (typeof window === 'undefined') {
+      return 'featured';
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoType = urlParams.get('repoType') as RepoType;
+
+    const validTypes: RepoType[] = ['all', 'npm', 'featured', 'other'];
+    return validTypes.includes(repoType) ? repoType : 'featured';
+  }
+
+  // watch for URL changes
+  function handlePopState() {
+    activeFilter = getRepoTypeFromURL();
+  }
+
+  onMount(() => {
+    activeFilter = getRepoTypeFromURL();
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   });
 
   // Reactive statements

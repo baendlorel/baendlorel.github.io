@@ -3,6 +3,9 @@
 
 declare const __IS_DEV__: boolean;
 
+type Language = 'en' | 'zh';
+type Theme = 'dark' | 'light';
+
 interface License {
   key: string;
   name: string;

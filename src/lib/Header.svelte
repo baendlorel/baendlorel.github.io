@@ -1,14 +1,7 @@
 <script lang="ts">
   import { repoStats } from '@/store/repo.js';
-  import { languageStore, t, type Language } from '@/store/i18n.js';
   import ThemeControls from './ThemeControls.svelte';
   import avatar from '@/assets/avatar.jpg';
-
-  let currentLang: Language;
-
-  languageStore.subscribe((lang) => {
-    currentLang = lang;
-  });
 </script>
 
 <header class="header">
