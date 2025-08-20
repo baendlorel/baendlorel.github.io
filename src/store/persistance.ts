@@ -3,8 +3,8 @@ import { compress, decompress } from 'lz-string';
 
 function genExpireTime() {
   const d = new Date();
-  d.setDate(d.getDate() + Consts.ExpireDays);
-  d.setHours(Consts.ExpireHour);
+  d.setUTCDate(d.getUTCDate() + Consts.ExpireDays);
+  d.setUTCHours(Consts.ExpireHour);
   return d.getTime();
 }
 
