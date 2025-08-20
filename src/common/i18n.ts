@@ -4,9 +4,9 @@ const KEY = 'language';
 
 const translations = {
   en: {
-    welcome: '🚀 Welcome to My Package Collection',
+    welcome: '🚀 Welcome to Tsumu Cabin!',
     intro:
-      "Here you'll find all my open-source packages. Each one is crafted with care and designed to make your development experience better! (◕‿◕)",
+      'Here you will find all my open-source packages. Each one is crafted with care and designed to make your development experience better! (◕‿◕)',
     repositories: 'Repositories',
     npmPackages: 'NPM Packages',
     featuredProjects: 'Featured Projects',
@@ -18,10 +18,11 @@ const translations = {
     downloads: 'Downloads',
     version: 'Version',
     updated: 'Updated',
-    viewOnGitHub: 'View on GitHub',
-    viewOnNPM: 'View on NPM',
+    viewOnGitHub: 'GitHub',
+    viewOnNPM: 'NPM',
+    repoNameCopied: 'Copied!',
 
-    searchPlaceholder: 'Search packages...',
+    searchPlaceholder: '🔍Search packages...',
     noResults: 'No packages found matching your search.',
     loading: 'Loading packages...',
 
@@ -38,10 +39,10 @@ const translations = {
     tryAgain: 'Try Again',
   },
   zh: {
-    welcome: '🚀 欢迎来到我的包集合',
-    intro: '这里展示了我所有的开源包。每一个都经过精心制作，旨在让你的开发体验更美好！(◕‿◕)',
+    welcome: '🚀 欢迎来到Tsumu Cabin!',
+    intro: '这里展示了我所有的开源程序。每一个都经过精心制作，旨在让你的开发体验更美好！(◕‿◕)',
     repositories: '仓库数',
-    npmPackages: 'NPM 包',
+    npmPackages: 'NPM包',
     featuredProjects: '特色项目',
     otherProjects: '其他项目',
     allProjects: '所有项目',
@@ -53,8 +54,9 @@ const translations = {
     updated: '更新时间',
     viewOnGitHub: '前往仓库',
     viewOnNPM: '前往NPM',
+    repoNameCopied: '复制成功',
 
-    searchPlaceholder: '搜索包...',
+    searchPlaceholder: '🔍搜索包...',
     noResults: '没有找到匹配的包。',
     loading: '加载中...',
 

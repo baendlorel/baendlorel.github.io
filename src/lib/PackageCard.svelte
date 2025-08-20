@@ -27,8 +27,23 @@
 <script lang="ts">
   import { lang, t } from '@/common/i18n.js';
   import { copyToClipboard } from '@/common/copy.js';
+  import { pop } from '@/common/pop.js';
 
   export let repository: RepoInfo;
+
+  function copy(event: MouseEvent) {
+    copyToClipboard(repository.name)
+      .then(() => {
+        pop({
+          x: event.clientX,
+          y: event.clientY,
+          msg: t('repoNameCopied'),
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to copy package name:', err);
+      });
+  }
 
   function getTypeClass(repo: RepoInfo): string {
     if (repo.is_npm_package) return 'npm';
@@ -76,7 +91,7 @@
         type="button"
         class="package-name-btn"
         aria-label="Copy package name to clipboard"
-        on:click={() => copyToClipboard(repository.name)}
+        on:click={copy}
       >
         {repository.name}
       </button>
