@@ -4,6 +4,13 @@
   import avatar from '@/assets/avatar.jpg';
 
   import ThemeControls from './ThemeControls.svelte';
+  import ContactDialog from './ContactDialog.svelte';
+
+  let contactDialog: ContactDialog;
+
+  function openContactDialog() {
+    contactDialog.open();
+  }
 </script>
 
 <header class="header">
@@ -22,6 +29,15 @@
             <i class="fas fa-envelope"></i>
             futami16237@gmail.com
           </a>
+          <button
+            type="button"
+            class="collaborate-btn"
+            on:click={openContactDialog}
+            title={t('collaborateWithMe') || '与我合作'}
+          >
+            <i class="fas fa-handshake"></i>
+            <span>{t('collaborate') || '合作'}</span>
+          </button>
         </div>
       </div>
     </div>
@@ -40,6 +56,8 @@
     </div>
   </div>
 </header>
+
+<ContactDialog bind:this={contactDialog} />
 
 <style>
   .header {
@@ -123,6 +141,9 @@
 
   .contact-info {
     margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 
   .email {
@@ -137,6 +158,27 @@
 
   .email:hover {
     color: var(--primary-color);
+  }
+
+  .collaborate-btn {
+    background: var(--gradient);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+  }
+
+  .collaborate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
   }
 
   .stats {
@@ -196,6 +238,22 @@
     .stat-item {
       min-width: 100px;
       padding: 0.75rem;
+    }
+
+    .contact-info {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .collaborate-btn span {
+      display: none;
+    }
+
+    .collaborate-btn {
+      padding: 0.5rem;
+      min-width: 40px;
+      justify-content: center;
     }
   }
 </style>
