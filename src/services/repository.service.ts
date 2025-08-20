@@ -6,6 +6,7 @@ class RepositoryService {
       return data.default;
     }
 
+    // fixme still has cross origin issue
     const resp = await axios.get(
       'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/fetched-data.json'
     );

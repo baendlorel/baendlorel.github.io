@@ -1,6 +1,6 @@
 <script lang="ts">
   import { debounce } from '@/common/debounce.js';
-  import { repoStore, repoLoading, repoError } from '@/store/repo.js';
+  import { loadRepoData, repoStore, repoLoading, repoError } from '@/store/repo.js';
 
   import PackageCard from './PackageCard.svelte';
 
@@ -101,7 +101,7 @@
     <div class="error-message">
       <i class="fas fa-exclamation-triangle"></i>
       <p>Oops! Something went wrong while loading packages. (╯°□°)╯</p>
-      <button on:click={loadRepositories} class="retry-btn">Try Again</button>
+      <button on:click={loadRepoData} class="retry-btn">Try Again</button>
     </div>
   {:else if filteredRepos.length === 0}
     <div class="no-results">
