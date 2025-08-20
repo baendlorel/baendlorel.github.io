@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
-const OUTPUT_PATH = './fetched-data.json';
+const OUTPUT_PATH = './fetched-data.js';
 
 async function fetchRepos() {
   const res = await fetch(
@@ -15,7 +15,7 @@ async function fetchRepos() {
   if (!res.ok) {
     throw new Error('GitHub API error: ' + res.status);
   }
-  const repos = (await res.json()) as RepoData[];
+  const repos = (await res.json()) as RepoInfo[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
   return repos.filter((repo) => !repo.private);
 }
@@ -36,7 +36,7 @@ async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
   }
 }
 
-async function enrichRepos(repos: RepoData[]) {
+async function enrichRepos(repos: RepoInfo[]) {
   return Promise.all(
     repos.map(async (repo) => {
       let npmInfo: NpmInfo | null = null;
@@ -52,7 +52,7 @@ async function enrichRepos(repos: RepoData[]) {
       } catch (e) {
         console.error(`Error fetching package.json for ${repo.name}:`, e);
       }
-      const riched: RepoData = {
+      const riched: RepoInfo = {
         id: repo.id,
         name: repo.name,
         description: repo.description,
@@ -80,6 +80,9 @@ async function enrichRepos(repos: RepoData[]) {
 (async () => {
   const repos = await fetchRepos();
   const data = await enrichRepos(repos);
-  writeFileSync(OUTPUT_PATH, JSON.stringify(data, null, 2));
-  console.log('Data file generated:', OUTPUT_PATH);
+  const dataStr = JSON.stringify(data, null, 2);
+  //
+  const js = `window.CORS_GET_REPO_INFO_RESOLVER(${dataStr});`;
+
+  writeFileSync(OUTPUT_PATH, js);
 })();

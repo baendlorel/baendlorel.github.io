@@ -11,7 +11,7 @@ interface License {
   node_id: string;
 }
 
-interface RepoData {
+interface RepoInfo {
   id: number;
   name: string;
   description: string | null;

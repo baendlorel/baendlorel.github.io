@@ -3,13 +3,13 @@ import { Consts } from '@/common/consts';
 import repositoryService from '@/services/repository.service.js';
 import { load, save } from './persistance';
 
-export const repoStore = writable<RepoData[]>([]);
+export const repoStore = writable<RepoInfo[]>([]);
 export const repoStats = writable<{ total: number; npm: number }>({ total: NaN, npm: NaN });
 export const repoLoading = writable<boolean>(false);
 export const repoError = writable<boolean>(false);
 
 async function getInfo() {
-  const saved = load<RepoData[]>(Consts.RepoInfoKey);
+  const saved = load<RepoInfo[]>(Consts.RepoInfoKey);
   if (saved !== null) {
     console.log('Loaded repo data from localStorage');
     return saved;

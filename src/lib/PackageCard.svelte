@@ -25,23 +25,23 @@
 </script>
 
 <script lang="ts">
-  export let repository: RepoData;
+  export let repository: RepoInfo;
 
-  function getTypeClass(repo: RepoData): string {
+  function getTypeClass(repo: RepoInfo): string {
     if (repo.is_npm_package) return 'npm';
     if (repo.topics?.includes('library')) return 'library';
     if (repo.topics?.includes('tool')) return 'tool';
     return 'other';
   }
 
-  function getTypeIcon(repo: RepoData): string {
+  function getTypeIcon(repo: RepoInfo): string {
     if (repo.is_npm_package) return 'fab fa-npm';
     if (repo.topics?.includes('library')) return 'fas fa-book';
     if (repo.topics?.includes('tool')) return 'fas fa-tools';
     return 'fas fa-code';
   }
 
-  function formatDate(dateString: RepoData): string {
+  function formatDate(dateString: RepoInfo): string {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
