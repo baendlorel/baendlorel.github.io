@@ -46,49 +46,48 @@
       </button>
     </header>
 
-    <div class="dialog-body">
-      <div class="contact-section">
-        <div class="section-header">
-          <i class="fas fa-envelope"></i>
-          <h3>{t('getInTouch')}</h3>
-        </div>
-        <div class="contact-methods">
-          <a href="mailto:futami16237@gmail.com" class="contact-method">
+    <div class="dialog-body-wrapper">
+      <div class="dialog-body">
+        <div class="contact-section">
+          <div class="section-header">
             <i class="fas fa-envelope"></i>
-            <span>futami16237@gmail.com</span>
-          </a>
-          <div class="contact-method">
-            <i class="fas fa-clock"></i>
+            <h3>
+              {t('getInTouch')}
+            </h3>
+          </div>
+          <div class="contact-methods">
+            <a href="mailto:futami16237@gmail.com" class="contact-method">
+              futami16237@gmail.com (。・∀・)ノ
+            </a>
             <span>{t('responseTime')}</span>
           </div>
         </div>
-      </div>
-      <div class="collaboration-section">
-        <div class="section-header">
-          <i class="fas fa-code"></i>
-          <h3>{t('customDevelopment')}</h3>
+        <div class="collaboration-section">
+          <div class="section-header">
+            <i class="fas fa-code"></i>
+            <h3>{t('customDevelopment')}</h3>
+          </div>
+          <p class="section-description">
+            {t('developmentDescription')}
+          </p>
+          <ul class="service-list">
+            <li><i class="fas fa-check"></i> {t('frontendDev')}</li>
+            <li><i class="fas fa-check"></i> {t('fullstackDev')}</li>
+            <li><i class="fas fa-check"></i> {t('techConsulting')}</li>
+          </ul>
         </div>
-        <p class="section-description">
-          {t('developmentDescription')}
-        </p>
-        <ul class="service-list">
-          <li><i class="fas fa-check"></i> {t('frontendDev')}</li>
-          <li><i class="fas fa-check"></i> {t('fullstackDev')}</li>
-          <li><i class="fas fa-check"></i> {t('techConsulting')}</li>
-        </ul>
-      </div>
+        <div class="support-section">
+          <div class="section-header">
+            <i class="fas fa-heart"></i>
+            <h3>{t('supportMyWork')}</h3>
+          </div>
+          <p class="section-description">
+            {t('supportDescription')}
+          </p>
 
-      <div class="support-section">
-        <div class="section-header">
-          <i class="fas fa-heart"></i>
-          <h3>{t('supportMyWork')}</h3>
-        </div>
-        <p class="section-description">
-          {t('supportDescription')}
-        </p>
-
-        <div class="qr-code-container">
-          <img src={zfb} alt="zfb-qr" style="width:100%" />
+          <div class="qr-code-container">
+            <img src={zfb} alt="zfb-qr" style="width:100%" />
+          </div>
         </div>
       </div>
     </div>
@@ -202,16 +201,20 @@
     background: rgba(255, 255, 255, 0.2);
   }
 
+  .dialog-body-wrapper {
+    height: 80vh;
+    overflow-y: auto;
+  }
+
   .dialog-body {
     padding: 2rem;
-    overflow-y: auto;
     flex: 1;
   }
 
   .collaboration-section,
   .support-section,
   .contact-section {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .collaboration-section:last-child,
@@ -224,7 +227,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
 
   .section-header i {
@@ -242,7 +245,7 @@
   .section-description {
     color: var(--text-secondary);
     line-height: 1.6;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .service-list {
@@ -269,44 +272,27 @@
     margin: auto;
     justify-content: center;
     width: 80%;
-    border: 2px dashed var(--border);
-    border-radius: 12px;
+    border: 4px dashed var(--border);
+    border-radius: 16px;
     overflow: hidden;
   }
 
   .contact-methods {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.3rem;
   }
 
   .contact-method {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.6rem 1rem;
-    background: var(--surface-light);
-    border-radius: 8px;
+    color: var(--secondary-color);
     text-decoration: none;
-    color: var(--text-secondary);
     transition: all 0.3s ease;
   }
 
   .contact-method:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-1px);
-  }
-
-  .contact-method i {
     color: var(--primary-color);
-    font-size: 1.1rem;
-    width: 20px;
-    text-align: center;
-  }
-
-  .contact-method:hover i {
-    color: white;
+    text-decoration: underline;
   }
 
   @media (max-width: 768px) {

@@ -28,8 +28,8 @@ const zh = {
 
   toggleTheme: '切换主题',
   toggleLanguage: '切换语言',
-  darkMode: '暗色模式',
-  lightMode: '亮色模式',
+  darkMode: 'Dark',
+  lightMode: 'Light',
 
   builtWith: '使用',
   and: '和',
@@ -39,18 +39,18 @@ const zh = {
   tryAgain: '重试',
 
   // Contact Dialog
-  collaborateWithMe: '与我合作',
+  collaborateWithMe: '开发服务 / 打赏支持',
   collaborate: '开发服务 / 打赏',
   customDevelopment: '定制开发服务',
-  developmentDescription:
-    '我提供高质量的前端开发、Node.js全栈应用开发和技术咨询服务。如果您有项目、小工具的开发需求，欢迎联系我！',
-  frontendDev: '前端开发（Vue、Svelte、React、Vanilla、Yuka.js）',
-  fullstackDev: '全栈方案（Node.js）',
+  developmentDescription: '提供高质量开发服务，如果您有需求，欢迎联系我！',
+  frontendDev: '前端开发（Vue、Svelte、React、Vanilla、Yuka.js...）',
+  fullstackDev: '全栈方案（Node.js），跨平台应用（Electron、Tauri...）',
   techConsulting: '技术交流学习、咨询（TypeScript/JavaScript）',
-  supportMyWork: '支持我的工作',
+  supportMyWork: '支持我的作品 / 打赏',
   supportDescription:
     '如果您觉得我的开源项目对您有帮助，欢迎使用我的NPM包或打赏支持！您的支持是我继续创作的动力 🌟',
-  getInTouch: '联系方式',
+  getInTouch: '联系',
+  mailMeNow: '点击此处给我发邮件',
   responseTime: '通常48小时内回复',
 };
 
@@ -81,8 +81,8 @@ const en = {
 
   toggleTheme: 'Toggle Theme',
   toggleLanguage: 'Switch Language',
-  darkMode: 'Dark Mode',
-  lightMode: 'Light Mode',
+  darkMode: 'Dark',
+  lightMode: 'Light',
 
   builtWith: 'Built with',
   and: 'and',
@@ -92,18 +92,18 @@ const en = {
   tryAgain: 'Try Again',
 
   // Contact Dialog
-  collaborateWithMe: 'Collaborate with Me',
+  collaborateWithMe: 'Development Services / Donate',
   collaborate: 'Development Services / Donate',
   customDevelopment: 'Custom Development Services',
-  developmentDescription:
-    'I provide high-quality frontend development, Node.js full-stack application development, and technical consulting services. If you have any project or tool development needs, feel free to contact me!',
-  frontendDev: 'Frontend Development (Vue, Svelte, React, Vanilla, Yuka.js)',
-  fullstackDev: 'Full-stack Solutions (Node.js)',
+  developmentDescription: 'If you have needs, feel free to contact me!',
+  frontendDev: 'Frontend Development (Vue, Svelte, React, Vanilla, Yuka.js...)',
+  fullstackDev: 'Full-stack Solutions (Node.js), cross-platform apps (Electron, Tauri...)',
   techConsulting: 'Technical Exchange & Consulting (TypeScript/JavaScript)',
-  supportMyWork: 'Support My Work',
+  supportMyWork: 'Support My Work / Donate',
   supportDescription:
     'If you find my open-source projects helpful, please use my NPM packages or consider donating! Your support motivates me to keep creating 🌟',
   getInTouch: 'Get in Touch',
+  mailMeNow: 'Click here to Mail Me Now',
   responseTime: 'Usually respond within 48 hours',
 } satisfies typeof zh;
 
@@ -118,7 +118,7 @@ const createLanguageStore = () => {
       persis.save(KEY, newLang);
       window.location.reload();
     },
-    t: (lorem) => dict[lorem],
+    t: (lorem: keyof typeof zh) => dict[lorem],
     lang,
   };
 };

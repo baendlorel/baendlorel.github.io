@@ -10,16 +10,20 @@ const createThemeStore = () => {
   const saved = persis.load<Theme>(KEY) ?? 'light';
   const themeStore = writable<Theme>(saved);
 
+  const apply = (theme: string) => {
+    document.documentElement.setAttribute(KEY, theme);
+  };
+
   return {
     toggle: () => {
       themeStore.update((current) => {
         const newTheme = current === 'light' ? 'dark' : 'light';
         persis.save(KEY, newTheme);
-        document.body.setAttribute(KEY, newTheme);
+        apply(newTheme);
         return newTheme;
       });
     },
-    init: () => document.body.setAttribute(KEY, saved),
+    init: () => apply(saved),
     themeStore,
   };
 };
