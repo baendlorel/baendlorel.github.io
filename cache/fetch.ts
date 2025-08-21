@@ -38,6 +38,7 @@ async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
 interface PackageJson {
   name: string;
   description?: string;
+  description_zh?: string;
 }
 
 async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
@@ -65,6 +66,7 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
       id: repo.id,
       name: repo.name,
       description: pkgJson?.description ?? repo.description,
+      description_zh: pkgJson?.description_zh ?? repo.description,
       html_url: repo.html_url,
       private: repo.private,
       fork: repo.fork,

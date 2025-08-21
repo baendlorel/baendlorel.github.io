@@ -76,11 +76,15 @@
   }
 
   function trunc(description: string, maxLength: number = 120): string {
-    if (!description) return 'No description available';
+    if (!description) {
+      return t('noDescription'); // Use i18n for no description
+    }
     return description.length > maxLength
       ? description.substring(0, maxLength) + '...'
       : description;
   }
+
+  let description = trunc(lang === 'en' ? repository.description : repository.description_zh);
 </script>
 
 <div class="package-card" data-type={getTypeClass(repository)}>
@@ -106,7 +110,7 @@
     </h3>
 
     <p class="package-description">
-      {trunc(repository.description)}
+      {description}
     </p>
 
     <div class="package-meta">

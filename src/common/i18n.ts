@@ -21,6 +21,7 @@ const zh = {
   viewOnGitHub: '前往仓库',
   viewOnNPM: '前往NPM',
   repoNameCopied: '复制成功',
+  noDescription: '没有项目描述',
 
   searchPlaceholder: '🔍搜索包...',
   noResults: '没有找到匹配的包。',
@@ -74,6 +75,7 @@ const en = {
   viewOnGitHub: 'GitHub',
   viewOnNPM: 'NPM',
   repoNameCopied: 'Copied!',
+  noDescription: 'No description available',
 
   searchPlaceholder: '🔍Search packages...',
   noResults: 'No packages found matching your search.',

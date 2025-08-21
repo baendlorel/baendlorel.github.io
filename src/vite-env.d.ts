@@ -18,7 +18,7 @@ interface RepoInfo {
   id: number;
   name: string;
   description: string | null;
-  descriptionZh: string | null;
+  description_zh: string | null;
   html_url: string;
   private: boolean;
   fork: boolean;
