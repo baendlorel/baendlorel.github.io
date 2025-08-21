@@ -1,0 +1,20 @@
+.kskb-icon {
+  display: inline-block;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: contain;
+  vertical-align: middle;
+  color: transparent;
+}
+
+.kskb-vscode {
+  background: url('/assets/icons/vscode.svg') no-repeat center center;
+}
+
+.kskb-rollup {
+  background: url('/assets/icons/rollup.svg') no-repeat center center;
+}
+
+.kskb-app {
+  background: url('/assets/icons/app.svg') no-repeat center center;
+}

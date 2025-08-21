@@ -46,16 +46,31 @@
   }
 
   function getTypeClass(repo: RepoInfo): string {
-    if (repo.is_npm_package) return 'npm';
-    if (repo.topics?.includes('library')) return 'library';
-    if (repo.topics?.includes('tool')) return 'tool';
-    return 'other';
+    if (repo.is_npm_package) {
+      return 'npm';
+    }
+    return repo.purpose ?? 'other';
   }
 
   function getTypeIcon(repo: RepoInfo): string {
-    if (repo.is_npm_package) return 'fab fa-npm';
-    if (repo.topics?.includes('library')) return 'fas fa-book';
-    if (repo.topics?.includes('tool')) return 'fas fa-tools';
+    if (repo.purpose === 'rollup-plugin') {
+      return 'kskb-icon kskb-rollup';
+    }
+    if (repo.purpose === 'vscode-extension') {
+      return 'kskb-icon kskb-vscode';
+    }
+    if (repo.purpose === 'app') {
+      return 'kskb-icon kskb-app';
+    }
+    if (repo.is_npm_package || repo.purpose === 'npm') {
+      return 'fab fa-npm';
+    }
+    if (repo.topics.includes('library')) {
+      return 'fas fa-book';
+    }
+    if (repo.topics.includes('tool')) {
+      return 'fas fa-tools';
+    }
     return 'fas fa-code';
   }
 
@@ -389,11 +404,15 @@
     background: linear-gradient(135deg, #cb3837 0%, #ff6b6b 100%);
   }
 
-  .package-card[data-type='library'] .package-icon {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  .package-card[data-type='app'] .package-icon {
+    background: linear-gradient(135deg, #059669 0%, #1bd597 100%);
   }
 
-  .package-card[data-type='tool'] .package-icon {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  .package-card[data-type='vscode-extension'] .package-icon {
+    background: linear-gradient(135deg, #e1effe 0%, #c8e3ff 100%);
+  }
+
+  .package-card[data-type='rollup-plugin'] .package-icon {
+    background: linear-gradient(135deg, #ffde22 0%, #fdbe7b 100%);
   }
 </style>

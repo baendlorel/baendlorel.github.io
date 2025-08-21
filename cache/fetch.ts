@@ -39,6 +39,7 @@ interface PackageJson {
   name: string;
   description?: string;
   description_zh?: string;
+  purpose?: RepoInfo['purpose'];
 }
 
 async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
@@ -65,8 +66,9 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
     const enriched: RepoInfo = {
       id: repo.id,
       name: repo.name,
-      description: pkgJson?.description ?? repo.description,
-      description_zh: pkgJson?.description_zh ?? repo.description,
+      description: pkgJson?.description ?? repo.description ?? '',
+      description_zh: pkgJson?.description_zh ?? repo.description ?? '',
+      purpose: pkgJson?.purpose ?? null,
       html_url: repo.html_url,
       private: repo.private,
       fork: repo.fork,

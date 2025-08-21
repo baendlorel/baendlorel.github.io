@@ -19,6 +19,12 @@ interface RepoInfo {
   name: string;
   description: string | null;
   description_zh: string | null;
+
+  /**
+   * Purpose of the repository, e.g. 'vscode-extension', 'rollup-plugin', 'npm' etc.
+   * This is used to categorize the repository for display purposes.
+   */
+  purpose: 'vscode-extension' | 'rollup-plugin' | 'npm' | 'app' | null;
   html_url: string;
   private: boolean;
   fork: boolean;
