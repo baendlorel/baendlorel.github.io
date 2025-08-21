@@ -1,6 +1,7 @@
 <script lang="ts">
-  import zfb from '@/assets/zfb.jpg';
-  import { t } from '@/common/i18n.ts';
+  import alipayZh from '@/assets/alipay-zh.jpg';
+  import alipayEn from '@/assets/alipay-en.png';
+  import { t, lang } from '@/common/i18n.ts';
 
   let dialog: HTMLDialogElement;
   let isClosing = false;
@@ -86,7 +87,11 @@
           </p>
 
           <div class="qr-code-container">
-            <img src={zfb} alt="zfb-qr" style="width:100%" />
+            {#if lang === 'en'}
+              <img src={alipayEn} alt="zfb-qr" style="width:100%" />
+            {:else}
+              <img src={alipayZh} alt="zfb-qr" style="width:100%" />
+            {/if}
           </div>
         </div>
       </div>
