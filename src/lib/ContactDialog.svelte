@@ -1,14 +1,30 @@
 <script lang="ts">
+  import zfb from '@/assets/zfb.jpg';
   import { t } from '@/common/i18n.ts';
 
   let dialog: HTMLDialogElement;
+  let isClosing = false;
 
   export function open() {
     dialog.showModal();
+    requestAnimationFrame(() => {
+      dialog.classList.add('dialog-opening');
+    });
   }
 
   export function close() {
-    dialog.close();
+    if (isClosing) {
+      return;
+    }
+
+    isClosing = true;
+    dialog.classList.add('dialog-closing');
+
+    setTimeout(() => {
+      dialog.close();
+      dialog.classList.remove('dialog-opening', 'dialog-closing');
+      isClosing = false;
+    }, 300); // same time as the CSS animation duration
   }
 
   function handleBackdropClick(event: MouseEvent) {
@@ -23,7 +39,7 @@
     <header class="dialog-header">
       <h2 class="dialog-title">
         <i class="fas fa-handshake"></i>
-        {t('collaborateWithMe') || '与我合作'}
+        {t('collaborateWithMe')}
       </h2>
       <button type="button" class="close-btn" on:click={close} aria-label="Close dialog">
         <i class="fas fa-times"></i>
@@ -31,46 +47,10 @@
     </header>
 
     <div class="dialog-body">
-      <div class="collaboration-section">
-        <div class="section-header">
-          <i class="fas fa-code"></i>
-          <h3>{t('customDevelopment') || '定制开发服务'}</h3>
-        </div>
-        <p class="section-description">
-          {t('developmentDescription') ||
-            '我提供高质量的前端开发、全栈应用开发和技术咨询服务。如果您有项目需求，欢迎联系我！'}
-        </p>
-        <ul class="service-list">
-          <li><i class="fas fa-check"></i> {t('frontendDev') || '前端应用开发'}</li>
-          <li><i class="fas fa-check"></i> {t('fullstackDev') || '全栈解决方案'}</li>
-          <li><i class="fas fa-check"></i> {t('techConsulting') || '技术咨询'}</li>
-          <li><i class="fas fa-check"></i> {t('projectMaintenance') || '项目维护'}</li>
-        </ul>
-      </div>
-
-      <div class="support-section">
-        <div class="section-header">
-          <i class="fas fa-heart"></i>
-          <h3>{t('supportMyWork') || '支持我的工作'}</h3>
-        </div>
-        <p class="section-description">
-          {t('supportDescription') ||
-            '如果您觉得我的开源项目对您有帮助，欢迎打赏支持！您的支持是我继续创作的动力 🌟'}
-        </p>
-
-        <div class="qr-code-container">
-          <div class="qr-placeholder">
-            <i class="fas fa-qrcode"></i>
-            <p>{t('qrCodePlaceholder') || '扫码打赏'}</p>
-            <small>{t('qrCodeNote') || '请添加您的二维码图片'}</small>
-          </div>
-        </div>
-      </div>
-
       <div class="contact-section">
         <div class="section-header">
           <i class="fas fa-envelope"></i>
-          <h3>{t('getInTouch') || '联系方式'}</h3>
+          <h3>{t('getInTouch')}</h3>
         </div>
         <div class="contact-methods">
           <a href="mailto:futami16237@gmail.com" class="contact-method">
@@ -79,8 +59,36 @@
           </a>
           <div class="contact-method">
             <i class="fas fa-clock"></i>
-            <span>{t('responseTime') || '通常24小时内回复'}</span>
+            <span>{t('responseTime')}</span>
           </div>
+        </div>
+      </div>
+      <div class="collaboration-section">
+        <div class="section-header">
+          <i class="fas fa-code"></i>
+          <h3>{t('customDevelopment')}</h3>
+        </div>
+        <p class="section-description">
+          {t('developmentDescription')}
+        </p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> {t('frontendDev')}</li>
+          <li><i class="fas fa-check"></i> {t('fullstackDev')}</li>
+          <li><i class="fas fa-check"></i> {t('techConsulting')}</li>
+        </ul>
+      </div>
+
+      <div class="support-section">
+        <div class="section-header">
+          <i class="fas fa-heart"></i>
+          <h3>{t('supportMyWork')}</h3>
+        </div>
+        <p class="section-description">
+          {t('supportDescription')}
+        </p>
+
+        <div class="qr-code-container">
+          <img src={zfb} alt="zfb-qr" style="width:100%" />
         </div>
       </div>
     </div>
@@ -98,26 +106,74 @@
     color: var(--text-primary);
     max-width: 500px;
     width: 90vw;
-    max-height: 80vh;
+    /* max-height: 80vh; */
     overflow: hidden;
+
+    /* Initial state */
+    opacity: 0;
+    transform: scale(0.7) translateY(-20px);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Popup animation */
+  :global(.contact-dialog.dialog-opening) {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  /* Close animation */
+  :global(.contact-dialog.dialog-closing) {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+    transition: all 0.3s ease-in;
   }
 
   .contact-dialog::backdrop {
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  /* Backdrop fade-in animation */
+  :global(.contact-dialog.dialog-opening::backdrop) {
+    opacity: 1;
+  }
+
+  /* Backdrop fade-out animation */
+  :global(.contact-dialog.dialog-closing::backdrop) {
+    opacity: 0;
   }
 
   .dialog-content {
     display: flex;
     flex-direction: column;
     height: 100%;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+  }
+
+  /* Content popup animation */
+  :global(.contact-dialog.dialog-opening) .dialog-content {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Content close animation */
+  :global(.contact-dialog.dialog-closing) .dialog-content {
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.2s ease-in;
   }
 
   .dialog-header {
     display: flex;
+    margin-top: -20px;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 2rem;
+    /* padding: 1.5rem 2rem; */
+    padding: 40px 30px 20px 30px;
     background: var(--gradient);
     color: white;
   }
@@ -210,39 +266,12 @@
 
   .qr-code-container {
     display: flex;
+    margin: auto;
     justify-content: center;
-    margin: 1.5rem 0;
-  }
-
-  .qr-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 200px;
-    background: var(--surface-light);
+    width: 80%;
     border: 2px dashed var(--border);
     border-radius: 12px;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 1rem;
-  }
-
-  .qr-placeholder i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: var(--text-muted);
-  }
-
-  .qr-placeholder p {
-    margin: 0.5rem 0;
-    font-weight: 500;
-  }
-
-  .qr-placeholder small {
-    font-size: 0.8rem;
-    opacity: 0.7;
+    overflow: hidden;
   }
 
   .contact-methods {
@@ -255,7 +284,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0.6rem 1rem;
     background: var(--surface-light);
     border-radius: 8px;
     text-decoration: none;
@@ -289,15 +318,6 @@
     .dialog-header,
     .dialog-body {
       padding: 1.5rem;
-    }
-
-    .qr-placeholder {
-      width: 160px;
-      height: 160px;
-    }
-
-    .qr-placeholder i {
-      font-size: 2.5rem;
     }
   }
 </style>

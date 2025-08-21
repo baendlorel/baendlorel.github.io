@@ -23,7 +23,7 @@
       <div class="profile-info">
         <h1 class="name">Kasukabe Tsumugi</h1>
 
-        <p class="bio">✨ Creating awesome stuff ✨</p>
+        <p class="bio">✨ {t('bio')} ✨</p>
         <div class="contact-info">
           <a href="mailto:futami16237@gmail.com" class="email">
             <i class="fas fa-envelope"></i>
@@ -33,10 +33,10 @@
             type="button"
             class="collaborate-btn"
             on:click={openContactDialog}
-            title={t('collaborateWithMe') || '与我合作'}
+            title={t('collaborateWithMe')}
           >
             <i class="fas fa-handshake"></i>
-            <span>{t('collaborate') || '合作'}</span>
+            <span>{t('collaborate')}</span>
           </button>
         </div>
       </div>

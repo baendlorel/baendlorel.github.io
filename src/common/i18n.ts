@@ -4,6 +4,7 @@ const KEY = 'language';
 
 const zh = {
   welcome: '🚀 欢迎来到Tsumu Cabin!',
+  bio: '创造美好事物',
   intro: '这里展示了我所有的开源程序。每一个都经过精心制作，旨在让你的开发体验更美好！(◕‿◕)',
   repositories: '仓库数',
   npmPackages: 'NPM包',
@@ -39,25 +40,23 @@ const zh = {
 
   // Contact Dialog
   collaborateWithMe: '与我合作',
-  collaborate: '合作',
+  collaborate: '开发服务 / 打赏',
   customDevelopment: '定制开发服务',
   developmentDescription:
-    '我提供高质量的前端开发、全栈应用开发和技术咨询服务。如果您有项目需求，欢迎联系我！',
-  frontendDev: '前端应用开发',
-  fullstackDev: '全栈解决方案',
-  techConsulting: '技术咨询',
-  projectMaintenance: '项目维护',
+    '我提供高质量的前端开发、Node.js全栈应用开发和技术咨询服务。如果您有项目、小工具的开发需求，欢迎联系我！',
+  frontendDev: '前端开发（Vue、Svelte、React、Vanilla、Yuka.js）',
+  fullstackDev: '全栈方案（Node.js）',
+  techConsulting: '技术交流学习、咨询（TypeScript/JavaScript）',
   supportMyWork: '支持我的工作',
   supportDescription:
-    '如果您觉得我的开源项目对您有帮助，欢迎打赏支持！您的支持是我继续创作的动力 🌟',
-  qrCodePlaceholder: '扫码打赏',
-  qrCodeNote: '请添加您的二维码图片',
+    '如果您觉得我的开源项目对您有帮助，欢迎使用我的NPM包或打赏支持！您的支持是我继续创作的动力 🌟',
   getInTouch: '联系方式',
-  responseTime: '通常24小时内回复',
+  responseTime: '通常48小时内回复',
 };
 
 const en = {
   welcome: '🚀 Welcome to Tsumu Cabin!',
+  bio: 'Creating awesome stuff',
   intro:
     'Here you will find all my open-source packages. Each one is crafted with care and designed to make your development experience better! (◕‿◕)',
   repositories: 'Repositories',
@@ -94,21 +93,18 @@ const en = {
 
   // Contact Dialog
   collaborateWithMe: 'Collaborate with Me',
-  collaborate: 'Collaborate',
+  collaborate: 'Development Services / Donate',
   customDevelopment: 'Custom Development Services',
   developmentDescription:
-    'I provide high-quality frontend development, full-stack solutions, and technical consulting services. Feel free to contact me for your project needs!',
-  frontendDev: 'Frontend Development',
-  fullstackDev: 'Full-stack Solutions',
-  techConsulting: 'Technical Consulting',
-  projectMaintenance: 'Project Maintenance',
+    'I provide high-quality frontend development, Node.js full-stack application development, and technical consulting services. If you have any project or tool development needs, feel free to contact me!',
+  frontendDev: 'Frontend Development (Vue, Svelte, React, Vanilla, Yuka.js)',
+  fullstackDev: 'Full-stack Solutions (Node.js)',
+  techConsulting: 'Technical Exchange & Consulting (TypeScript/JavaScript)',
   supportMyWork: 'Support My Work',
   supportDescription:
-    "If you find my open-source projects helpful, I'd appreciate your support! Your contribution motivates me to keep creating 🌟",
-  qrCodePlaceholder: 'Scan to Donate',
-  qrCodeNote: 'Please add your QR code image',
+    'If you find my open-source projects helpful, please use my NPM packages or consider donating! Your support motivates me to keep creating 🌟',
   getInTouch: 'Get in Touch',
-  responseTime: 'Usually respond within 24 hours',
+  responseTime: 'Usually respond within 48 hours',
 } satisfies typeof zh;
 
 const createLanguageStore = () => {
