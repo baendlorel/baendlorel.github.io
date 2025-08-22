@@ -12,7 +12,7 @@
 
   import PackageCard from './PackageCard.svelte';
 
-  type RepoFilter = 'all' | 'npm' | 'featured' | 'rollup-plugin' | 'vscode-extension' | 'app';
+  type RepoFilter = 'all' | 'npm' | 'featured' | 'plugin' | 'extension' | 'app';
 
   // State
   $: repos = $repoStore;
@@ -29,14 +29,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const repoType = urlParams.get('repoType') as RepoFilter;
 
-    const validTypes: RepoFilter[] = [
-      'all',
-      'npm',
-      'featured',
-      'rollup-plugin',
-      'vscode-extension',
-      'app',
-    ];
+    const validTypes: RepoFilter[] = ['all', 'npm', 'featured', 'plugin', 'extension', 'app'];
     return validTypes.includes(repoType) ? repoType : 'featured';
   }
 
@@ -73,11 +66,12 @@
       filtered = filtered.filter((repo) => {
         switch (filter) {
           case 'npm':
-          case 'vscode-extension':
-          case 'rollup-plugin':
           case 'app':
-            console.log('repo.purpose', repo.purpose, filter);
             return repo.purpose === filter;
+          case 'extension':
+            return repo.purpose.includes('extension');
+          case 'plugin':
+            return repo.purpose.includes('plugin');
           default:
             return true;
         }
@@ -90,7 +84,7 @@
       filtered = filtered.filter(
         (repo) =>
           repo.name.toLowerCase().includes(lower) ||
-          repo.description?.toLowerCase().includes(lower) ||
+          repo.description.toLowerCase().includes(lower) ||
           repo.topics.some((topic) => topic.toLowerCase().includes(lower))
       );
     }
@@ -131,15 +125,22 @@
     </button>
     <button
       class="filter-btn"
-      class:active={activeFilter === 'rollup-plugin'}
-      on:click={() => handleFilter('rollup-plugin')}
+      class:active={activeFilter === 'app'}
+      on:click={() => handleFilter('app')}
+    >
+      {t('appProjects')}
+    </button>
+    <button
+      class="filter-btn"
+      class:active={activeFilter === 'plugin'}
+      on:click={() => handleFilter('plugin')}
     >
       {t('pluginProjects')}
     </button>
     <button
       class="filter-btn"
-      class:active={activeFilter === 'vscode-extension'}
-      on:click={() => handleFilter('vscode-extension')}
+      class:active={activeFilter === 'extension'}
+      on:click={() => handleFilter('extension')}
     >
       {t('extensionProjects')}
     </button>

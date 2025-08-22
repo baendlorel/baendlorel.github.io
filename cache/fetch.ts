@@ -7,12 +7,13 @@ const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 
+// todo  Some day, there might be more than 100 repos, need to handle pagination
 async function fetchRepos() {
   const res = await fetch(
     `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
   );
   if (!res.ok) {
-    throw new Error('GitHub API error: ' + res.status);
+    throw new Error(`GitHub API error: ${res.status}, ${res.statusText}`);
   }
   const repos = (await res.json()) as RepoInfo[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
@@ -69,7 +70,7 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
       name: repo.name,
       description: pkgJson?.description ?? repo.description ?? '',
       description_zh: pkgJson?.description_zh ?? repo.description ?? '',
-      purpose: pkgJson?.purpose ?? (npmInfo ? 'npm' : null),
+      purpose: pkgJson?.purpose ?? (npmInfo ? 'npm' : 'other'),
       html_url: repo.html_url,
       private: repo.private,
       fork: repo.fork,

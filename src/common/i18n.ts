@@ -12,6 +12,7 @@ const zh = {
   pluginProjects: '插件',
   extensionProjects: '扩展',
   otherProjects: '其他',
+  appProjects: '应用',
   allProjects: '全部',
 
   updatedAt: '更新于',
@@ -68,7 +69,8 @@ const en = {
   pluginProjects: 'Plugin',
   extensionProjects: 'Extension',
   otherProjects: 'Others',
-  allProjects: 'All Projects',
+  appProjects: 'App',
+  allProjects: 'All',
 
   updatedAt: 'Updated',
   stars: 'Stars',
