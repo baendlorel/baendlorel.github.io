@@ -12,24 +12,31 @@
 
   import PackageCard from './PackageCard.svelte';
 
-  type RepoType = 'all' | 'npm' | 'featured' | 'other';
+  type RepoFilter = 'all' | 'npm' | 'featured' | 'rollup-plugin' | 'vscode-extension' | 'app';
 
   // State
   $: repos = $repoStore;
   $: featuredRepos = $featuredRepoStore;
   let filteredRepos: RepoInfo[] = [];
   let searchQuery = '';
-  let activeFilter: RepoType = 'featured'; // 默认值，会被 URL 参数覆盖
+  let activeFilter: RepoFilter = 'featured'; // 默认值，会被 URL 参数覆盖
 
-  function getRepoTypeFromURL(): RepoType {
+  function getRepoTypeFromURL(): RepoFilter {
     if (typeof window === 'undefined') {
       return 'featured';
     }
 
     const urlParams = new URLSearchParams(window.location.search);
-    const repoType = urlParams.get('repoType') as RepoType;
+    const repoType = urlParams.get('repoType') as RepoFilter;
 
-    const validTypes: RepoType[] = ['all', 'npm', 'featured', 'other'];
+    const validTypes: RepoFilter[] = [
+      'all',
+      'npm',
+      'featured',
+      'rollup-plugin',
+      'vscode-extension',
+      'app',
+    ];
     return validTypes.includes(repoType) ? repoType : 'featured';
   }
 
@@ -52,7 +59,7 @@
   $: filterRepositories(repos, searchQuery, activeFilter);
 
   // Filter repositories based on search and filter type
-  function filterRepositories(storedRepos: RepoInfo[], search: string, filter: RepoType) {
+  function filterRepositories(storedRepos: RepoInfo[], search: string, filter: RepoFilter) {
     if (storedRepos.length === 0) {
       filteredRepos = [];
       return;
@@ -66,9 +73,11 @@
       filtered = filtered.filter((repo) => {
         switch (filter) {
           case 'npm':
-            return repo.is_npm_package;
-          case 'other':
-            return !repo.is_npm_package;
+          case 'vscode-extension':
+          case 'rollup-plugin':
+          case 'app':
+            console.log('repo.purpose', repo.purpose, filter);
+            return repo.purpose === filter;
           default:
             return true;
         }
@@ -96,7 +105,7 @@
   }
 
   // Handle filter change
-  function handleFilter(filter: RepoType) {
+  function handleFilter(filter: RepoFilter) {
     activeFilter = filter;
   }
 
@@ -122,10 +131,17 @@
     </button>
     <button
       class="filter-btn"
-      class:active={activeFilter === 'other'}
-      on:click={() => handleFilter('other')}
+      class:active={activeFilter === 'rollup-plugin'}
+      on:click={() => handleFilter('rollup-plugin')}
     >
-      {t('otherProjects')}
+      {t('pluginProjects')}
+    </button>
+    <button
+      class="filter-btn"
+      class:active={activeFilter === 'vscode-extension'}
+      on:click={() => handleFilter('vscode-extension')}
+    >
+      {t('extensionProjects')}
     </button>
     <button
       class="filter-btn"

@@ -9,8 +9,8 @@ const zh = {
   repositories: '仓库数',
   featuredProjects: '特色项目',
   npmPackages: 'NPM包',
-  plugin: '插件',
-  extension: '扩展',
+  pluginProjects: '插件',
+  extensionProjects: '扩展',
   otherProjects: '其他',
   allProjects: '全部',
 
@@ -65,8 +65,8 @@ const en = {
   repositories: 'Repositories',
   featuredProjects: 'Featured',
   npmPackages: 'NPM',
-  plugin: 'Plugin',
-  extension: 'Extension',
+  pluginProjects: 'Plugin',
+  extensionProjects: 'Extension',
   otherProjects: 'Others',
   allProjects: 'All Projects',
 

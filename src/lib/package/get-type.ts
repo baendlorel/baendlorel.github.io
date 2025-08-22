@@ -4,9 +4,6 @@ export function getType(repo: RepoInfo): string | null {
   if (REPO_PURPOSES.includes(repo.purpose)) {
     return repo.purpose;
   }
-  if (repo.is_npm_package) {
-    return 'npm';
-  }
   // if (repo.topics.includes('library')) {
   //   return 'fas fa-book';
   // }

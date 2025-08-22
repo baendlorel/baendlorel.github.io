@@ -63,12 +63,13 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
     } catch (e) {
       console.error(`Error fetching package.json for ${repo.name}:`, e);
     }
+
     const enriched: RepoInfo = {
       id: repo.id,
       name: repo.name,
       description: pkgJson?.description ?? repo.description ?? '',
       description_zh: pkgJson?.description_zh ?? repo.description ?? '',
-      purpose: pkgJson?.purpose ?? null,
+      purpose: pkgJson?.purpose ?? (npmInfo ? 'npm' : null),
       html_url: repo.html_url,
       private: repo.private,
       fork: repo.fork,
