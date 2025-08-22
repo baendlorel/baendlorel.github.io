@@ -7,10 +7,12 @@ const zh = {
   bio: '创造美好事物',
   intro: '这里展示了我所有的开源程序。每一个都经过精心制作，旨在让你的开发体验更美好！(◕‿◕)',
   repositories: '仓库数',
-  npmPackages: 'NPM包',
   featuredProjects: '特色项目',
-  otherProjects: '其他项目',
-  allProjects: '所有项目',
+  npmPackages: 'NPM包',
+  plugin: '插件',
+  extension: '扩展',
+  otherProjects: '其他',
+  allProjects: '全部',
 
   updatedAt: '更新于',
   stars: '星标',
@@ -61,8 +63,10 @@ const en = {
   intro:
     'Here you will find all my open-source packages. Each one is crafted with care and designed to make your development experience better! (◕‿◕)',
   repositories: 'Repositories',
-  npmPackages: 'NPM Packages',
-  featuredProjects: 'Featured Projects',
+  featuredProjects: 'Featured',
+  npmPackages: 'NPM',
+  plugin: 'Plugin',
+  extension: 'Extension',
   otherProjects: 'Others',
   allProjects: 'All Projects',
 

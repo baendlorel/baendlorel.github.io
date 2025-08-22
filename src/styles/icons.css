@@ -7,11 +7,15 @@
   color: transparent;
 }
 
-.kskb-vscode {
+.kskb-vscode-extension {
   background: url('/assets/icons/vscode.svg') no-repeat center center;
 }
 
-.kskb-rollup {
+.kskb-npm {
+  background: url('/assets/icons/npm.svg') no-repeat center center;
+}
+
+.kskb-rollup-plugin {
   background: url('/assets/icons/rollup.svg') no-repeat center center;
 }
 

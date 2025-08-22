@@ -28,6 +28,7 @@
   import { lang, t } from '@/common/i18n.js';
   import { copyToClipboard } from '@/common/copy.js';
   import { pop } from '@/common/pop.js';
+  import { getType } from './get-type.js';
 
   export let repository: RepoInfo;
 
@@ -46,29 +47,12 @@
   }
 
   function getTypeClass(repo: RepoInfo): string {
-    return repo.purpose ?? 'other';
+    return getType(repo) ?? 'other';
   }
 
   function getTypeIcon(repo: RepoInfo): string {
-    if (repo.purpose === 'rollup-plugin') {
-      return 'kskb-icon kskb-rollup';
-    }
-    if (repo.purpose === 'vscode-extension') {
-      return 'kskb-icon kskb-vscode';
-    }
-    if (repo.purpose === 'app') {
-      return 'kskb-icon kskb-app';
-    }
-    if (repo.is_npm_package || repo.purpose === 'npm') {
-      return 'fab fa-npm';
-    }
-    if (repo.topics.includes('library')) {
-      return 'fas fa-book';
-    }
-    if (repo.topics.includes('tool')) {
-      return 'fas fa-tools';
-    }
-    return 'fas fa-code';
+    const t = getType(repo);
+    return t === null ? 'fas fa-code' : `kskb-icon kskb-${t}`;
   }
 
   function formatDate(dateString: string): string {
