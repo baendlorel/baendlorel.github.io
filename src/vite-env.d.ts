@@ -1,6 +1,10 @@
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
 
+type IsSameType<T, U> = (<G>() => G extends T ? 1 : 2) extends <G>() => G extends U ? 1 : 2
+  ? true
+  : false;
+
 declare const __IS_DEV__: boolean;
 
 type Language = 'en' | 'zh';
@@ -14,11 +18,10 @@ interface License {
   node_id: string;
 }
 
-type RepoFilter = RepoPurpose | 'all';
+type RepoFilter = RepoPurpose | 'all' | 'featured';
 
 type RepoPurpose =
   | 'npm'
-  | 'featured'
   | 'plugin'
   | 'rollup-plugin'
   | 'extension'

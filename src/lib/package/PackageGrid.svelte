@@ -9,6 +9,7 @@
     repoLoading,
     repoError,
   } from '@/store/repo.js';
+  import { repoFilter } from './get-type.js';
 
   import PackageCard from './PackageCard.svelte';
 
@@ -61,19 +62,7 @@
     if (filter === 'featured') {
       filtered = featuredRepos;
     } else if (filter !== 'all') {
-      filtered = filtered.filter((repo) => {
-        switch (filter) {
-          case 'npm':
-          case 'app':
-            return repo.purpose === filter;
-          case 'extension':
-            return repo.purpose.includes('extension');
-          case 'plugin':
-            return repo.purpose.includes('plugin');
-          default:
-            return true;
-        }
-      });
+      filtered = filtered.filter(repoFilter);
     }
 
     // Apply search filter

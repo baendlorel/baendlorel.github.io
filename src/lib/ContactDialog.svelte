@@ -113,31 +113,39 @@
     color: var(--text-primary);
     max-width: 500px;
     width: 90vw;
-    /* max-height: 80vh; */
+    max-height: 90vh;
     overflow: hidden;
+
+    /* Fix iOS positioning issues */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    margin: 0;
 
     /* Initial state */
     opacity: 0;
-    transform: scale(0.7) translateY(-20px);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 9999;
   }
 
   /* Popup animation */
   :global(.contact-dialog.dialog-opening) {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translate(-50%, -50%) scale(1);
   }
 
   /* Close animation */
   :global(.contact-dialog.dialog-closing) {
     opacity: 0;
-    transform: scale(0.9) translateY(10px);
+    transform: translate(-50%, -50%) scale(0.9);
     transition: all 0.3s ease-in;
   }
 
   .contact-dialog::backdrop {
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    /* Remove backdrop-filter for iOS compatibility */
+    /* backdrop-filter: blur(4px); */
     opacity: 0;
     transition: all 0.3s ease;
   }
@@ -210,8 +218,11 @@
   }
 
   .dialog-body-wrapper {
-    height: 80vh;
+    height: 75vh;
+    max-height: 600px;
     overflow-y: auto;
+    /* Fix iOS scroll issues */
+    -webkit-overflow-scrolling: touch;
   }
 
   .dialog-body {
