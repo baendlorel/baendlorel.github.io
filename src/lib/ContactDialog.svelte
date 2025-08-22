@@ -57,7 +57,10 @@
             </h3>
           </div>
           <div class="contact-methods">
-            <a href="mailto:futami16237@gmail.com" class="contact-method">
+            <a
+              href="mailto:futami16237@gmail.com?subject=Development%20Request"
+              class="contact-method"
+            >
               futami16237@gmail.com (。・∀・)ノ
             </a>
             <span>{t('responseTime')}</span>
@@ -173,11 +176,11 @@
 
   .dialog-header {
     display: flex;
-    margin-top: -20px;
+    /* margin-top: -20px;*/
     justify-content: space-between;
     align-items: center;
-    /* padding: 1.5rem 2rem; */
-    padding: 40px 30px 20px 30px;
+    padding: 1.5rem 2rem;
+    /*padding: 40px 30px 20px 30px; */
     background: var(--gradient);
     color: white;
   }

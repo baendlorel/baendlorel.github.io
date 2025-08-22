@@ -63,7 +63,7 @@ const en = {
   bio: 'Creating awesome stuff',
   intro:
     'Here you will find all my open-source packages. Each one is crafted with care and designed to make your development experience better! (◕‿◕)',
-  repositories: 'Repositories',
+  repositories: 'Repos',
   featuredProjects: 'Featured',
   npmPackages: 'NPM',
   pluginProjects: 'Plugin',
@@ -100,8 +100,8 @@ const en = {
   tryAgain: 'Try Again',
 
   // Contact Dialog
-  collaborateWithMe: 'Development Services / Donate',
-  collaborate: 'Development Services / Donate',
+  collaborateWithMe: 'Work Contact / Donate',
+  collaborate: 'Work Contact / Donate',
   customDevelopment: 'Custom Development Services',
   developmentDescription: 'If you have needs, feel free to contact me!',
   frontendDev: 'Frontend Development (Vue, Svelte, React, Vanilla, Yuka.js...)',
