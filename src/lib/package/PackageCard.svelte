@@ -52,7 +52,7 @@
 
   function getTypeIcon(repo: RepoInfo): string {
     const t = getType(repo);
-    return t === null ? 'fas fa-code' : `kskb-icon kskb-${t}`;
+    return t === 'other' ? 'fas fa-code' : `kskb-icon kskb-${t}`;
   }
 
   function formatDate(dateString: string): string {

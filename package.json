@@ -4,6 +4,7 @@
   "description": "A beautiful showcase website for Kasukabe Tsumugi repositories",
   "descriptionZh": "Kasukabe Tsumugi的个人主页，展示她的项目仓库",
   "main": "index.html",
+  "type": "module",
   "scripts": {
     "start": "python -m http.server 8000",
     "serve": "python3 -m http.server 8000",

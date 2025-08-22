@@ -20,7 +20,7 @@ export const getType = (repo: RepoInfo): string | null => {
   // if (repo.topics.includes('tool')) {
   //   return 'fas fa-tools';
   // }
-  return null;
+  return 'other';
 };
 
 export const repoFilter = (filter: RepoFilter) => (repo: RepoInfo) => {
