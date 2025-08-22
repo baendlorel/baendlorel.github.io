@@ -12,8 +12,6 @@
 
   import PackageCard from './PackageCard.svelte';
 
-  type RepoFilter = 'all' | 'npm' | 'featured' | 'plugin' | 'extension' | 'app';
-
   // State
   $: repos = $repoStore;
   $: featuredRepos = $featuredRepoStore;

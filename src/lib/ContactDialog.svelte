@@ -1,7 +1,7 @@
 <script lang="ts">
   import alipayZh from '@/assets/alipay-zh.jpg';
   import alipayEn from '@/assets/alipay-en.png';
-  import { t, lang } from '@/common/i18n.ts';
+  import { t, lang } from '@/common/i18n.js';
 
   let dialog: HTMLDialogElement;
   let isClosing = false;

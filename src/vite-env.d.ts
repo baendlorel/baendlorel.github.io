@@ -14,6 +14,18 @@ interface License {
   node_id: string;
 }
 
+type RepoFilter = RepoPurpose | 'all';
+
+type RepoPurpose =
+  | 'npm'
+  | 'featured'
+  | 'plugin'
+  | 'rollup-plugin'
+  | 'extension'
+  | 'vscode-extension'
+  | 'app'
+  | 'other';
+
 interface RepoInfo {
   id: number;
   name: string;
@@ -24,7 +36,7 @@ interface RepoInfo {
    * Purpose of the repository, e.g. 'vscode-extension', 'rollup-plugin', 'npm' etc.
    * This is used to categorize the repository for display purposes.
    */
-  purpose: 'vscode-extension' | 'rollup-plugin' | 'npm' | 'app' | 'other';
+  purpose: RepoPurpose;
   html_url: string;
   private: boolean;
   fork: boolean;
