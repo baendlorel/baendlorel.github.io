@@ -46,9 +46,6 @@
   }
 
   function getTypeClass(repo: RepoInfo): string {
-    if (repo.is_npm_package) {
-      return 'npm';
-    }
     return repo.purpose ?? 'other';
   }
 
@@ -409,10 +406,10 @@
   }
 
   .package-card[data-type='vscode-extension'] .package-icon {
-    background: linear-gradient(135deg, #e1effe 0%, #c8e3ff 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #dcdcdc 100%);
   }
 
   .package-card[data-type='rollup-plugin'] .package-icon {
-    background: linear-gradient(135deg, #ffde22 0%, #fdbe7b 100%);
+    background: linear-gradient(135deg, #fff5bd 0%, #ffb86b 100%);
   }
 </style>

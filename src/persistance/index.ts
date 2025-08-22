@@ -107,12 +107,12 @@ class Persistance {
     try {
       const { expire, value } = this.deformat(rawValue);
       if (expire < Date.now()) {
-        throw new Error(`Value expired`);
+        return null;
       }
       console.log(`Load '${key}' from localStorage`);
       return value as T;
     } catch (e) {
-      console.error(`Error loading key "${key}":`, e);
+      console.error(`Error loading key, will return null. "${key}":`, e);
       return null;
     }
   }

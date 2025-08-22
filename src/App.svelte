@@ -4,7 +4,7 @@
   import { loadRepoData } from '@/store/repo.js';
   import { init as initTheme } from '@/store/theme.js';
   import Header from '@/lib/Header.svelte';
-  import PackageGrid from '@/lib/PackageGrid.svelte';
+  import PackageGrid from '@/lib/package/PackageGrid.svelte';
   import Footer from '@/lib/Footer.svelte';
 
   onMount(() => {
