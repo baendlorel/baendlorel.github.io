@@ -1,5 +1,5 @@
 import { compress, decompress } from 'lz-string';
-import { Persis } from './consts';
+import { Persis } from './consts.js';
 
 class Persistance {
   private genExpireTime() {

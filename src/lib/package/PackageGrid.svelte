@@ -62,7 +62,7 @@
     if (filter === 'featured') {
       filtered = featuredRepos;
     } else if (filter !== 'all') {
-      filtered = filtered.filter(repoFilter);
+      filtered = filtered.filter(repoFilter(filter));
     }
 
     // Apply search filter
