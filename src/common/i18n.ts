@@ -23,6 +23,7 @@ const zh = {
   updated: '更新时间',
   viewOnGitHub: '前往仓库',
   viewOnNPM: '前往NPM',
+  onWorking: '开发中',
   repoNameCopied: '复制成功',
   noDescription: '没有项目描述',
 
@@ -80,6 +81,7 @@ const en = {
   updated: 'Updated',
   viewOnGitHub: 'GitHub',
   viewOnNPM: 'NPM',
+  onWorking: 'In Progress',
   repoNameCopied: 'Copied!',
   noDescription: 'No description available',
 

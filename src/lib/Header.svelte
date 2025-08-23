@@ -26,10 +26,6 @@
 
         <p class="bio">✨ {t('bio')} ✨</p>
         <div class="contact-info">
-          <a href="mailto:futami16237@gmail.com" class="email">
-            <i class="fas fa-envelope"></i>
-            futami16237@gmail.com
-          </a>
           <button
             type="button"
             class="collaborate-btn"
@@ -254,10 +250,10 @@
       gap: 0.5rem;
       align-items: center;
     }
-
+    /* do not hide the text
     .collaborate-btn span {
       display: none;
-    }
+    } */
 
     .collaborate-btn {
       padding: 0.5rem;

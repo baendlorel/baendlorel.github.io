@@ -30,7 +30,7 @@
   .footer {
     background: var(--surface);
     border-top: 1px solid var(--border);
-    padding: 2rem 0;
+    padding: 2rem 0 5rem 0;
     margin-top: auto;
   }
 

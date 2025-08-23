@@ -41,6 +41,14 @@ export const repoFilter = (filter: RepoFilter) => (repo: RepoInfo) => {
       return filter === 'other';
     default:
       const _: never = repo.purpose;
-      return true;
+      return filter === 'other';
+  }
+};
+
+export const getNpmState = (repo: RepoInfo) => {
+  if (repo.purpose === 'npm' || repo.purpose === 'rollup-plugin') {
+    return repo.npm ? 'available' : 'unavailable';
+  } else {
+    return 'na';
   }
 };

@@ -28,9 +28,11 @@
   import { lang, t } from '@/common/i18n.js';
   import { copyToClipboard } from '@/common/copy.js';
   import { pop } from '@/common/pop.js';
-  import { getType } from './get-type.js';
+  import { getType, getNpmState } from './repo-detail.js';
 
   export let repository: RepoInfo;
+
+  $: npmState = getNpmState(repository);
 
   function copy(event: MouseEvent) {
     copyToClipboard(repository.name)
@@ -146,7 +148,7 @@
           {t('viewOnGitHub')}
         </a>
 
-        {#if repository.is_npm_package}
+        {#if npmState === 'available'}
           <a
             href="https://npmjs.com/package/{repository.name}"
             target="_blank"
@@ -156,20 +158,11 @@
             <i class="fab fa-npm"></i>
             {t('viewOnNPM')}
           </a>
-          <!-- <div class="npm-info">
-            <div class="npm-badge">
-              <i class="fab fa-npm"></i>
-              <span>v{repository.npm.version}</span>
-            </div>
-            <a
-              href="https://npmjs.com/package/{repository.name}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="npm-link"
-            >
-              View on NPM
-            </a>
-          </div> -->
+        {:else if npmState === 'unavailable'}
+          <button class="btn btn-primary disabled">
+            <i class="fab fa-npm"></i>
+            {t('onWorking')}
+          </button>
         {/if}
       </div>
     </div>
@@ -337,43 +330,6 @@
   .package-links {
     display: flex;
     gap: 0.75rem;
-  }
-
-  .btn {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex: 1;
-    justify-content: center;
-  }
-
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-  }
-
-  .btn-outline:hover {
-    background: var(--surface-light);
-    border-color: var(--primary-color);
-    color: var(--text-primary);
-  }
-
-  .btn-primary {
-    background: var(--gradient);
-    border: 1px solid transparent;
-    color: white;
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
   }
 
   .package-card .btn-primary {

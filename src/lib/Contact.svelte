@@ -54,7 +54,6 @@
 
 <style>
   /** contact */
-
   .collaboration-section,
   .support-section,
   .contact-section {
@@ -71,7 +70,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
   }
 
   .section-header i {
@@ -89,7 +88,7 @@
   .section-description {
     color: var(--text-secondary);
     line-height: 1.6;
-    margin-bottom: 1rem;
+    margin-bottom: 0.3rem;
   }
 
   .service-list {
@@ -102,7 +101,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.5rem 0;
+    padding: 0.2rem 0;
     color: var(--text-secondary);
   }
 

@@ -9,7 +9,7 @@
     repoLoading,
     repoError,
   } from '@/store/repo.js';
-  import { repoFilter } from './get-type.js';
+  import { repoFilter } from './repo-detail.js';
 
   import PackageCard from './PackageCard.svelte';
 
@@ -18,7 +18,7 @@
   $: featuredRepos = $featuredRepoStore;
   let filteredRepos: RepoInfo[] = [];
   let searchQuery = '';
-  let activeFilter: RepoFilter = 'featured'; // 默认值，会被 URL 参数覆盖
+  let activeFilter: RepoFilter = 'featured';
 
   function getRepoTypeFromURL(): RepoFilter {
     if (typeof window === 'undefined') {

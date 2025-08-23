@@ -247,9 +247,11 @@
     }
 
     .dialog-content :global(.dialog-header),
-    .dialog-content :global(.dialog-body),
     .dialog-content :global(.dialog-footer) {
       padding: 1.5rem;
+    }
+    .dialog-content :global(.dialog-body) {
+      padding: 1.5rem 1.5rem 4.5rem 1.5rem;
     }
   }
 </style>
