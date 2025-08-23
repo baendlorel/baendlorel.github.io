@@ -155,13 +155,12 @@
             rel="noopener noreferrer"
             class="btn btn-primary"
           >
-            <i class="fab fa-npm"></i>
-            <!-- {t('viewOnNPM')} -->
-            {repository.npm.version}
+            <i class="kskb-icon kskb-npm"></i>
+            <span class="version-text"> {repository.npm.version}</span>
           </a>
         {:else if npmState === 'unavailable'}
           <button class="btn btn-primary disabled">
-            <i class="fab fa-npm"></i>
+            <i class="kskb-icon kskb-npm"></i>
             {t('onWorking')}
           </button>
         {/if}
