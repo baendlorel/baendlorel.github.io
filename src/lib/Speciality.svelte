@@ -1,27 +1,103 @@
 <script lang="ts">
-  import { t } from '@/common/i18n.js';
+  import { t, lang } from '@/common/i18n.js';
 
   const specialities: SpecialityItem[] = [
-    { name: 'JavaScript / TypeScript', level: 3, progress: 100 },
-    { name: 'Node.js', level: 3, progress: 100 },
-    { name: 'Vue.js', level: 3, progress: 100 },
-    { name: 'Svelte', level: 1, progress: 60 },
-    { name: 'Rust', level: 1, progress: 75 },
-    { name: 'C++', level: 1, progress: 30 },
-    { name: 'PHP', level: 1, progress: 50 },
-    { name: 'Python', level: 1, progress: 20 },
-    { name: 'Docker', level: 2, progress: 65 },
+    {
+      name: 'JavaScript / TypeScript',
+      level: 3,
+      progress: 100,
+      description: {
+        en: '6 years development experience, also main language of my work',
+        zh: '6年开发经验，也是工作主用',
+      },
+    },
+    {
+      name: 'Node.js',
+      level: 3,
+      progress: 100,
+      description: {
+        en: '6 years development experience, also main framework of my work',
+        zh: '6年开发经验，也是工作主用',
+      },
+    },
+    {
+      name: 'Vue.js',
+      level: 3,
+      progress: 100,
+      description: {
+        en: '6 years development experience, also main framework of my work',
+        zh: '6年开发经验，也是工作主用',
+      },
+    },
+    {
+      name: 'Svelte',
+      level: 1,
+      progress: 60,
+      description: { en: 'This page is made of Svelte', zh: '本网页就是用Svelte编写' },
+    },
+    {
+      name: 'Rust',
+      level: 1,
+      progress: 75,
+      description: {
+        en: 'My terminal application "archiver" is made of this',
+        zh: '我开发的终端应用“archiver”就是以此开发',
+      },
+    },
+    {
+      name: 'C++',
+      level: 1,
+      progress: 30,
+      description: {
+        en: 'My keyboard tool "umbral-keys" is made of this. Also have some experience of Unreal Engine development',
+        zh: ' 我的键盘工具“umbral-keys”是以此开发的，也有一些Unreal Engine开发经验',
+      },
+    },
+    {
+      name: 'PHP',
+      level: 1,
+      progress: 50,
+      description: {
+        en: 'Experienced with maintance of a 10 year old PHP project and modifing of WordPress',
+        zh: '有维护10年前PHP项目和魔改WordPress的经验',
+      },
+    },
+    {
+      name: 'Python',
+      level: 0,
+      progress: 15,
+      description: {
+        en: 'My project "whisper-asr-spa" involves some Python server developing. Not very experienced',
+        zh: '我的项目“whisper-asr-spa”涉及一些Python服务器开发，但经验不多',
+      },
+    },
+    {
+      name: 'Docker',
+      level: 2,
+      progress: 65,
+      description: { en: 'Almost same as js/ts', zh: '和js/ts几乎一样' },
+    },
+    {
+      name: 'Ruby',
+      level: 1,
+      progress: 58,
+      description: {
+        en: 'I use Ruby on tool development(used by assistants and managers) and RPG Maker XP many years ago',
+        zh: '我在工具开发(营业员和客户经理使用)和RPG Maker XP中使用Ruby已有多年',
+      },
+    },
   ].sort((a, b) => b.progress - a.progress);
 
   function getIcon(name: string): string {
     const map = {
-      'JavaScript / TypeScript': 'kskb-icon kskb-typescript',
+      'JavaScript / TypeScript': 'kskb-icon kskb-jts',
       'Node.js': 'kskb-icon kskb-nodejs',
       'Vue.js': 'kskb-icon kskb-vue',
       Svelte: 'kskb-icon kskb-svelte',
       Rust: 'kskb-icon kskb-rust',
       'C++': 'kskb-icon kskb-cpp',
       PHP: 'kskb-icon kskb-php',
+      Ruby: 'kskb-icon kskb-ruby',
       Python: 'kskb-icon kskb-python',
       Docker: 'kskb-icon kskb-docker',
     };
@@ -51,10 +127,13 @@
             <div class="item-name">
               <i class={getIcon(item.name)} style="margin-right: 3px"></i>
               {item.name}
+              <span class="item-level-name">
+                {t('specialityLevel')[item.level]}
+              </span>
             </div>
           </div>
-          <div class="item-description">
-            {t('specialityLevel')[item.level]}
+          <div class="item-info">
+            {item.description[lang]}
           </div>
         </div>
 
@@ -116,10 +195,15 @@
     margin-bottom: 0.25rem;
   }
 
-  .item-description {
+  .item-level-name {
     font-size: 0.9rem;
     color: var(--text-muted);
     font-style: italic;
+  }
+
+  .item-description {
+    font-size: 0.85rem;
+    color: var(--text-muted);
   }
 
   .progress-container {
@@ -175,7 +259,6 @@
     }
 
     .item-info {
-      text-align: center;
       width: 100%;
     }
 

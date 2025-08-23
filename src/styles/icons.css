@@ -39,6 +39,14 @@
   background: url('/assets/icons/typescript.svg') no-repeat center center;
 }
 
+.kskb-javascript {
+  background: url('/assets/icons/javascript.svg') no-repeat center center;
+}
+
+.kskb-jts {
+  background: url('/assets/icons/jts.svg') no-repeat center center;
+}
+
 .kskb-nodejs {
   background: url('/assets/icons/nodejs.svg') no-repeat center center;
 }
@@ -61,4 +69,8 @@
 
 .kskb-docker {
   background: url('/assets/icons/docker.svg') no-repeat center center;
+}
+
+.kskb-ruby {
+  background: url('/assets/icons/ruby.svg') no-repeat center center;
 }

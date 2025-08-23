@@ -14,7 +14,7 @@ interface SpecialityItem {
   name: string;
   level: 0 | 1 | 2 | 3;
   progress: number;
-  description: string;
+  description: { en: string; zh: string };
 }
 
 interface License {
