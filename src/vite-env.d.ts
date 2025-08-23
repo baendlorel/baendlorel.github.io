@@ -17,14 +17,6 @@ interface SpecialityItem {
   description: { en: string; zh: string };
 }
 
-interface License {
-  key: string;
-  name: string;
-  spdx_id: string;
-  url: string;
-  node_id: string;
-}
-
 type RepoFilter = RepoPurpose | 'all' | 'featured';
 
 type RepoPurpose =
@@ -50,7 +42,7 @@ interface RepoInfo {
   html_url: string;
   private: boolean;
   fork: boolean;
-  license: License | null;
+  license: string;
 
   stargazers_count: number;
   forks_count: number;

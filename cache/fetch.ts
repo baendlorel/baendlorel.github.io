@@ -2,6 +2,7 @@
 
 import { writeFileSync } from 'node:fs';
 import fetch from 'node-fetch';
+import { compressToBase64 } from 'lz-string';
 
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
@@ -18,6 +19,7 @@ function normalizeDescription(str: string, period: string = '.') {
   }
 }
 
+// todo 使用压缩方法减小数据大小
 // todo  Some day, there might be more than 100 repos, need to handle pagination
 async function fetchRepos() {
   const res = await fetch(
@@ -108,6 +110,43 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
   }
 
   return enrichedRepos;
+}
+
+function serializeRepoInfo(enrichedRepos: RepoInfo[]): string {
+  return enrichedRepos.map((r) => {
+    // & serialize in order
+    // const enriched: RepoInfo = {
+    //   id: repo.id,
+    //   name: repo.name,
+    //   description,
+    //   description_zh,
+    //   purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
+    //   ^ html_url: repo.html_url, // omit to save space, equals 'https://github.com/baendlorel/'+r.name
+    //   ^ private: repo.private, // omit to save space, already filtered out private repos
+    //   fork: repo.fork,
+    //   license: repo.license,
+    //   stargazers_count: repo.stargazers_count,
+    //   forks_count: repo.forks_count,
+    //   watchers_count: repo.watchers_count,
+    //   language: repo.language,
+    //   updated_at: repo.updated_at,
+    //   homepage: repo.homepage,
+    //   topics: Array.isArray(repo.topics) ? repo.topics : [],
+    //   npm: npmInfo ?? null,
+    //   is_npm_package: !!npmInfo,
+    // };
+    return [
+      r.id,
+      r.name,
+      r.description,
+      r.description_zh,
+      r.purpose,
+      r.fork,
+      r.license?.spdx_id || '',
+      r.stargazers_count,
+      r.forks_count,
+    ];
+  });
 }
 
 /**

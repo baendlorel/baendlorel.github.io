@@ -27,7 +27,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: npm install node-fetch tsx
+        run: npm install node-fetch tsx lz-string
 
       - name: Run fetch.ts to generate data
         run: npx tsx cache/fetch.ts
