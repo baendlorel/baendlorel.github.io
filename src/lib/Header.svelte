@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { repoStats } from '@/store/repo.js';
   import { t } from '@/common/i18n.js';
+  import { repoStats } from '@/store/repo.js';
   import avatar from '@/assets/avatar.jpg';
 
   import ThemeControls from './ThemeControls.svelte';
-  import ContactDialog from './ContactDialog.svelte';
+  import Contact from './Contact.svelte';
+  import Dialog from './Dialog.svelte';
 
-  let contactDialog: ContactDialog;
+  let contactDialog: Dialog;
 
   function openContactDialog() {
     contactDialog.open();
@@ -57,7 +58,17 @@
   </div>
 </header>
 
-<ContactDialog bind:this={contactDialog} />
+<Dialog bind:this={contactDialog} closeBtn={true}>
+  <div slot="header">
+    <h2 class="dialog-title">
+      <i class="fas fa-handshake"></i>
+      {t('collaborateWithMe')}
+    </h2>
+  </div>
+  <div slot="body">
+    <Contact />
+  </div>
+</Dialog>
 
 <style>
   .header {
