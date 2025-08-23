@@ -2,7 +2,7 @@
 
 import { writeFileSync } from 'node:fs';
 import fetch from 'node-fetch';
-import { compressToBase64 } from 'lz-string';
+import lz from 'lz-string';
 
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
@@ -193,8 +193,8 @@ async function update() {
 
   // & Compressed and unified data
   const serializedRepos = serializeRepoInfo(enriched);
-  const a = compressToBase64(serializedRepos);
-  const b = compressToBase64(FEATURED.join(DELIMITER));
+  const a = lz.compressToBase64(serializedRepos);
+  const b = lz.compressToBase64(FEATURED.join(DELIMITER));
   writeFileSync(REPO_DATA_PATH, `${REPO_DATA_METHOD}("${a}${DELIMITER}${b}")`);
 }
 
