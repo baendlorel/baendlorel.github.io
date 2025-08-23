@@ -51,7 +51,6 @@ interface RawRepoInfo {
   updated_at: string;
   topics: string[];
   npm: NpmInfo | null;
-  is_npm_package: boolean;
 }
 
 type RepoInfo = Merge<
@@ -62,5 +61,6 @@ type RepoInfo = Merge<
     html_url: string;
     license: string;
     language: string;
+    is_npm_package: boolean;
   }
 >;

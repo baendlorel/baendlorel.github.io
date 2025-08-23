@@ -1,3 +1,5 @@
+import { decompressFromBase64 } from 'lz-string';
+
 class RepositoryService {
   private async load<T>(file: string, resolverName: string | symbol): Promise<T> {
     const script = document.createElement('script');
@@ -25,10 +27,38 @@ class RepositoryService {
 
   // & serialized + compressed
   async getData(): Promise<{ repoInfo: RepoInfo[]; featured: string[] }> {
-    const raw = await this.load(
+    const DELIMITER: SimpleArrayDelimiter = '||';
+    const raw = await this.load<string>(
       'repo-data.compressed.js' satisfies RepoDataFile,
       'CORS_GET_REPO_DATA' satisfies RepoDataMethod
     );
+    const [a, b] = raw.split(DELIMITER);
+    const featured = decompressFromBase64(b).split(DELIMITER);
+    const serializedRepos = decompressFromBase64(a);
+    const serialized = JSON.parse(serializedRepos) as any[][];
+    const repoInfo = serialized.map((r) => {
+      const repo: RepoInfo = {
+        id: r[0],
+        name: r[1],
+        html_url: 'https://github.com/baendlorel/' + r[1],
+        description: r[2],
+        description_zh: r[3],
+        purpose: r[4],
+        fork: r[5],
+        license: r[6],
+        stargazers_count: r[7],
+        forks_count: r[8],
+        watchers_count: r[9],
+        language: r[10],
+        updated_at: r[11],
+        topics: r[12],
+        npm: r[13],
+        is_npm_package: r[13] !== null,
+      };
+      return repo;
+    });
+
+    return { featured, repoInfo };
   }
 }
 

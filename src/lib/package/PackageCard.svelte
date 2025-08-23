@@ -156,7 +156,8 @@
             class="btn btn-primary"
           >
             <i class="fab fa-npm"></i>
-            {t('viewOnNPM')}
+            <!-- {t('viewOnNPM')} -->
+            {repository.npm.version}
           </a>
         {:else if npmState === 'unavailable'}
           <button class="btn btn-primary disabled">

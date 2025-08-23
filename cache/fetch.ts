@@ -7,6 +7,26 @@ import { compressToBase64 } from 'lz-string';
 const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
+const DELIMITER: SimpleArrayDelimiter = '||';
+
+const FEATURED = [
+  'reflect-deep',
+  'colorful-titlebar',
+  'archiver',
+  'rollup-plugin-dts-merger',
+  'rollup-plugin-conditional-compilation',
+  '2ality-javascript-decorators-document',
+  'wildcard-event',
+  'singleton-pattern',
+  'probability-branch',
+  'function-feature',
+  'get-function-features',
+  'whisper-asr-spa',
+  'cpp-comment-generator',
+];
+
+const REPO_DATA_PATH: RepoDataFile = 'repo-data.compressed.js';
+const REPO_DATA_METHOD: RepoDataMethod = 'CORS_GET_REPO_DATA';
 
 function normalizeDescription(str: string, period: string = '.') {
   str = str || '';
@@ -97,7 +117,6 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
       updated_at: repo.updated_at,
       topics: Array.isArray(repo.topics) ? repo.topics : [],
       npm: npmInfo ?? null,
-      is_npm_package: !!npmInfo,
     };
 
     enrichedRepos.push(enriched);
@@ -141,7 +160,7 @@ function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
       r.watchers_count,
       r.language ?? '',
       new Date(r.updated_at).getTime(),
-      r.topics.join('||' satisfies SimpleArrayDelimiter),
+      r.topics.join(DELIMITER),
       r.npm,
     ];
     return entry;
@@ -149,22 +168,6 @@ function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
 
   return JSON.stringify(list);
 }
-
-const FEATURED = [
-  'reflect-deep',
-  'colorful-titlebar',
-  'archiver',
-  'rollup-plugin-dts-merger',
-  'rollup-plugin-conditional-compilation',
-  '2ality-javascript-decorators-document',
-  'wildcard-event',
-  'singleton-pattern',
-  'probability-branch',
-  'function-feature',
-  'get-function-features',
-  'whisper-asr-spa',
-  'cpp-comment-generator',
-];
 
 /**
  * [WARN] Method names must be the **SAME** as in `repository.service.ts`
@@ -189,12 +192,10 @@ async function update() {
   console.log('Origin data saved, now proceeding compression...');
 
   // & Compressed and unified data
-  const REPO_DATA_PATH: RepoDataFile = 'repo-data.compressed.js';
   const serializedRepos = serializeRepoInfo(enriched);
   const a = compressToBase64(serializedRepos);
-  const b = compressToBase64(FEATURED.join('||' satisfies SimpleArrayDelimiter));
-  const repoDataMethod: RepoDataMethod = 'CORS_GET_REPO_DATA';
-  writeFileSync(REPO_DATA_PATH, `${repoDataMethod}("${a},${b}")`);
+  const b = compressToBase64(FEATURED.join(DELIMITER));
+  writeFileSync(REPO_DATA_PATH, `${REPO_DATA_METHOD}("${a}${DELIMITER}${b}")`);
 }
 
 update();
