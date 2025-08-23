@@ -39,7 +39,6 @@ jobs:
           name: Cached Repo Data
           body: 'Auto-generated repo and NPM data file.'
           files: |
-            repo-info.js
-            featured-repo.js
+            repo-data.compressed.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

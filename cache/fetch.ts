@@ -171,31 +171,17 @@ function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
 
 /**
  * [WARN] Method names must be the **SAME** as in `repository.service.ts`
- *
- * Supports:
- * 1. CORS_GET_REPO_INFO
- * 2. CORS_GET_FEATURED_REPO
  */
 async function update() {
-  const REPO_INFO_PATH = './repo-info.js';
-  const FEATURED_REPO_PATH = './featured-repo.js';
-
   const repos = await fetchRepos();
   const enriched = await enrichRepos(repos);
-
-  const reposStr = JSON.stringify(enriched, null, 2);
-  writeFileSync(REPO_INFO_PATH, `window.CORS_GET_REPO_INFO(${reposStr});`);
-
-  const featuredStr = JSON.stringify(FEATURED, null, 2);
-  writeFileSync(FEATURED_REPO_PATH, `window.CORS_GET_FEATURED_REPO(${featuredStr});`);
-
-  console.log('Origin data saved, now proceeding compression...');
 
   // & Compressed and unified data
   const serializedRepos = serializeRepoInfo(enriched);
   const a = lz.compressToBase64(serializedRepos);
   const b = lz.compressToBase64(FEATURED.join(DELIMITER));
   writeFileSync(REPO_DATA_PATH, `${REPO_DATA_METHOD}("${a}${DELIMITER}${b}")`);
+  console.log('Finished writing compressed data.');
 }
 
 update();
