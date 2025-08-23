@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { lang, t, formatDateI18N } from '@/common/i18n.js';
+  import { lang, t } from '@/common/i18n.js';
+  import { formatDate } from '@/common/dtm.js';
 
-  const lastUpdatedAt = formatDateI18N('__UPDATED_AT__');
+  const lastUpdatedAt = formatDate(Number('__UPDATED_AT__'));
 </script>
 
 <footer class="footer">
@@ -25,7 +26,7 @@
         <i class="fab fa-npm"></i>
       </a>
     </div>
-    <p>
+    <p style="color: var(--text-muted)">
       {t('updatedAt')}
       {lastUpdatedAt}
     </p>

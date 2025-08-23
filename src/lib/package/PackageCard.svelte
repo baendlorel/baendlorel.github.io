@@ -25,7 +25,8 @@
 </script>
 
 <script lang="ts">
-  import { lang, t, formatDateI18N } from '@/common/i18n.js';
+  import { lang, t } from '@/common/i18n.js';
+  import { formatDate } from '@/common/dtm.js';
   import { copyToClipboard } from '@/common/copy.js';
   import { pop } from '@/common/pop.js';
   import { getType, getNpmState } from './repo-detail.js';
@@ -118,7 +119,7 @@
     <div class="package-footer">
       <div class="updated-date">
         {t('updatedAt')}
-        {formatDateI18N(repository.updated_at)}
+        {formatDate(repository.updated_at)}
       </div>
 
       <div class="package-links">

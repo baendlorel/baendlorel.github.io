@@ -131,20 +131,27 @@ const createLanguageStore = () => {
   const dict = lang === 'en' ? en : zh;
 
   const formatDateI18N = (dateString: string): string => {
+    const s = /^\d+$/g.test(dateString) ? Number(dateString) : dateString;
+
     if (lang === 'en') {
-      return new Date(dateString).toLocaleDateString('en-US', {
+      return new Date(s).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
+        hour: 'numeric',
+        hour12: false,
       });
     } else {
-      return new Date(dateString).toLocaleDateString('zh-CN', {
+      return new Date(s).toLocaleDateString('zh-CN', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
+        hour: 'numeric',
+        hour12: false,
       });
     }
   };
+
   return {
     toggle: () => {
       const newLang = lang === 'en' ? 'zh' : 'en';
