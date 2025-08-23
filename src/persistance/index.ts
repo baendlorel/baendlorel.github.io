@@ -1,7 +1,17 @@
-import { compress, decompress, compressToBase64 } from 'lz-string';
+import { compress, decompress } from 'lz-string';
 import { Persis } from './consts.js';
 
 class Persistance {
+  constructor() {
+    // & Because services loads cache first, so code here is definitely executed before CORS loading
+    const updatedAt = localStorage.getItem(Persis.Prefix + 'updatedAt');
+    if (updatedAt !== '__UPDATED_AT__') {
+      localStorage.clear();
+      localStorage.setItem(Persis.Prefix + 'updatedAt', '__UPDATED_AT__');
+      console.log('LocalStorage cleared due to version update.');
+    }
+  }
+
   private genExpireTime() {
     const d = new Date();
     d.setUTCDate(d.getUTCDate() + Persis.ExpireDays);
