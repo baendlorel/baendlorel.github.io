@@ -21,16 +21,16 @@ function normalizeDescription(str: string, period: string = '.') {
 
 // todo 使用压缩方法减小数据大小
 // todo  Some day, there might be more than 100 repos, need to handle pagination
-async function fetchRepos() {
+async function fetchRepos(): Promise<RawRepoInfo[]> {
   const res = await fetch(
     `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
   );
   if (!res.ok) {
     throw new Error(`GitHub API error: ${res.status}, ${res.statusText}`);
   }
-  const repos = (await res.json()) as RepoInfo[];
+  const repos = (await res.json()) as any[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
-  return repos.filter((repo) => !repo.private);
+  return repos.filter((repo) => !repo.private) as RawRepoInfo[];
 }
 
 async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
@@ -40,9 +40,6 @@ async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
     const npmData = (await res.json()) as NpmInfo;
     return {
       version: npmData['dist-tags']?.latest || 'unknown',
-      description: npmData.description || '',
-      homepage: npmData.homepage || '',
-      repository: npmData.repository || { url: '' },
     };
   } catch {
     return null;
@@ -53,11 +50,11 @@ interface PackageJson {
   name: string;
   description?: string;
   description_zh?: string;
-  purpose?: RepoInfo['purpose'];
+  purpose?: RepoPurpose;
 }
 
-async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
-  const enrichedRepos: RepoInfo[] = [];
+async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
+  const enrichedRepos: RawRepoInfo[] = [];
   for (let i = 0; i < repos.length; i++) {
     const repo = repos[i];
     let npmInfo: NpmInfo | null = null;
@@ -83,16 +80,14 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
       ? normalizeDescription(pkgJson.description, '。')
       : normalizeDescription(repo.description);
 
-    const enriched: RepoInfo = {
+    const enriched: RawRepoInfo = {
       id: repo.id,
       name: repo.name,
       description,
       description_zh,
       purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
-      html_url: repo.html_url,
-      private: repo.private,
       fork: repo.fork,
-      license: repo.license,
+      license: repo.license ?? null,
 
       stargazers_count: repo.stargazers_count,
       forks_count: repo.forks_count,
@@ -100,7 +95,6 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
 
       language: repo.language,
       updated_at: repo.updated_at,
-      homepage: repo.homepage,
       topics: Array.isArray(repo.topics) ? repo.topics : [],
       npm: npmInfo ?? null,
       is_npm_package: !!npmInfo,
@@ -112,8 +106,8 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
   return enrichedRepos;
 }
 
-function serializeRepoInfo(enrichedRepos: RepoInfo[]): string {
-  return enrichedRepos.map((r) => {
+function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
+  const list = enrichedRepos.map((r) => {
     // & serialize in order
     // const enriched: RepoInfo = {
     //   id: repo.id,
@@ -130,12 +124,11 @@ function serializeRepoInfo(enrichedRepos: RepoInfo[]): string {
     //   watchers_count: repo.watchers_count,
     //   language: repo.language,
     //   updated_at: repo.updated_at,
-    //   homepage: repo.homepage,
     //   topics: Array.isArray(repo.topics) ? repo.topics : [],
     //   npm: npmInfo ?? null,
     //   is_npm_package: !!npmInfo,
     // };
-    return [
+    const entry = [
       r.id,
       r.name,
       r.description,
@@ -145,9 +138,33 @@ function serializeRepoInfo(enrichedRepos: RepoInfo[]): string {
       r.license?.spdx_id || '',
       r.stargazers_count,
       r.forks_count,
+      r.watchers_count,
+      r.language ?? '',
+      new Date(r.updated_at).getTime(),
+      r.topics.join('||' satisfies SimpleArrayDelimiter),
+      r.npm,
     ];
+    return entry;
   });
+
+  return JSON.stringify(list);
 }
+
+const FEATURED = [
+  'reflect-deep',
+  'colorful-titlebar',
+  'archiver',
+  'rollup-plugin-dts-merger',
+  'rollup-plugin-conditional-compilation',
+  '2ality-javascript-decorators-document',
+  'wildcard-event',
+  'singleton-pattern',
+  'probability-branch',
+  'function-feature',
+  'get-function-features',
+  'whisper-asr-spa',
+  'cpp-comment-generator',
+];
 
 /**
  * [WARN] Method names must be the **SAME** as in `repository.service.ts`
@@ -161,27 +178,22 @@ async function update() {
   const FEATURED_REPO_PATH = './featured-repo.js';
 
   const repos = await fetchRepos();
-  const enrichedRepos = await enrichRepos(repos);
-  const reposStr = JSON.stringify(enrichedRepos, null, 2);
+  const enriched = await enrichRepos(repos);
+
+  const reposStr = JSON.stringify(enriched, null, 2);
   writeFileSync(REPO_INFO_PATH, `window.CORS_GET_REPO_INFO(${reposStr});`);
 
-  const featuredRepos = [
-    'reflect-deep',
-    'colorful-titlebar',
-    'archiver',
-    'rollup-plugin-dts-merger',
-    'rollup-plugin-conditional-compilation',
-    '2ality-javascript-decorators-document',
-    'wildcard-event',
-    'singleton-pattern',
-    'probability-branch',
-    'function-feature',
-    'get-function-features',
-    'whisper-asr-spa',
-    'cpp-comment-generator',
-  ];
-  const featuredReposStr = JSON.stringify(featuredRepos, null, 2);
-  writeFileSync(FEATURED_REPO_PATH, `window.CORS_GET_FEATURED_REPO(${featuredReposStr});`);
+  const featuredStr = JSON.stringify(FEATURED, null, 2);
+  writeFileSync(FEATURED_REPO_PATH, `window.CORS_GET_FEATURED_REPO(${featuredStr});`);
+
+  console.log('Origin data saved, now proceeding compression...');
+
+  // & Compressed and unified data
+  const REPO_DATA_COMPRESSED_PATH = './repo-data.compressed.js';
+  const serializedRepos = serializeRepoInfo(enriched);
+  const a = compressToBase64(serializedRepos);
+  const b = compressToBase64(FEATURED.join('||' satisfies SimpleArrayDelimiter));
+  writeFileSync(REPO_DATA_COMPRESSED_PATH, `window.CORS_GET_REPO_DATA("${a},${b}");`);
 }
 
 update();
