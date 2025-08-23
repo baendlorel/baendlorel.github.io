@@ -13,3 +13,7 @@ declare const __IS_DEV__: boolean;
 
 type Language = 'en' | 'zh';
 type Theme = 'dark' | 'light';
+
+// & CORS names
+type RepoDataFile = 'repo-data.compressed.js';
+type RepoDataMethod = 'CORS_GET_REPO_DATA';

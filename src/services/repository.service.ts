@@ -1,8 +1,9 @@
 class RepositoryService {
-  private async load<T>(url: string, resolverName: string | symbol): Promise<T> {
+  private async load<T>(file: string, resolverName: string | symbol): Promise<T> {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = url;
+    script.src =
+      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/' + file;
     document.body.appendChild(script);
 
     const result = await new Promise<T>((resolve) => {
@@ -15,15 +16,19 @@ class RepositoryService {
   }
 
   async getInfo(): Promise<RepoInfo[]> {
-    const url =
-      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/repo-info.js';
-    return await this.load(url, 'CORS_GET_REPO_INFO');
+    return await this.load('repo-info.js', 'CORS_GET_REPO_INFO');
   }
 
   async getFeatured(): Promise<string[]> {
-    const url =
-      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/featured-repo.js';
-    return await this.load(url, 'CORS_GET_FEATURED_REPO');
+    return await this.load('featured-repo.js', 'CORS_GET_FEATURED_REPO');
+  }
+
+  // & serialized + compressed
+  async getData(): Promise<{ repoInfo: RepoInfo[]; featured: string[] }> {
+    const raw = await this.load(
+      'repo-data.compressed.js' satisfies RepoDataFile,
+      'CORS_GET_REPO_DATA' satisfies RepoDataMethod
+    );
   }
 }
 

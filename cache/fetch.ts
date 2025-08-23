@@ -189,11 +189,12 @@ async function update() {
   console.log('Origin data saved, now proceeding compression...');
 
   // & Compressed and unified data
-  const REPO_DATA_COMPRESSED_PATH = './repo-data.compressed.js';
+  const REPO_DATA_PATH: RepoDataFile = 'repo-data.compressed.js';
   const serializedRepos = serializeRepoInfo(enriched);
   const a = compressToBase64(serializedRepos);
   const b = compressToBase64(FEATURED.join('||' satisfies SimpleArrayDelimiter));
-  writeFileSync(REPO_DATA_COMPRESSED_PATH, `window.CORS_GET_REPO_DATA("${a},${b}");`);
+  const repoDataMethod: RepoDataMethod = 'CORS_GET_REPO_DATA';
+  writeFileSync(REPO_DATA_PATH, `${repoDataMethod}("${a},${b}")`);
 }
 
 update();
