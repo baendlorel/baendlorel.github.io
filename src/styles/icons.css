@@ -26,3 +26,19 @@
 .kskb-laptop {
   background: url('/assets/icons/laptop.svg') no-repeat center center;
 }
+
+.kskb-svelte {
+  background: url('/assets/icons/svelte.svg') no-repeat center center;
+}
+
+.kskb-vue {
+  background: url('/assets/icons/vue.svg') no-repeat center center;
+}
+
+.kskb-typescript {
+  background: url('/assets/icons/typescript.svg') no-repeat center center;
+}
+
+.kskb-nodejs {
+  background: url('/assets/icons/nodejs.svg') no-repeat center center;
+}

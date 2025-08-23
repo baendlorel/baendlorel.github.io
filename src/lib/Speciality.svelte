@@ -12,6 +12,20 @@
     { name: 'Python', level: 1, progress: 20 },
   ];
 
+  function getIcon(name: string): string {
+    const map = {
+      'JavaScript / TypeScript': 'kskb-icon kskb-typescript',
+      'Node.js': 'kskb-icon kskb-nodejs',
+      'Vue.js': 'kskb-icon kskb-vue',
+      Svelte: 'kskb-icon kskb-svelte',
+      Rust: 'fas fa-cogs',
+      'C++': 'fas fa-code',
+      PHP: 'fab fa-php',
+      Python: 'fab fa-python',
+    };
+    return map[name] || 'fas fa-code';
+  }
+
   function getColor(progress: number): string {
     if (progress >= 80) {
       return '#4CAF50'; // green
@@ -32,7 +46,10 @@
       <div class="speciality-item" data-level={item.level}>
         <div class="item-header">
           <div class="item-info">
-            <div class="item-name">{item.name}</div>
+            <div class="item-name">
+              <i class={getIcon(item.name)} style="margin-right: 3px"></i>
+              {item.name}
+            </div>
           </div>
           <div class="item-description">
             {t('specialityLevel')[item.level]}
