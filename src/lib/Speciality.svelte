@@ -10,7 +10,8 @@
     { name: 'C++', level: 1, progress: 30 },
     { name: 'PHP', level: 1, progress: 50 },
     { name: 'Python', level: 1, progress: 20 },
-  ];
+    { name: 'Docker', level: 2, progress: 65 },
+  ].sort((a, b) => b.progress - a.progress);
 
   function getIcon(name: string): string {
     const map = {
@@ -18,10 +19,11 @@
       'Node.js': 'kskb-icon kskb-nodejs',
       'Vue.js': 'kskb-icon kskb-vue',
       Svelte: 'kskb-icon kskb-svelte',
-      Rust: 'fas fa-cogs',
-      'C++': 'fas fa-code',
-      PHP: 'fab fa-php',
-      Python: 'fab fa-python',
+      Rust: 'kskb-icon kskb-rust',
+      'C++': 'kskb-icon kskb-cpp',
+      PHP: 'kskb-icon kskb-php',
+      Python: 'kskb-icon kskb-python',
+      Docker: 'kskb-icon kskb-docker',
     };
     return map[name] || 'fas fa-code';
   }
@@ -178,7 +180,6 @@
     }
 
     .progress-container {
-      flex-direction: column;
       gap: 0.5rem;
     }
   }

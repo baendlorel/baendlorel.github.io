@@ -42,3 +42,23 @@
 .kskb-nodejs {
   background: url('/assets/icons/nodejs.svg') no-repeat center center;
 }
+
+.kskb-rust {
+  background: url('/assets/icons/rust.svg') no-repeat center center;
+}
+
+.kskb-php {
+  background: url('/assets/icons/php.svg') no-repeat center center;
+}
+
+.kskb-cpp {
+  background: url('/assets/icons/cpp.svg') no-repeat center center;
+}
+
+.kskb-python {
+  background: url('/assets/icons/python.svg') no-repeat center center;
+}
+
+.kskb-docker {
+  background: url('/assets/icons/docker.svg') no-repeat center center;
+}
