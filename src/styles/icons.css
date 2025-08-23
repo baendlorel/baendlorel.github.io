@@ -22,3 +22,7 @@
 .kskb-app {
   background: url('/assets/icons/app.svg') no-repeat center center;
 }
+
+.kskb-laptop {
+  background: url('/assets/icons/laptop.svg') no-repeat center center;
+}

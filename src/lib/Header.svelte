@@ -5,12 +5,18 @@
 
   import ThemeControls from './ThemeControls.svelte';
   import Contact from './Contact.svelte';
+  import Speciality from './Speciality.svelte';
   import Dialog from './Dialog.svelte';
 
   let contactDialog: Dialog;
+  let specialityDialog: Dialog;
 
   function openContactDialog() {
     contactDialog.open();
+  }
+
+  function openSpecialityDialog() {
+    specialityDialog.open();
   }
 </script>
 
@@ -28,7 +34,17 @@
         <div class="contact-info">
           <button
             type="button"
-            class="collaborate-btn"
+            class="detail-btn"
+            on:click={openSpecialityDialog}
+            title={t('speciality')}
+          >
+            <i class="fas fa-book"></i>
+            <span>{t('speciality')}</span>
+          </button>
+
+          <button
+            type="button"
+            class="detail-btn"
             on:click={openContactDialog}
             title={t('collaborateWithMe')}
           >
@@ -53,6 +69,16 @@
     </div>
   </div>
 </header>
+
+<Dialog bind:this={specialityDialog} closeBtn={true}>
+  <div slot="header">
+    <h2 class="dialog-title">
+      <i class="kskb-icon kskb-laptop"></i>
+      {t('speciality')}
+    </h2>
+  </div>
+  <Speciality slot="body" />
+</Dialog>
 
 <Dialog bind:this={contactDialog} closeBtn={true}>
   <div slot="header">
@@ -151,21 +177,7 @@
     gap: 1rem;
   }
 
-  .email {
-    color: var(--text-muted);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    transition: color 0.3s ease;
-  }
-
-  .email:hover {
-    color: var(--primary-color);
-  }
-
-  .collaborate-btn {
+  .detail-btn {
     background: var(--gradient);
     border: none;
     color: white;
@@ -181,7 +193,7 @@
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
   }
 
-  .collaborate-btn:hover {
+  .detail-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
   }
@@ -251,11 +263,11 @@
       align-items: center;
     }
     /* do not hide the text
-    .collaborate-btn span {
+    .detail-btn span {
       display: none;
     } */
 
-    .collaborate-btn {
+    .detail-btn {
       padding: 0.5rem;
       min-width: 40px;
       justify-content: center;

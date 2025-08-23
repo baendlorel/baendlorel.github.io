@@ -43,6 +43,10 @@ const zh = {
   errorLoading: '加载数据出错',
   tryAgain: '重试',
 
+  // Speciality Dialog
+  speciality: '专长',
+  specialityLevel: ['入门', '有经验', '熟练', '精通'],
+
   // Contact Dialog
   collaborateWithMe: '开发服务 / 打赏支持',
   collaborate: '开发服务 / 打赏',
@@ -100,6 +104,10 @@ const en = {
 
   errorLoading: 'Error loading data',
   tryAgain: 'Try Again',
+
+  // Speciality Dialog
+  speciality: 'Speciality',
+  specialityLevel: ['Beginner', 'Experienced', 'Proficient', 'Expert'],
 
   // Contact Dialog
   collaborateWithMe: 'Work Contact / Donate',

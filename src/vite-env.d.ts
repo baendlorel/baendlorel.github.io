@@ -10,6 +10,12 @@ declare const __IS_DEV__: boolean;
 type Language = 'en' | 'zh';
 type Theme = 'dark' | 'light';
 
+interface SpecialityItem {
+  name: string;
+  level: 0 | 1 | 2 | 3;
+  progress: number;
+}
+
 interface License {
   key: string;
   name: string;
