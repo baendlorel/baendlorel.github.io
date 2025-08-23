@@ -26,7 +26,7 @@ class RepositoryService {
   }
 
   // & serialized + compressed
-  async getData(): Promise<{ repoInfo: RepoInfo[]; featured: string[] }> {
+  async getData(): Promise<{ info: RepoInfo[]; featured: string[] }> {
     const DELIMITER: SimpleArrayDelimiter = '||';
     const raw = await this.load<string>(
       'repo-data.compressed.js' satisfies RepoDataFile,
@@ -36,7 +36,7 @@ class RepositoryService {
     const featured = decompressFromBase64(b).split(DELIMITER);
     const serializedRepos = decompressFromBase64(a);
     const serialized = JSON.parse(serializedRepos) as any[][];
-    const repoInfo = serialized.map((r) => {
+    const info = serialized.map((r) => {
       const repo: RepoInfo = {
         id: r[0],
         name: r[1],
@@ -58,7 +58,7 @@ class RepositoryService {
       return repo;
     });
 
-    return { featured, repoInfo };
+    return { featured, info };
   }
 }
 

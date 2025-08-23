@@ -20,13 +20,9 @@ async function getInfo() {
   if (saved !== null) {
     return saved;
   }
-  const info = await repositoryService.getInfo();
-  if (__IS_DEV__) {
-    info[0].purpose = 'app'; // Ensure at least one is an app
-    info[1].purpose = 'rollup-plugin'; // Ensure at least one is an app
-    info[2].purpose = 'vscode-extension'; // Ensure at least one is an app
-  }
-  const featured = await repositoryService.getFeatured();
+  // const info = await repositoryService.getInfo();
+  // const featured = await repositoryService.getFeatured();
+  const { info, featured } = await repositoryService.getData();
   persis.save(KEY, { info, featured });
   return { info, featured };
 }
