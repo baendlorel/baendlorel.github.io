@@ -105,8 +105,6 @@
     width: 90vw;
     max-height: 90vh;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 
     /* Initial state */
     opacity: 0;
@@ -137,14 +135,48 @@
   }
 
   .dialog-content {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* header, body, footer */
     height: 100%;
-    min-height: 0; /* 关键：允许flex子元素收缩 */
     transform: translateY(20px);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
   }
+
+  .dialog-header {
+    grid-row: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: var(--gradient);
+    color: white;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+
+  .close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .dialog-body-wrapper {
+    grid-row: 2;
+    overflow-y: auto;
+    max-height: 75vh; /* needs this to ensure scrolling */
+    /* Fix iOS scroll issues */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* footer slot will take 3rd row automatically */
 
   /* Content popup animation */
   :global(.dialog-overlay.dialog-opening) .dialog-content {
@@ -157,14 +189,6 @@
     transform: translateY(-10px);
     opacity: 0;
     transition: all 0.2s ease-in;
-  }
-
-  .dialog-body-wrapper {
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0; /* 关键：允许滚动容器正确计算高度 */
-    /* Fix iOS scroll issues */
-    -webkit-overflow-scrolling: touch;
   }
 
   /* Header and footer styles - only apply if they have content */
