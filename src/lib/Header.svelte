@@ -65,9 +65,7 @@
       {t('collaborateWithMe')}
     </h2>
   </div>
-  <div slot="body">
-    <Contact />
-  </div>
+  <Contact slot="body" />
 </Dialog>
 
 <style>

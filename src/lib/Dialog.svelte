@@ -105,6 +105,8 @@
     width: 90vw;
     max-height: 90vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     /* Initial state */
     opacity: 0;
@@ -138,6 +140,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 0; /* 关键：允许flex子元素收缩 */
     transform: translateY(20px);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
@@ -159,6 +162,7 @@
   .dialog-body-wrapper {
     flex: 1;
     overflow-y: auto;
+    min-height: 0; /* 关键：允许滚动容器正确计算高度 */
     /* Fix iOS scroll issues */
     -webkit-overflow-scrolling: touch;
   }
