@@ -74,3 +74,7 @@
 .kskb-ruby {
   background: url('/assets/icons/ruby.svg') no-repeat center center;
 }
+
+.kskb-csharp {
+  background: url('/assets/icons/csharp.svg') no-repeat center center;
+}

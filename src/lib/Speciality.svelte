@@ -33,12 +33,15 @@
       name: 'Svelte',
       level: 1,
       progress: 60,
-      description: { en: 'This page is made of Svelte', zh: '本网页就是用Svelte编写' },
+      description: {
+        en: 'This page is made of Svelte (。・∀・)ノ',
+        zh: '本网页就是用Svelte编写的 (。・∀・)ノ',
+      },
     },
     {
       name: 'Rust',
       level: 1,
-      progress: 75,
+      progress: 58,
       description: {
         en: 'My terminal application "archiver" is made of this',
         zh: '我开发的终端应用“archiver”就是以此开发',
@@ -78,9 +81,18 @@
       description: { en: 'Almost same as js/ts', zh: '和js/ts几乎一样' },
     },
     {
+      name: 'C#',
+      level: 1,
+      progress: 20,
+      description: {
+        en: 'Have some experience of Unity developing that involves C#',
+        zh: '拥有一些Unity开发经验，涉及C#',
+      },
+    },
+    {
       name: 'Ruby',
       level: 1,
-      progress: 58,
+      progress: 48,
       description: {
         en: 'I use Ruby on tool development(used by assistants and managers) and RPG Maker XP many years ago',
         zh: '我在工具开发(营业员和客户经理使用)和RPG Maker XP中使用Ruby已有多年',
@@ -100,21 +112,22 @@
       Ruby: 'kskb-icon kskb-ruby',
       Python: 'kskb-icon kskb-python',
       Docker: 'kskb-icon kskb-docker',
+      'C#': 'kskb-icon kskb-csharp',
     };
     return map[name] || 'fas fa-code';
   }
 
   function getColor(progress: number): string {
-    if (progress >= 80) {
-      return '#4CAF50'; // green
-    } else if (progress >= 60) {
-      return '#8BC34A'; // light green
-    } else if (progress >= 40) {
-      return '#FFC107'; // amber
-    } else if (progress >= 20) {
-      return '#FF9800'; // orange
-    }
-    return '#FFD700';
+    if (progress >= 90) return '#24f209';
+    if (progress >= 80) return '#78e50b';
+    if (progress >= 70) return '#E6FF3B';
+    if (progress >= 60) return '#FFF94D';
+    if (progress >= 50) return '#FFD84D';
+    if (progress >= 40) return '#FFB84D';
+    if (progress >= 30) return '#FF984D';
+    if (progress >= 20) return '#FF6B35';
+    if (progress >= 10) return '#FF3B3B';
+    return '#B80000';
   }
 </script>
 
@@ -160,13 +173,13 @@
   .speciality-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1.5rem;
   }
 
   .speciality-item {
     background: var(--surface-light);
     border-radius: 12px;
-    padding: 0.4rem 1rem;
+    padding: 0.8rem 1rem;
     transition: all 0.3s ease;
     border: 2px solid transparent;
   }
@@ -181,7 +194,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.6rem;
   }
 
   .item-info {
