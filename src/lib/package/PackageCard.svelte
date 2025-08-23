@@ -25,7 +25,7 @@
 </script>
 
 <script lang="ts">
-  import { lang, t } from '@/common/i18n.js';
+  import { lang, t, formatDateI18N } from '@/common/i18n.js';
   import { copyToClipboard } from '@/common/copy.js';
   import { pop } from '@/common/pop.js';
   import { getType, getNpmState } from './repo-detail.js';
@@ -55,22 +55,6 @@
   function getTypeIcon(repo: RepoInfo): string {
     const t = getType(repo);
     return t === 'other' ? 'fas fa-code' : `kskb-icon kskb-${t}`;
-  }
-
-  function formatDate(dateString: string): string {
-    if (lang === 'en') {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      });
-    } else {
-      return new Date(dateString).toLocaleDateString('zh-CN', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-    }
   }
 
   function trunc(description: string, maxLength: number = 120): string {
@@ -134,7 +118,7 @@
     <div class="package-footer">
       <div class="updated-date">
         {t('updatedAt')}
-        {formatDate(repository.updated_at)}
+        {formatDateI18N(repository.updated_at)}
       </div>
 
       <div class="package-links">

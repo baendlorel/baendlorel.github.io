@@ -77,7 +77,7 @@ const en = {
   appProjects: 'App',
   allProjects: 'All',
 
-  updatedAt: 'Updated',
+  updatedAt: 'Updated at',
   stars: 'Stars',
   forks: 'Forks',
   downloads: 'Downloads',
@@ -130,6 +130,21 @@ const createLanguageStore = () => {
 
   const dict = lang === 'en' ? en : zh;
 
+  const formatDateI18N = (dateString: string): string => {
+    if (lang === 'en') {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
+    } else {
+      return new Date(dateString).toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    }
+  };
   return {
     toggle: () => {
       const newLang = lang === 'en' ? 'zh' : 'en';
@@ -138,8 +153,9 @@ const createLanguageStore = () => {
     },
     t: (lorem: keyof typeof zh) => dict[lorem],
     lang,
+    formatDateI18N,
   };
 };
 
-const { toggle, t, lang } = createLanguageStore();
-export { toggle, t, lang };
+const { toggle, t, lang, formatDateI18N } = createLanguageStore();
+export { toggle, t, lang, formatDateI18N };

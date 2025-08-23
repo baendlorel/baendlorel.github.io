@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { lang, t } from '@/common/i18n.js';
+  import { lang, t, formatDateI18N } from '@/common/i18n.js';
+
+  const lastUpdatedAt = formatDateI18N('__UPDATED_AT__');
 </script>
 
 <footer class="footer">
@@ -23,6 +25,10 @@
         <i class="fab fa-npm"></i>
       </a>
     </div>
+    <p>
+      {t('updatedAt')}
+      {lastUpdatedAt}
+    </p>
   </div>
 </footer>
 
@@ -35,10 +41,10 @@
   }
 
   .footer-content {
+    display: flex;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;

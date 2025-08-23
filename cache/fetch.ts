@@ -96,9 +96,9 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     }
 
     const description = normalizeDescription(pkgJson.description ?? repo.description);
-    const description_zh = pkgJson.description
-      ? normalizeDescription(pkgJson.description, '。')
-      : normalizeDescription(repo.description);
+    const description_zh = pkgJson.description_zh
+      ? normalizeDescription(pkgJson.description_zh, '。')
+      : description;
 
     const enriched: RawRepoInfo = {
       id: repo.id,
@@ -177,6 +177,7 @@ async function update() {
   const enriched = await enrichRepos(repos);
 
   // & Compressed and unified data
+  // Successfully reduced from 34.7KB to 7.8KB, and merge 2 requests to 1
   const serializedRepos = serializeRepoInfo(enriched);
   const a = lz.compressToBase64(serializedRepos);
   const b = lz.compressToBase64(FEATURED.join(DELIMITER));
