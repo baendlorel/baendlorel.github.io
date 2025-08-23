@@ -29,11 +29,13 @@ export const repoFilter = (filter: RepoFilter) => (repo: RepoInfo) => {
       return filter === 'npm';
     case 'app':
       return filter === 'app';
-    case 'extension':
     case 'vscode-extension':
       return filter === 'extension';
-    case 'plugin':
+    case 'extension':
+      return filter === 'extension';
     case 'rollup-plugin':
+      return filter === 'plugin' || filter === 'npm';
+    case 'plugin':
       return filter === 'plugin';
     case 'other':
       return filter === 'other';

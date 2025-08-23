@@ -7,6 +7,17 @@ const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 
+function normalizeDescription(str: string, period: string = '.') {
+  str = str || '';
+  if (str.endsWith(period)) {
+    return str;
+  } else if (str) {
+    return str + period;
+  } else {
+    return str;
+  }
+}
+
 // todo  Some day, there might be more than 100 repos, need to handle pagination
 async function fetchRepos() {
   const res = await fetch(
@@ -48,7 +59,7 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
   for (let i = 0; i < repos.length; i++) {
     const repo = repos[i];
     let npmInfo: NpmInfo | null = null;
-    let pkgJson: PackageJson | null = null;
+    let pkgJson: PackageJson = {} as PackageJson;
     try {
       const pkgRes = await fetch(
         `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
@@ -65,12 +76,17 @@ async function enrichRepos(repos: RepoInfo[]): Promise<RepoInfo[]> {
       console.error(`Error fetching package.json for ${repo.name}:`, e);
     }
 
+    const description = normalizeDescription(pkgJson.description ?? repo.description);
+    const description_zh = pkgJson.description
+      ? normalizeDescription(pkgJson.description, '。')
+      : normalizeDescription(repo.description);
+
     const enriched: RepoInfo = {
       id: repo.id,
       name: repo.name,
-      description: pkgJson?.description ?? repo.description ?? '',
-      description_zh: pkgJson?.description_zh ?? repo.description ?? '',
-      purpose: pkgJson?.purpose ?? (npmInfo ? 'npm' : 'other'),
+      description,
+      description_zh,
+      purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
       html_url: repo.html_url,
       private: repo.private,
       fork: repo.fork,
