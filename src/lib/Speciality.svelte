@@ -1,14 +1,16 @@
 <script lang="ts">
   import { t, lang } from '@/common/i18n.js';
 
+  const jsExp = new Date().getFullYear() - 2018;
+
   const specialities: SpecialityItem[] = [
     {
       name: 'JavaScript / TypeScript',
       level: 3,
       progress: 100,
       description: {
-        en: '6 years development experience, also main language of my work',
-        zh: '6年开发经验，也是工作主用',
+        en: `${jsExp} years development experience, also main language of my work`,
+        zh: `${jsExp}年开发经验，也是工作主用`,
       },
     },
     {
@@ -16,8 +18,8 @@
       level: 3,
       progress: 100,
       description: {
-        en: '6 years development experience, also main framework of my work',
-        zh: '6年开发经验，也是工作主用',
+        en: `${jsExp} years development experience, also main framework of my work`,
+        zh: `${jsExp}年开发经验，也是工作主用`,
       },
     },
     {
@@ -25,8 +27,8 @@
       level: 3,
       progress: 100,
       description: {
-        en: '6 years development experience, also main framework of my work',
-        zh: '6年开发经验，也是工作主用',
+        en: `${jsExp} years development experience, also main framework of my work`,
+        zh: `${jsExp}年开发经验，也是工作主用`,
       },
     },
     {
@@ -118,15 +120,15 @@
   }
 
   function getColor(progress: number): string {
-    if (progress >= 90) return '#24f209';
-    if (progress >= 80) return '#78e50b';
-    if (progress >= 70) return '#E6FF3B';
-    if (progress >= 60) return '#FFF94D';
-    if (progress >= 50) return '#FFD84D';
-    if (progress >= 40) return '#FFB84D';
-    if (progress >= 30) return '#FF984D';
-    if (progress >= 20) return '#FF6B35';
-    if (progress >= 10) return '#FF3B3B';
+    if (progress >= 90) return '#14a900';
+    if (progress >= 80) return '#5cb701';
+    if (progress >= 70) return '#c3dd17';
+    if (progress >= 60) return '#c8c223';
+    if (progress >= 50) return '#d2ab1f';
+    if (progress >= 40) return '#e39725';
+    if (progress >= 30) return '#eb731e';
+    if (progress >= 20) return '#da4008';
+    if (progress >= 10) return '#dc0f0f';
     return '#B80000';
   }
 </script>
