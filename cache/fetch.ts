@@ -39,8 +39,7 @@ function normalizeDescription(str: string, period: string = '.') {
   }
 }
 
-// todo 使用压缩方法减小数据大小
-// todo  Some day, there might be more than 100 repos, need to handle pagination
+// todo Some day, there might be more than 100 repos, need to handle pagination
 async function fetchRepos(): Promise<RawRepoInfo[]> {
   const res = await fetch(
     `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
