@@ -43,10 +43,7 @@ function normalizeDescription(str: string, period: string = '.') {
 
 // todo Some day, there might be more than 100 repos, need to handle pagination
 async function fetchRepos(): Promise<RawRepoInfo[]> {
-  const res = await fetch(
-    `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
-    { headers }
-  );
+  const res = await fetch(`${GITHUB_API_BASE}/user/repos?per_page=100&sort=updated`, { headers });
   if (!res.ok) {
     throw new Error(
       `GitHub API error: ${res.status}, ${res.statusText} , PRIVATE_REPO_TOKEN.len:[${PRIVATE_REPO_TOKEN.length}]`
@@ -105,7 +102,14 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     }
 
     // & if it is private and does not want to be displayed, skip it.
-    console.log('Enriching:', repo.name, 'isPrivate', repo.private, 'display', pkgJson.display);
+    console.log(
+      'Enriching:',
+      repo.name,
+      'isPrivate',
+      repo.private ? 'YES' : '-',
+      'display',
+      pkgJson.display ? 'YES' : '-'
+    );
     if (!pkgJson.display && repo.private) {
       continue;
     }
