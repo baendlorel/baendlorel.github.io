@@ -71,6 +71,9 @@
 </script>
 
 <div class="package-card" data-type={getTypeClass(repository)}>
+  {#if repository.private}
+    <div class="private-banner" aria-hidden="true">{t('privateRepoFlag')}</div>
+  {/if}
   <div class="package-header">
     <div class="package-icon">
       <i class={getTypeIcon(repository)}></i>
@@ -123,15 +126,22 @@
       </div>
 
       <div class="package-links">
-        <a
-          href={repository.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-outline"
-        >
-          <i class="fab fa-github"></i>
-          {t('viewOnGitHub')}
-        </a>
+        {#if repository.private}
+          <button class="btn btn-outline disabled" rel="noopener noreferrer">
+            <i class="fab fa-github"></i>
+            {t('viewOnGitHub')}
+          </button>
+        {:else}
+          <a
+            href={repository.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline"
+          >
+            <i class="fab fa-github"></i>
+            {t('viewOnGitHub')}
+          </a>
+        {/if}
 
         {#if npmState === 'available'}
           <a
@@ -166,6 +176,27 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+  }
+
+  .private-banner {
+    position: absolute;
+    top: 12px;
+    right: -74px;
+    background: linear-gradient(90deg, rgba(220, 38, 38), rgba(220, 38, 38));
+    color: #fff1f1;
+    padding: 8px 80px;
+    transform: rotate(35deg);
+    text-align: center;
+    letter-spacing: 1px;
+    z-index: 2;
+    opacity: 0.2;
+    pointer-events: none;
+    border-radius: 4px;
+  }
+
+  /* Ensure overflow hidden on parent clips the banner */
+  .package-card {
+    overflow: hidden;
   }
 
   .package-card::before {
@@ -336,5 +367,10 @@
 
   .package-card[data-type='rollup-plugin'] .package-icon {
     background: linear-gradient(135deg, #fff5bd 0%, #ffb86b 100%);
+  }
+
+  /* Ensure overflow hidden on parent clips the banner */
+  .package-card {
+    overflow: hidden;
   }
 </style>

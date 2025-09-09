@@ -30,6 +30,10 @@ jobs:
         run: npm install node-fetch tsx lz-string
 
       - name: Run fetch.ts to generate data
+        # Use a personal PAT stored as the repository secret `PERSONAL_PAT`.
+        # Create this secret in Settings -> Secrets -> Actions if not present.
+        env:
+          PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
         run: npx tsx cache/fetch.ts
 
       - name: Create or update release with data file

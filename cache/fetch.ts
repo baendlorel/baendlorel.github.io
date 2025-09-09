@@ -9,6 +9,14 @@ const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 const DELIMITER: SimpleArrayDelimiter = '||';
 
+// Read tokens from environment. PRIVATE_REPO_TOKEN will be used as Bearer token
+// if present. Otherwise fall back to GITHUB_TOKEN (uses `token` scheme).
+function makeAuthHeaders() {
+  const headers: Record<string, string> = {};
+  headers.Authorization = `Bearer ${process.env.PRIVATE_REPO_TOKEN}`;
+  return headers;
+}
+
 const FEATURED = [
   'reflect-deep',
   'colorful-titlebar',
@@ -42,7 +50,8 @@ function normalizeDescription(str: string, period: string = '.') {
 // todo Some day, there might be more than 100 repos, need to handle pagination
 async function fetchRepos(): Promise<RawRepoInfo[]> {
   const res = await fetch(
-    `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`
+    `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
+    { headers: makeAuthHeaders() }
   );
   if (!res.ok) {
     throw new Error(`GitHub API error: ${res.status}, ${res.statusText}`);
@@ -81,14 +90,12 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     let pkgJson: PackageJson = {} as PackageJson;
     try {
       const pkgRes = await fetch(
-        `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`
+        `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`,
+        { headers: makeAuthHeaders() }
       );
       if (pkgRes.ok) {
         const pkgData = (await pkgRes.json()) as { content: string };
-        pkgJson = JSON.parse(Buffer.from(pkgData.content, 'base64').toString()) as {
-          name: string;
-          description?: string;
-        };
+        pkgJson = JSON.parse(Buffer.from(pkgData.content, 'base64').toString()) as PackageJson;
         npmInfo = await fetchNpmInfo(pkgJson.name);
       }
     } catch (e) {

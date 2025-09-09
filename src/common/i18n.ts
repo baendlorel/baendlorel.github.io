@@ -15,6 +15,7 @@ const zh = {
   appProjects: '应用',
   allProjects: '全部',
 
+  privateRepoFlag: '私有仓库',
   updatedAt: '更新于',
   stars: '星标',
   forks: '分叉',
@@ -77,6 +78,7 @@ const en = {
   appProjects: 'App',
   allProjects: 'All',
 
+  privateRepoFlag: 'PRIVATE',
   updatedAt: 'Updated at',
   stars: 'Stars',
   forks: 'Forks',

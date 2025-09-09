@@ -22,15 +22,19 @@ async function getInfo() {
   }
   // const info = await repositoryService.getInfo();
   // const featured = await repositoryService.getFeatured();
-  const { info, featured } = await repositoryService.getData();
-  persis.save(KEY, { info, featured });
-  return { info, featured };
+  const data = await repositoryService.getData();
+  persis.save(KEY, data);
+  return data;
 }
 
 export async function loadRepoData() {
   try {
     repoLoading.set(true);
     const { info, featured: featuredNames } = await getInfo();
+    // if (__IS_DEV__) {
+    //   info[0].private = true;
+    //   console.log('data', info, featuredNames);
+    // }
 
     const featured: RepoInfo[] = [];
     for (let i = 0; i < featuredNames.length; i++) {
