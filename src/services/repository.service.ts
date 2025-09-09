@@ -53,7 +53,7 @@ class RepositoryService {
         watchers_count: r[10],
         language: r[11],
         updated_at: r[12],
-        topics: r[13],
+        topics: r[13] ? r[13].split(DELIMITER) : [],
         npm: r[14],
         is_npm_package: r[14] !== null,
       };
