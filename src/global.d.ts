@@ -33,6 +33,7 @@ interface RawRepoInfo {
   name: string;
   description: string | null;
   description_zh: string | null;
+  private: boolean;
 
   /**
    * Purpose of the repository, e.g. 'vscode-extension', 'rollup-plugin', 'npm' etc.
@@ -61,6 +62,7 @@ type RepoInfo = Merge<
     html_url: string;
     license: string;
     language: string;
+    updated_at: number;
     is_npm_package: boolean;
   }
 >;

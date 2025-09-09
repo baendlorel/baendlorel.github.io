@@ -49,7 +49,7 @@ async function fetchRepos(): Promise<RawRepoInfo[]> {
   }
   const repos = (await res.json()) as any[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
-  return repos.filter((repo) => !repo.private) as RawRepoInfo[];
+  return repos as RawRepoInfo[];
 }
 
 async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
@@ -70,6 +70,7 @@ interface PackageJson {
   description?: string;
   description_zh?: string;
   purpose?: RepoPurpose;
+  display?: boolean;
 }
 
 async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
@@ -94,6 +95,11 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
       console.error(`Error fetching package.json for ${repo.name}:`, e);
     }
 
+    // & if it is private and does not want to be displayed, skip it.
+    if (!pkgJson.display && repo.private) {
+      continue;
+    }
+
     const description = normalizeDescription(pkgJson.description ?? repo.description);
     const description_zh = pkgJson.description_zh
       ? normalizeDescription(pkgJson.description_zh, '。')
@@ -105,6 +111,7 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
       description,
       description_zh,
       purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
+      private: repo.private,
       fork: repo.fork,
       license: repo.license ?? null,
 
@@ -133,6 +140,7 @@ function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
     //   description,
     //   description_zh,
     //   purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
+    //   private: repo.private,
     //   ^ html_url: repo.html_url, // omit to save space, equals 'https://github.com/baendlorel/'+r.name
     //   ^ private: repo.private, // omit to save space, already filtered out private repos
     //   fork: repo.fork,
@@ -152,6 +160,7 @@ function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
       r.description,
       r.description_zh,
       r.purpose,
+      r.private,
       r.fork,
       r.license?.spdx_id || '',
       r.stargazers_count,

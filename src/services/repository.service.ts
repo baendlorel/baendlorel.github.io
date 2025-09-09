@@ -37,23 +37,25 @@ class RepositoryService {
     const serializedRepos = decompressFromBase64(a);
     const serialized = JSON.parse(serializedRepos) as any[][];
     const info = serialized.map((r) => {
+      const isPrivate = r[5];
       const repo: RepoInfo = {
         id: r[0],
         name: r[1],
-        html_url: 'https://github.com/baendlorel/' + r[1],
+        html_url: isPrivate ? '' : 'https://github.com/baendlorel/' + r[1],
         description: r[2],
         description_zh: r[3],
         purpose: r[4],
-        fork: r[5],
-        license: r[6],
-        stargazers_count: r[7],
-        forks_count: r[8],
-        watchers_count: r[9],
-        language: r[10],
-        updated_at: r[11],
-        topics: r[12],
-        npm: r[13],
-        is_npm_package: r[13] !== null,
+        private: isPrivate,
+        fork: r[6],
+        license: r[7],
+        stargazers_count: r[8],
+        forks_count: r[9],
+        watchers_count: r[10],
+        language: r[11],
+        updated_at: r[12],
+        topics: r[13],
+        npm: r[14],
+        is_npm_package: r[14] !== null,
       };
       return repo;
     });
