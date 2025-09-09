@@ -8,12 +8,13 @@ const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 const DELIMITER: SimpleArrayDelimiter = '||';
+const PRIVATE_REPO_TOKEN = process.env.PRIVATE_REPO_TOKEN;
 
 // Read tokens from environment. PRIVATE_REPO_TOKEN will be used as Bearer token
 // if present. Otherwise fall back to GITHUB_TOKEN (uses `token` scheme).
 function makeAuthHeaders() {
   const headers: Record<string, string> = {};
-  headers.Authorization = `Bearer ${process.env.PRIVATE_REPO_TOKEN}`;
+  headers.Authorization = `Bearer ${PRIVATE_REPO_TOKEN}`;
   return headers;
 }
 
@@ -54,7 +55,9 @@ async function fetchRepos(): Promise<RawRepoInfo[]> {
     { headers: makeAuthHeaders() }
   );
   if (!res.ok) {
-    throw new Error(`GitHub API error: ${res.status}, ${res.statusText}`);
+    throw new Error(
+      `GitHub API error: ${res.status}, ${res.statusText} , PRIVATE_REPO_TOKEN.len:[${PRIVATE_REPO_TOKEN.length}]`
+    );
   }
   const repos = (await res.json()) as any[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
