@@ -8,15 +8,8 @@ const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 const DELIMITER: SimpleArrayDelimiter = '||';
-const PRIVATE_REPO_TOKEN = process.env.PRIVATE_REPO_TOKEN;
-
-// Read tokens from environment. PRIVATE_REPO_TOKEN will be used as Bearer token
-// if present. Otherwise fall back to GITHUB_TOKEN (uses `token` scheme).
-function makeAuthHeaders() {
-  const headers: Record<string, string> = {};
-  headers.Authorization = `Bearer ${PRIVATE_REPO_TOKEN}`;
-  return headers;
-}
+const PRIVATE_REPO_TOKEN = process.env.PRIVATE_REPO_TOKEN.trim();
+const headers: Record<string, string> = { Authorization: `Bearer ${PRIVATE_REPO_TOKEN}` };
 
 const FEATURED = [
   'reflect-deep',
@@ -52,7 +45,7 @@ function normalizeDescription(str: string, period: string = '.') {
 async function fetchRepos(): Promise<RawRepoInfo[]> {
   const res = await fetch(
     `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
-    { headers: makeAuthHeaders() }
+    { headers }
   );
   if (!res.ok) {
     throw new Error(
@@ -61,6 +54,12 @@ async function fetchRepos(): Promise<RawRepoInfo[]> {
   }
   const repos = (await res.json()) as any[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
+  console.log(
+    'repos count:',
+    repos.length,
+    'private count:',
+    repos.filter((r) => r.private).length
+  );
   return repos as RawRepoInfo[];
 }
 
@@ -94,7 +93,7 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     try {
       const pkgRes = await fetch(
         `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`,
-        { headers: makeAuthHeaders() }
+        { headers }
       );
       if (pkgRes.ok) {
         const pkgData = (await pkgRes.json()) as { content: string };
@@ -106,6 +105,7 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     }
 
     // & if it is private and does not want to be displayed, skip it.
+    console.log('Enriching:', repo.name, 'isPrivate', repo.private, 'display', pkgJson.display);
     if (!pkgJson.display && repo.private) {
       continue;
     }
