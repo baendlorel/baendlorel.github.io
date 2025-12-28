@@ -41,14 +41,6 @@
     <p class="section-description">
       {t('supportDescription')}
     </p>
-
-    <div class="qr-code-container">
-      {#if lang === 'en'}
-        <img src={alipayEn} alt="zfb-qr" style="width:100%" />
-      {:else}
-        <img src={alipayZh} alt="zfb-qr" style="width:100%" />
-      {/if}
-    </div>
   </div>
 </div>
 
