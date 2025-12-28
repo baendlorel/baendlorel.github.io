@@ -12,13 +12,15 @@ const PRIVATE_REPO_TOKEN = process.env.PRIVATE_REPO_TOKEN.trim();
 const headers: Record<string, string> = { Authorization: `Bearer ${PRIVATE_REPO_TOKEN}` };
 
 const FEATURED = [
+  'kt.js',
+  'fastify-injecorator',
   'reflect-deep',
-  'colorful-titlebar',
-  'archiver',
+  'jetbrains-titlebar',
   'rollup-plugin-dts-merger',
   'rollup-plugin-conditional-compilation',
   '2ality-javascript-decorators-document',
   'wildcard-event',
+  'archiver',
   'singleton-pattern',
   'probability-branch',
   'function-feature',
@@ -51,12 +53,7 @@ async function fetchRepos(): Promise<RawRepoInfo[]> {
   }
   const repos = (await res.json()) as any[];
   // return repos.filter((repo) => !repo.fork && !repo.private);
-  console.log(
-    'repos count:',
-    repos.length,
-    'private count:',
-    repos.filter((r) => r.private).length
-  );
+  console.log('repos count:', repos.length, 'private count:', repos.filter((r) => r.private).length);
   return repos as RawRepoInfo[];
 }
 
@@ -88,10 +85,9 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     let npmInfo: NpmInfo | null = null;
     let pkgJson: PackageJson = {} as PackageJson;
     try {
-      const pkgRes = await fetch(
-        `${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`,
-        { headers }
-      );
+      const pkgRes = await fetch(`${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`, {
+        headers,
+      });
       if (pkgRes.ok) {
         const pkgData = (await pkgRes.json()) as { content: string };
         pkgJson = JSON.parse(Buffer.from(pkgData.content, 'base64').toString()) as PackageJson;
@@ -115,9 +111,7 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
     }
 
     const description = normalizeDescription(pkgJson.description ?? repo.description);
-    const description_zh = pkgJson.description_zh
-      ? normalizeDescription(pkgJson.description_zh, '。')
-      : description;
+    const description_zh = pkgJson.description_zh ? normalizeDescription(pkgJson.description_zh, '。') : description;
 
     const enriched: RawRepoInfo = {
       id: repo.id,

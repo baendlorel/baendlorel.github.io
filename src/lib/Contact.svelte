@@ -1,6 +1,4 @@
 <script lang="ts">
-  import alipayZh from '@/assets/alipay-zh.jpg';
-  import alipayEn from '@/assets/alipay-en.png';
   import { t, lang } from '@/common/i18n.js';
 </script>
 
@@ -32,15 +30,6 @@
       <li><i class="fas fa-check"></i> {t('fullstackDev')}</li>
       <li><i class="fas fa-check"></i> {t('techConsulting')}</li>
     </ul>
-  </div>
-  <div class="support-section">
-    <div class="section-header">
-      <i class="fas fa-heart"></i>
-      <h3>{t('supportMyWork')}</h3>
-    </div>
-    <p class="section-description">
-      {t('supportDescription')}
-    </p>
   </div>
 </div>
 
