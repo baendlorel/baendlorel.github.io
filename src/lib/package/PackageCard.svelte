@@ -67,10 +67,11 @@
       : description;
   }
 
-  let description = trunc(lang === 'en' ? repository.description : repository.description_zh);
+  $: description = trunc(lang === 'en' ? repository.description : repository.description_zh);
+  $: npmPackageUrl = `https://npmjs.com/package/${encodeURIComponent(repository.name)}`;
 </script>
 
-<div class="package-card" data-type={getTypeClass(repository)}>
+<div class="package-card" class:is-monorepo={repository.is_monorepo} data-type={getTypeClass(repository)}>
   {#if repository.private}
     <div class="private-banner" aria-hidden="true">{t('privateRepoFlag')}</div>
   {/if}
@@ -78,8 +79,16 @@
     <div class="package-icon">
       <i class={getTypeIcon(repository)}></i>
     </div>
-    <div class="package-type">
-      {getTypeClass(repository)}
+    <div class="package-labels">
+      <div class="package-type">
+        {getTypeClass(repository)}
+      </div>
+      {#if repository.is_monorepo}
+        <div class="monorepo-tag">
+          <i class="fas fa-layer-group"></i>
+          {t('monorepoFlag')}
+        </div>
+      {/if}
     </div>
   </div>
 
@@ -98,6 +107,13 @@
     <p class="package-description">
       {description}
     </p>
+    {#if repository.is_monorepo}
+      <p class="monorepo-source">
+        <i class="fas fa-cubes"></i>
+        {t('fromMonorepo')}
+        <span>{repository.monorepo_root}</span>
+      </p>
+    {/if}
 
     <div class="package-meta">
       <div class="meta-item">
@@ -127,7 +143,7 @@
 
       <div class="package-links">
         {#if repository.private}
-          <button class="btn btn-outline disabled" rel="noopener noreferrer">
+          <button class="btn btn-outline disabled">
             <i class="fab fa-github"></i>
             {t('viewOnGitHub')}
           </button>
@@ -145,7 +161,7 @@
 
         {#if npmState === 'available'}
           <a
-            href="https://npmjs.com/package/{repository.name}"
+            href={npmPackageUrl}
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-primary"
@@ -176,6 +192,13 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+  }
+
+  .package-card.is-monorepo {
+    border-color: var(--monorepo-border);
+    background:
+      radial-gradient(circle at top right, var(--monorepo-glow), transparent 58%),
+      var(--surface);
   }
 
   .private-banner {
@@ -217,8 +240,17 @@
     border-color: var(--primary-color);
   }
 
+  .package-card.is-monorepo:hover {
+    border-color: var(--monorepo-border-strong);
+    box-shadow: 0 14px 42px var(--monorepo-shadow);
+  }
+
   .package-card:hover::before {
     opacity: 1;
+  }
+
+  .package-card.is-monorepo::before {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
   }
 
   .package-header {
@@ -251,6 +283,29 @@
     letter-spacing: 0.05em;
   }
 
+  .package-labels {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .monorepo-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--monorepo-tag-text);
+    background: var(--monorepo-tag-bg);
+    border: 1px solid var(--monorepo-border);
+  }
+
   .package-content {
     flex: 1;
     display: flex;
@@ -280,6 +335,24 @@
     line-height: 1.6;
     margin-bottom: 1rem;
     flex: 1;
+  }
+
+  .monorepo-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--monorepo-source-text);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .monorepo-source span {
+    font-family: 'Consolas', monospace;
+    background: var(--monorepo-tag-bg);
+    border: 1px solid var(--monorepo-border);
+    color: var(--text-primary);
+    border-radius: 6px;
+    padding: 0.08rem 0.45rem;
   }
 
   .package-meta {
@@ -369,8 +442,7 @@
     background: linear-gradient(135deg, #fff5bd 0%, #ffb86b 100%);
   }
 
-  /* Ensure overflow hidden on parent clips the banner */
-  .package-card {
-    overflow: hidden;
+  .package-card.is-monorepo .package-icon {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
   }
 </style>

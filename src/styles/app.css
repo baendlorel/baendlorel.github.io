@@ -21,6 +21,13 @@
   --border: #475569;
   --shadow: rgba(0, 0, 0, 0.3);
   --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  --monorepo-border: rgba(245, 158, 11, 0.55);
+  --monorepo-border-strong: rgba(251, 146, 60, 0.9);
+  --monorepo-glow: rgba(245, 158, 11, 0.2);
+  --monorepo-shadow: rgba(245, 158, 11, 0.2);
+  --monorepo-tag-bg: rgba(245, 158, 11, 0.16);
+  --monorepo-tag-text: #fdba74;
+  --monorepo-source-text: #fcd34d;
 }
 
 :root[theme='light'] {
@@ -37,6 +44,13 @@
   --border: #e2e8f0;
   --shadow: rgba(0, 0, 0, 0.1);
   --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  --monorepo-border: rgba(234, 88, 12, 0.45);
+  --monorepo-border-strong: rgba(194, 65, 12, 0.7);
+  --monorepo-glow: rgba(251, 146, 60, 0.18);
+  --monorepo-shadow: rgba(251, 146, 60, 0.24);
+  --monorepo-tag-bg: rgba(251, 146, 60, 0.14);
+  --monorepo-tag-text: #9a3412;
+  --monorepo-source-text: #9a3412;
 }
 
 * {

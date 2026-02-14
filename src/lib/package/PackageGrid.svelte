@@ -71,6 +71,7 @@
       filtered = filtered.filter(
         (repo) =>
           repo.name.toLowerCase().includes(lower) ||
+          repo.monorepo_root.toLowerCase().includes(lower) ||
           repo.description.toLowerCase().includes(lower) ||
           repo.topics.some((topic) => topic.toLowerCase().includes(lower))
       );

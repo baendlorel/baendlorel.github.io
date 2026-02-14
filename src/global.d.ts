@@ -29,11 +29,12 @@ interface NpmInfo {
 }
 
 interface RawRepoInfo {
-  id: number;
+  id: number | string;
   name: string;
   description: string | null;
   description_zh: string | null;
   private: boolean;
+  html_url: string;
 
   /**
    * Purpose of the repository, e.g. 'vscode-extension', 'rollup-plugin', 'npm' etc.
@@ -49,9 +50,11 @@ interface RawRepoInfo {
   watchers_count: number;
 
   language: string | null;
-  updated_at: string;
+  updated_at: string | number;
   topics: string[];
   npm: NpmInfo | null;
+  is_monorepo: boolean;
+  monorepo_root: string;
 }
 
 type RepoInfo = Merge<
@@ -64,5 +67,7 @@ type RepoInfo = Merge<
     language: string;
     updated_at: number;
     is_npm_package: boolean;
+    is_monorepo: boolean;
+    monorepo_root: string;
   }
 >;

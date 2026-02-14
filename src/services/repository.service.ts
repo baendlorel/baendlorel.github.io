@@ -33,29 +33,34 @@ class RepositoryService {
       'CORS_GET_REPO_DATA' satisfies RepoDataMethod
     );
     const [a, b] = raw.split(DELIMITER);
-    const featured = decompressFromBase64(b).split(DELIMITER);
-    const serializedRepos = decompressFromBase64(a);
+    const featuredSerialized = decompressFromBase64(b) ?? '';
+    const featured = featuredSerialized ? featuredSerialized.split(DELIMITER) : [];
+    const serializedRepos = decompressFromBase64(a) ?? '[]';
     const serialized = JSON.parse(serializedRepos) as any[][];
     const info = serialized.map((r) => {
       const isPrivate = r[5];
+      const htmlUrlFromData = typeof r[15] === 'string' ? r[15] : '';
+      const description = typeof r[2] === 'string' ? r[2] : '';
       const repo: RepoInfo = {
         id: r[0],
         name: r[1],
-        html_url: isPrivate ? '' : 'https://github.com/baendlorel/' + r[1],
-        description: r[2],
-        description_zh: r[3],
-        purpose: r[4],
+        html_url: htmlUrlFromData || (isPrivate ? '' : 'https://github.com/baendlorel/' + r[1]),
+        description,
+        description_zh: typeof r[3] === 'string' ? r[3] : description,
+        purpose: r[4] || 'other',
         private: isPrivate,
         fork: r[6],
         license: r[7],
         stargazers_count: r[8],
         forks_count: r[9],
         watchers_count: r[10],
-        language: r[11],
-        updated_at: r[12],
-        topics: r[13] ? r[13].split(DELIMITER) : [],
+        language: typeof r[11] === 'string' ? r[11] : '',
+        updated_at: Number(r[12]) || 0,
+        topics: typeof r[13] === 'string' && r[13] ? r[13].split(DELIMITER) : [],
         npm: r[14],
         is_npm_package: r[14] !== null,
+        is_monorepo: Boolean(r[16]),
+        monorepo_root: typeof r[17] === 'string' ? r[17] : '',
       };
       return repo;
     });

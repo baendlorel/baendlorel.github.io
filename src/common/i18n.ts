@@ -27,6 +27,8 @@ const zh = {
   onWorking: '开发中',
   repoNameCopied: '复制成功',
   noDescription: '没有项目描述',
+  monorepoFlag: 'Monorepo',
+  fromMonorepo: '来自',
 
   searchPlaceholder: '🔍搜索包...',
   noResults: '没有找到匹配的包。',
@@ -90,6 +92,8 @@ const en = {
   onWorking: 'In Progress',
   repoNameCopied: 'Copied!',
   noDescription: 'No description available',
+  monorepoFlag: 'Monorepo',
+  fromMonorepo: 'From',
 
   searchPlaceholder: '🔍Search packages...',
   noResults: 'No packages found matching your search.',

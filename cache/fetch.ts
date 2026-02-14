@@ -8,7 +8,10 @@ const GITHUB_USERNAME = 'baendlorel';
 const GITHUB_API_BASE = 'https://api.github.com';
 const NPM_REGISTRY = 'https://registry.npmjs.org/';
 const DELIMITER: SimpleArrayDelimiter = '||';
-const PRIVATE_REPO_TOKEN = process.env.PRIVATE_REPO_TOKEN.trim();
+const PRIVATE_REPO_TOKEN = (process.env.PRIVATE_REPO_TOKEN ?? '').trim();
+if (!PRIVATE_REPO_TOKEN) {
+  throw new Error('PRIVATE_REPO_TOKEN is required.');
+}
 const headers: Record<string, string> = { Authorization: `Bearer ${PRIVATE_REPO_TOKEN}` };
 
 const FEATURED = [
@@ -32,7 +35,7 @@ const FEATURED = [
 const REPO_DATA_PATH: RepoDataFile = 'repo-data.compressed.js';
 const REPO_DATA_METHOD: RepoDataMethod = 'CORS_GET_REPO_DATA';
 
-function normalizeDescription(str: string, period: string = '.') {
+function normalizeDescription(str: string | null | undefined, period: string = '.') {
   str = str || '';
   if (str.endsWith(period)) {
     return str;
@@ -43,31 +46,20 @@ function normalizeDescription(str: string, period: string = '.') {
   }
 }
 
-// todo Some day, there might be more than 100 repos, need to handle pagination
-async function fetchRepos(): Promise<RawRepoInfo[]> {
-  const res = await fetch(`${GITHUB_API_BASE}/user/repos?per_page=100&sort=updated`, { headers });
-  if (!res.ok) {
-    throw new Error(
-      `GitHub API error: ${res.status}, ${res.statusText} , PRIVATE_REPO_TOKEN.len:[${PRIVATE_REPO_TOKEN.length}]`
-    );
-  }
-  const repos = (await res.json()) as any[];
-  // return repos.filter((repo) => !repo.fork && !repo.private);
-  console.log('repos count:', repos.length, 'private count:', repos.filter((r) => r.private).length);
-  return repos as RawRepoInfo[];
-}
-
-async function fetchNpmInfo(pkgName): Promise<NpmInfo | null> {
-  try {
-    const res = await fetch(`${NPM_REGISTRY}${pkgName}`);
-    if (!res.ok) return null;
-    const npmData = (await res.json()) as NpmInfo;
-    return {
-      version: npmData['dist-tags']?.latest || 'unknown',
-    };
-  } catch {
-    return null;
-  }
+interface GithubRepo {
+  id: number;
+  name: string;
+  description: string | null;
+  private: boolean;
+  html_url: string;
+  fork: boolean;
+  license: License | null;
+  stargazers_count: number;
+  forks_count: number;
+  watchers_count: number;
+  language: string | null;
+  updated_at: string;
+  topics: string[];
 }
 
 interface PackageJson {
@@ -78,62 +70,174 @@ interface PackageJson {
   display?: boolean;
 }
 
-async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
+interface RepoListJson {
+  isMonorepo?: boolean;
+  packages?: PackageJson[];
+}
+
+// todo Some day, there might be more than 100 repos, need to handle pagination
+async function fetchRepos(): Promise<GithubRepo[]> {
+  const res = await fetch(`${GITHUB_API_BASE}/user/repos?per_page=100&sort=updated`, { headers });
+  if (!res.ok) {
+    throw new Error(
+      `GitHub API error: ${res.status}, ${res.statusText} , PRIVATE_REPO_TOKEN.len:[${PRIVATE_REPO_TOKEN.length}]`
+    );
+  }
+  const repos = (await res.json()) as any[];
+  // return repos.filter((repo) => !repo.fork && !repo.private);
+  console.log('repos count:', repos.length, 'private count:', repos.filter((r) => r.private).length);
+  return repos as GithubRepo[];
+}
+
+async function fetchNpmInfo(pkgName: string): Promise<NpmInfo | null> {
+  try {
+    const res = await fetch(`${NPM_REGISTRY}${encodeURIComponent(pkgName)}`);
+    if (!res.ok) return null;
+    const npmData = (await res.json()) as { 'dist-tags'?: { latest?: string } };
+    return {
+      version: npmData['dist-tags']?.latest || 'unknown',
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function fetchRepoJSON<T>(repoName: string, fileName: string): Promise<T | null> {
+  try {
+    const fileRes = await fetch(`${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repoName}/contents/${fileName}`, {
+      headers,
+    });
+    if (!fileRes.ok) {
+      return null;
+    }
+
+    const payload = (await fileRes.json()) as {
+      content?: string;
+      encoding?: string;
+    };
+
+    if (!payload.content || payload.encoding !== 'base64') {
+      return null;
+    }
+
+    return JSON.parse(Buffer.from(payload.content, 'base64').toString('utf-8')) as T;
+  } catch (error) {
+    console.error(`Error fetching ${fileName} for ${repoName}:`, error);
+    return null;
+  }
+}
+
+function toRawRepoInfo(
+  repo: GithubRepo,
+  payload: {
+    id: number | string;
+    name: string;
+    description?: string | null;
+    description_zh?: string | null;
+    purpose?: RepoPurpose;
+    npm: NpmInfo | null;
+    isMonorepo: boolean;
+    monorepoRoot?: string;
+  }
+): RawRepoInfo {
+  const description = normalizeDescription(payload.description ?? repo.description);
+  const description_zh = payload.description_zh
+    ? normalizeDescription(payload.description_zh, '。')
+    : description;
+
+  return {
+    id: payload.id,
+    name: payload.name,
+    description,
+    description_zh,
+    purpose: payload.purpose ?? (payload.npm ? 'npm' : 'other'),
+    private: repo.private,
+    html_url: repo.private ? '' : repo.html_url,
+    fork: repo.fork,
+    license: repo.license ?? null,
+    stargazers_count: repo.stargazers_count,
+    forks_count: repo.forks_count,
+    watchers_count: repo.watchers_count,
+    language: repo.language,
+    updated_at: repo.updated_at,
+    topics: Array.isArray(repo.topics) ? repo.topics : [],
+    npm: payload.npm ?? null,
+    is_monorepo: payload.isMonorepo,
+    monorepo_root: payload.monorepoRoot ?? '',
+  };
+}
+
+async function enrichRepos(repos: GithubRepo[]): Promise<RawRepoInfo[]> {
   const enrichedRepos: RawRepoInfo[] = [];
   for (let i = 0; i < repos.length; i++) {
     const repo = repos[i];
-    let npmInfo: NpmInfo | null = null;
-    let pkgJson: PackageJson = {} as PackageJson;
-    try {
-      const pkgRes = await fetch(`${GITHUB_API_BASE}/repos/${GITHUB_USERNAME}/${repo.name}/contents/package.json`, {
-        headers,
-      });
-      if (pkgRes.ok) {
-        const pkgData = (await pkgRes.json()) as { content: string };
-        pkgJson = JSON.parse(Buffer.from(pkgData.content, 'base64').toString()) as PackageJson;
-        npmInfo = await fetchNpmInfo(pkgJson.name);
+    const [pkgJson, repoListJson] = await Promise.all([
+      fetchRepoJSON<PackageJson>(repo.name, 'package.json'),
+      fetchRepoJSON<RepoListJson>(repo.name, 'repo-list.json'),
+    ]);
+    const monorepoPackages = repoListJson?.isMonorepo ? repoListJson.packages ?? [] : [];
+
+    if (repoListJson?.isMonorepo && monorepoPackages.length > 0) {
+      console.log(
+        'Enriching monorepo:',
+        repo.name,
+        'isPrivate',
+        repo.private ? 'YES' : '-',
+        'packages',
+        monorepoPackages.length
+      );
+
+      for (let packageIndex = 0; packageIndex < monorepoPackages.length; packageIndex++) {
+        const item = monorepoPackages[packageIndex];
+        if (!item || !item.name) {
+          continue;
+        }
+        if (!item.display && repo.private) {
+          continue;
+        }
+
+        const npmInfo = await fetchNpmInfo(item.name);
+        enrichedRepos.push(
+          toRawRepoInfo(repo, {
+            id: `${repo.id}:${packageIndex}:${item.name}`,
+            name: item.name,
+            description: item.description ?? repo.description,
+            description_zh: item.description_zh,
+            purpose: item.purpose,
+            npm: npmInfo,
+            isMonorepo: true,
+            monorepoRoot: repo.name,
+          })
+        );
       }
-    } catch (e) {
-      console.error(`Error fetching package.json for ${repo.name}:`, e);
+      continue;
     }
 
-    // & if it is private and does not want to be displayed, skip it.
+    const packageName = pkgJson?.name;
+    const npmInfo = packageName ? await fetchNpmInfo(packageName) : null;
     console.log(
       'Enriching:',
       repo.name,
       'isPrivate',
       repo.private ? 'YES' : '-',
       'display',
-      pkgJson.display ? 'YES' : '-'
+      pkgJson?.display ? 'YES' : '-'
     );
-    if (!pkgJson.display && repo.private) {
+    if (!pkgJson?.display && repo.private) {
       continue;
     }
 
-    const description = normalizeDescription(pkgJson.description ?? repo.description);
-    const description_zh = pkgJson.description_zh ? normalizeDescription(pkgJson.description_zh, '。') : description;
-
-    const enriched: RawRepoInfo = {
-      id: repo.id,
-      name: repo.name,
-      description,
-      description_zh,
-      purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
-      private: repo.private,
-      fork: repo.fork,
-      license: repo.license ?? null,
-
-      stargazers_count: repo.stargazers_count,
-      forks_count: repo.forks_count,
-      watchers_count: repo.watchers_count,
-
-      language: repo.language,
-      updated_at: repo.updated_at,
-      topics: Array.isArray(repo.topics) ? repo.topics : [],
-      npm: npmInfo ?? null,
-    };
-
-    enrichedRepos.push(enriched);
+    enrichedRepos.push(
+      toRawRepoInfo(repo, {
+        id: repo.id,
+        name: repo.name,
+        description: pkgJson?.description ?? repo.description,
+        description_zh: pkgJson?.description_zh,
+        purpose: pkgJson?.purpose,
+        npm: npmInfo,
+        isMonorepo: false,
+      })
+    );
   }
 
   return enrichedRepos;
@@ -141,27 +245,7 @@ async function enrichRepos(repos: RawRepoInfo[]): Promise<RawRepoInfo[]> {
 
 function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
   const list = enrichedRepos.map((r) => {
-    // & serialize in order
-    // const enriched: RepoInfo = {
-    //   id: repo.id,
-    //   name: repo.name,
-    //   description,
-    //   description_zh,
-    //   purpose: pkgJson.purpose ?? (npmInfo ? 'npm' : 'other'),
-    //   private: repo.private,
-    //   ^ html_url: repo.html_url, // omit to save space, equals 'https://github.com/baendlorel/'+r.name
-    //   ^ private: repo.private, // omit to save space, already filtered out private repos
-    //   fork: repo.fork,
-    //   license: repo.license,
-    //   stargazers_count: repo.stargazers_count,
-    //   forks_count: repo.forks_count,
-    //   watchers_count: repo.watchers_count,
-    //   language: repo.language,
-    //   updated_at: repo.updated_at,
-    //   topics: Array.isArray(repo.topics) ? repo.topics : [],
-    //   npm: npmInfo ?? null,
-    //   is_npm_package: !!npmInfo,
-    // };
+    // & serialize in fixed order for compact transport
     const entry = [
       r.id,
       r.name,
@@ -178,6 +262,9 @@ function serializeRepoInfo(enrichedRepos: RawRepoInfo[]): string {
       new Date(r.updated_at).getTime(),
       r.topics.join(DELIMITER),
       r.npm,
+      r.html_url,
+      r.is_monorepo,
+      r.monorepo_root,
     ];
     return entry;
   });
