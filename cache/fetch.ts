@@ -80,7 +80,7 @@ async function fetchRepos(): Promise<GithubRepo[]> {
   const res = await fetch(`${GITHUB_API_BASE}/user/repos?per_page=100&sort=updated`, { headers });
   if (!res.ok) {
     throw new Error(
-      `GitHub API error: ${res.status}, ${res.statusText} , PRIVATE_REPO_TOKEN.len:[${PRIVATE_REPO_TOKEN.length}]`
+      `GitHub API error: ${res.status}, ${res.statusText} , PRIVATE_REPO_TOKEN.len:[${PRIVATE_REPO_TOKEN.length}]`,
     );
   }
   const repos = (await res.json()) as any[];
@@ -138,12 +138,10 @@ function toRawRepoInfo(
     npm: NpmInfo | null;
     isMonorepo: boolean;
     monorepoRoot?: string;
-  }
+  },
 ): RawRepoInfo {
   const description = normalizeDescription(payload.description ?? repo.description);
-  const description_zh = payload.description_zh
-    ? normalizeDescription(payload.description_zh, '。')
-    : description;
+  const description_zh = payload.description_zh ? normalizeDescription(payload.description_zh, '。') : description;
 
   return {
     id: payload.id,
@@ -175,16 +173,17 @@ async function enrichRepos(repos: GithubRepo[]): Promise<RawRepoInfo[]> {
       fetchRepoJSON<PackageJson>(repo.name, 'package.json'),
       fetchRepoJSON<RepoListJson>(repo.name, 'repo-list.json'),
     ]);
-    const monorepoPackages = repoListJson?.isMonorepo ? repoListJson.packages ?? [] : [];
+    const isMonorepo = Array.isArray(repoListJson?.packages);
+    const monorepoPackages = isMonorepo ? repoListJson.packages : [];
 
-    if (repoListJson?.isMonorepo && monorepoPackages.length > 0) {
+    if (isMonorepo && monorepoPackages.length > 0) {
       console.log(
         'Enriching monorepo:',
         repo.name,
         'isPrivate',
         repo.private ? 'YES' : '-',
         'packages',
-        monorepoPackages.length
+        monorepoPackages.length,
       );
 
       for (let packageIndex = 0; packageIndex < monorepoPackages.length; packageIndex++) {
@@ -207,7 +206,7 @@ async function enrichRepos(repos: GithubRepo[]): Promise<RawRepoInfo[]> {
             npm: npmInfo,
             isMonorepo: true,
             monorepoRoot: repo.name,
-          })
+          }),
         );
       }
       continue;
@@ -221,7 +220,7 @@ async function enrichRepos(repos: GithubRepo[]): Promise<RawRepoInfo[]> {
       'isPrivate',
       repo.private ? 'YES' : '-',
       'display',
-      pkgJson?.display ? 'YES' : '-'
+      pkgJson?.display ? 'YES' : '-',
     );
     if (!pkgJson?.display && repo.private) {
       continue;
@@ -236,7 +235,7 @@ async function enrichRepos(repos: GithubRepo[]): Promise<RawRepoInfo[]> {
         purpose: pkgJson?.purpose,
         npm: npmInfo,
         isMonorepo: false,
-      })
+      }),
     );
   }
 

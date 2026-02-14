@@ -1,20 +1,62 @@
 import { decompressFromBase64 } from 'lz-string';
 
 class RepositoryService {
-  private async load<T>(file: string, resolverName: string | symbol): Promise<T> {
+  private readonly remoteAssetBase =
+    'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/';
+
+  private async loadFromURL<T>(url: string, resolverName: string | symbol): Promise<T> {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src =
-      'https://github.com/baendlorel/baendlorel.github.io/releases/download/assets/' + file;
-    document.body.appendChild(script);
+    script.src = url;
 
-    const result = await new Promise<T>((resolve) => {
-      globalThis[resolverName] = resolve;
+    const result = await new Promise<T>((resolve, reject) => {
+      let settled = false;
+      const cleanup = () => {
+        window.clearTimeout(timeout);
+        delete (globalThis as Record<string | symbol, unknown>)[resolverName];
+        script.onerror = null;
+        script.remove();
+      };
+      const succeed = (payload: T) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resolve(payload);
+      };
+      const fail = (error: unknown) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(error);
+      };
+
+      const timeout = window.setTimeout(() => {
+        fail(new Error(`Load timeout: ${url}`));
+      }, 8000);
+
+      (globalThis as Record<string | symbol, unknown>)[resolverName] = succeed;
+      script.onerror = () => fail(new Error(`Load failed: ${url}`));
+      document.body.appendChild(script);
     });
-    delete globalThis[resolverName];
 
-    script.remove();
     return result;
+  }
+
+  private async load<T>(file: string, resolverName: string | symbol): Promise<T> {
+    const remote = this.remoteAssetBase + file;
+    const urls = __IS_DEV__ ? [`/${file}`, remote] : [remote];
+
+    let lastError: unknown = null;
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      try {
+        return await this.loadFromURL<T>(url, resolverName);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError ?? new Error(`Unable to load ${file}`);
   }
 
   async getInfo(): Promise<RepoInfo[]> {
